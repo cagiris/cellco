@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE tiles-definitions PUBLIC  
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<definition name="DefaultTemplate" template="/WEB-INF/views/templates/default-template.jsp">
+		<put-attribute name="header-default" value="/WEB-INF/views/partials/common/header/default.jsp" />
+        <put-attribute name="quick-stats" value="/WEB-INF/views/partials/common/sidebar/quick-stats.jsp" />
+        <put-attribute name="main-content" value="/WEB-INF/views/partials/common/main-content/default.jsp" />
+	</definition>
+
+    <definition name="BasicTemplate" template="/WEB-INF/views/templates/basic-template.jsp">
+        <put-attribute name="header-basic" value="/WEB-INF/views/partials/common/header/basic.jsp" />
+        <put-attribute name="main-content" value="" />
+    </definition>
+    
+</tiles-definitions>
