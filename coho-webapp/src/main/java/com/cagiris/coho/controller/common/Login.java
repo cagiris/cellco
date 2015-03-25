@@ -1,4 +1,8 @@
-package com.cagiris.controller.common;
+/*
+ * Copyright (c) 2015, Cagiris Pvt. Ltd.
+ * All rights reserved.
+ */
+package com.cagiris.coho.controller.common;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
