@@ -1,0 +1,1 @@
+CREATE TABLE users (userName varchar, password varchar, enabled varchar);

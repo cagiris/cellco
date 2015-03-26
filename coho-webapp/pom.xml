@@ -7,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>coho-webapp</name>
 	<url>http://maven.apache.org</url>
-	
+
 	<properties>
 		<jdk.version>1.8</jdk.version>
 		<spring.version>4.1.5.RELEASE</spring.version>
@@ -23,7 +23,7 @@
 		<mvnCompiler.version>3.2</mvnCompiler.version>
 		<tiles.version>3.0.5</tiles.version>
 	</properties>
-	
+
 	<dependencies>
 
 		<!-- Unit testing -->
@@ -47,14 +47,14 @@
 			<version>${jspApi.version}</version>
 			<scope>provided</scope>
 		</dependency>
-    
+
 		<!-- JSTL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-        
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -94,50 +94,57 @@
 			<version>${spring.security.version}</version>
 		</dependency>
 
-        <!-- Hibernate validator -->
+		<!-- Hibernate validator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${validator.version}</version>
 		</dependency>
-		
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-	
-	   <!-- MySql -->
+
+		<!-- MySql -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-        <!-- Hibernate -->
+
+		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		
+
 		<!-- Apache Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-extras</artifactId>
 			<version>${tiles.version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901.jdbc4</version>
+		</dependency>
+
+
 	</dependencies>
-    
+
 	<build>
 		<finalName>coho</finalName>
 
 		<plugins>
-		
-            <!-- JDK Compiler level -->
+
+			<!-- JDK Compiler level -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -147,9 +154,9 @@
 					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
-		
+
 	</build>
-	
+
 </project>
