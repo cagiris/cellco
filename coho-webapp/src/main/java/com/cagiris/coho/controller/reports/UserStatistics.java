@@ -17,6 +17,6 @@ public class UserStatistics {
 
 	@RequestMapping(value = {"/user-statistics"}, method = RequestMethod.GET)
 	public String showUserStatistics () {
-		return "user-statistics";
+		return "reports/user-statistics";
 	}
 }

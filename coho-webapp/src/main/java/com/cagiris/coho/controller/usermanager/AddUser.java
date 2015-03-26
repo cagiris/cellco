@@ -17,6 +17,6 @@ public class AddUser {
 
 	@RequestMapping(value = {"/add-user"}, method = RequestMethod.GET)
 	public String showAddUserPage () {
-		return "add-user";
+		return "usermanager/add-user";
 	}
 }

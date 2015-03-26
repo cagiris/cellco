@@ -17,6 +17,6 @@ public class LeavePlanner {
 
 	@RequestMapping(value = {"/leave-planner"}, method = RequestMethod.GET)
 	public String showLeavePlanner () {
-		return "leave-planner";
+		return "leavemanager/leave-planner";
 	}
 }

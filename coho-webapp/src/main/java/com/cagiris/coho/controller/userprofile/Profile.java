@@ -17,6 +17,6 @@ public class Profile {
 
 	@RequestMapping(value = {"/profile"}, method = RequestMethod.GET)
 	public String showProfilePage () {
-		return "profile";
+		return "userprofile/profile";
 	}
 }

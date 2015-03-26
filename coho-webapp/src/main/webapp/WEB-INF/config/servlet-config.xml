@@ -16,13 +16,6 @@
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" p:basename="messages" />
 
-<!-- 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
-<!-- 		<property name="viewClass" -->
-<!--             value="org.springframework.web.servlet.view.JstlView" /> -->
-<!-- 		<property name="prefix" value="/WEB-INF/jsp/" /> -->
-<!-- 		<property name="suffix" value=".jsp" /> -->
-<!-- 	</bean> -->
-	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
@@ -31,12 +24,7 @@
 	   <property name="definitions">
 	       <list>
 	           <value>/WEB-INF/config/tiles-def/base-layouts-def.xml</value>
-               <value>/WEB-INF/config/tiles-def/common-layouts-def.xml</value>
-               <value>/WEB-INF/config/tiles-def/dashboard-layouts-def.xml</value>
-               <value>/WEB-INF/config/tiles-def/leave-manager-layouts-def.xml</value>
-               <value>/WEB-INF/config/tiles-def/reports-layouts-def.xml</value>
-               <value>/WEB-INF/config/tiles-def/user-manager-layouts-def.xml</value>
-               <value>/WEB-INF/config/tiles-def/user-profile-layouts-def.xml</value>
+               <value>/WEB-INF/config/tiles-def/layouts-def.xml</value>
 	       </list>
 	   </property>
 	</bean>

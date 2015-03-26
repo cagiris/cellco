@@ -17,6 +17,6 @@ public class LeavesList {
 
 	@RequestMapping(value = {"/leaves-list"}, method = RequestMethod.GET)
 	public String showLeavesList () {
-		return "leaves-list";
+		return "leavemanager/leaves-list";
 	}
 }

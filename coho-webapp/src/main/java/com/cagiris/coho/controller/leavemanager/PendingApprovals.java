@@ -17,6 +17,6 @@ public class PendingApprovals {
 
 	@RequestMapping(value = {"/pending-approvals"}, method = RequestMethod.GET)
 	public String showPendingApprovals () {
-		return "pending-approvals";
+		return "leavemanager/pending-approvals";
 	}
 }

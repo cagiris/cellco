@@ -17,6 +17,6 @@ public class MyLeaveList {
 
 	@RequestMapping(value = {"/my-leave-list"}, method = RequestMethod.GET)
 	public String showMyLeaveList () {
-		return "my-leave-list";
+		return "leavemanager/my-leave-list";
 	}
 }

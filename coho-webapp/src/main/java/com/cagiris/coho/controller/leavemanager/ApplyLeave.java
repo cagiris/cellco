@@ -17,6 +17,6 @@ public class ApplyLeave {
 
 	@RequestMapping(value = {"/apply-leave"}, method = RequestMethod.GET)
 	public String showApplyLeavePage () {
-		return "apply-leave";
+		return "leavemanager/apply-leave";
 	}
 }

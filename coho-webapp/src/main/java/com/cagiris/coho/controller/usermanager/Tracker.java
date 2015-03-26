@@ -17,6 +17,6 @@ public class Tracker {
 
 	@RequestMapping(value = {"/tracker"}, method = RequestMethod.GET)
 	public String showTrackerPage () {
-		return "tracker";
+		return "usermanager/tracker";
 	}
 }

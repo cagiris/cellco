@@ -17,6 +17,6 @@ public class UserList {
 
 	@RequestMapping(value = {"/user-list"}, method = RequestMethod.GET)
 	public String showUserListPage () {
-		return "user-list";
+		return "usermanager/user-list";
 	}
 }

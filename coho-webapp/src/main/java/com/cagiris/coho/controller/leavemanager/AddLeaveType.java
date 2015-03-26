@@ -17,6 +17,6 @@ public class AddLeaveType {
 
 	@RequestMapping(value = {"/add-leave-type"}, method = RequestMethod.GET)
 	public String showAddLeaveTypePage () {
-		return "add-leave-type";
+		return "leavemanager/add-leave-type";
 	}
 }
