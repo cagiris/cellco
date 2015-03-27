@@ -1,30 +1,47 @@
 <h1 class="page-header">My leaves</h1>
 <div class="row form-filters">
-	<form class="form-inline warning">
+	<form class="form-inline">
 		<div class="form-group">
 			<label class="sr-only" for="leaveType">Leave Type</label> 
 			<select class="form-control" id="leaveType">
+			    <option>All</option>
 				<option>Casual</option>
 				<option>Emergency</option>
 				<option>Maternity</option>
 			</select>
 		</div>
-		<div class="form-group date form-date">
-			<label class="sr-only" for="startDate">Start Date</label> <input
-				type="text" class="form-control" id="startDate"
-				placeholder="Start Date">
-		    <span class="add-on"><i class="icon-th"></i></span>
-		</div>
-		<div class="form-group date form-date">
-			<label class="sr-only" for="endDate">End Date</label> <input
-				type="text" class="form-control" id="endDate" placeholder="End Date">
-		    <span class="add-on"><i class="icon-th"></i></span>
+		<div class="form-group">
+			<label class="sr-only" for="startDate">Start Date</label>
+			<div class="input-group date form-datepicker" data-date="12-02-2012"
+				data-date-format="dd-mm-yyyy">
+				<input type="text" class="form-control" id="startDate"
+					placeholder="Start Date" required> <span
+					class="input-group-addon add-on"><i
+					class="glyphicon glyphicon-calendar"></i></span>
+			</div>
 		</div>
 		<div class="form-group">
-			<label class="sr-only" for="status">Status</label> <input type="text"
-				class="form-control" id="status" placeholder="Status">
+            <label class="sr-only" for="endDate">End Date</label>
+            <div class="input-group date form-datepicker" data-date="12-02-2012"
+                data-date-format="dd-mm-yyyy">
+                <input type="text" class="form-control" id="endDate"
+                    placeholder="End Date" required> <span
+                    class="input-group-addon add-on"><i
+                    class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+        </div>
+		<div class="form-group">
+			<label class="sr-only" for="status">Status</label> 
+			<select class="form-control" id="status">
+                <option>Any</option>
+                <option>Approved</option>
+                <option>Pending</option>
+                <option>Cancelled</option>
+            </select>
 		</div>
-		<button type="submit" class="btn btn-primary">Filter</button>
+		<div class="form-group">
+            <button type="submit" class="btn btn-primary">Filter</button>
+		</div>
 	</form>
 </div>
 <div class="row">
@@ -36,7 +53,7 @@
 					<th>Leave Type</th>
 					<th>From</th>
 					<th>To</th>
-					<th>Reason</th>
+					<th>Description</th>
 					<th>Status</th>
 				</tr>
 			</thead>
@@ -69,3 +86,22 @@
 		</table>
 	</div>
 </div>
+<nav>
+  <ul class="pagination">
+    <li class="disabled">
+        <a href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </li>
+    <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>

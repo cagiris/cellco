@@ -186,4 +186,7 @@ body {
 	padding: 20px 0;
 	margin-bottom: 20px;
 }
+.form-coho input[type="checkbox"] {
+	transform: translateY(50%);
+}
  
