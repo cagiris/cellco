@@ -7,9 +7,17 @@ package com.cagiris.coho.service.entity;
 
 import java.util.Map;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyEnumerated;
 
-import com.cagiris.coho.service.api.ITeam;
 import com.cagiris.coho.service.api.IUserLeaveRequest;
 import com.cagiris.coho.service.api.LeaveRequestStatus;
 import com.cagiris.coho.service.api.LeaveType;
@@ -19,7 +27,8 @@ import com.cagiris.coho.service.api.LeaveType;
  * @author: ssnk
  */
 @Entity(name = "userLeaveRequest")
-public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequest {
+public class UserLeaveRequestEntity extends BaseEntity implements
+		IUserLeaveRequest {
 
 	private String leaveApplicationId;
 	private String userId;
@@ -27,7 +36,7 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 	private LeaveRequestStatus leaveApplicationStatus;
 	private String approvingUserId;
 
-
+	@Id
 	@Override
 	public String getLeaveApplicationId() {
 		return leaveApplicationId;
@@ -46,6 +55,11 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 		this.userId = userId;
 	}
 
+	@ElementCollection(targetClass = java.lang.Integer.class, fetch = FetchType.EAGER)
+	@MapKeyEnumerated(EnumType.STRING)
+	@MapKeyColumn(name = "leave_type")
+	@Column(name = "leave_quota")
+	@CollectionTable(name = "request_leave_type_vs_quota", joinColumns = @JoinColumn(name = "user_id"))
 	@Override
 	public Map<LeaveType, Integer> getLeaveTypeVsLeaveCount() {
 		return leaveTypeVsLeaveCount;
@@ -61,7 +75,8 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 		return leaveApplicationStatus;
 	}
 
-	public void setLeaveApplicationStatus(LeaveRequestStatus leaveApplicationStatus) {
+	public void setLeaveApplicationStatus(
+			LeaveRequestStatus leaveApplicationStatus) {
 		this.leaveApplicationStatus = leaveApplicationStatus;
 	}
 
@@ -75,5 +90,3 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 	}
 
 }
-
-
