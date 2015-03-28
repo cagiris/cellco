@@ -4,7 +4,6 @@
  */
 package com.cagiris.coho.service.exception;
 
-import com.cagiris.coho.service.db.api.DatabaseManagerException;
 
 /**
  *
@@ -29,7 +28,7 @@ public class HierarchyServiceException extends Exception {
 		super(message, cause);
 	}
 
-	public HierarchyServiceException(DatabaseManagerException e) {
+	public HierarchyServiceException(Throwable e) {
 		super(e);
 	}
 }

@@ -23,7 +23,7 @@ public interface IAttendenceReportingService {
 	/**
 	 * This will be called when a user ends his shift.
 	 */
-	IUserShiftInfo endUserShift(Long teamId, String userId) throws AttendanceReportingServiceException;
+	IUserShiftInfo endUserShift(String shiftId) throws AttendanceReportingServiceException;
 
 	/**
 	 * This can be used to update the shift timings for a particular team. All
@@ -37,7 +37,7 @@ public interface IAttendenceReportingService {
 	 * This will return the shift info of an active shift. i.e. the user is not
 	 * logged out yet.
 	 */
-	IUserShiftInfo getCurrentUserShiftInfo(String userId) throws AttendanceReportingServiceException;
+	List<IUserShiftInfo> getCurrentUserShiftInfo(String userId) throws AttendanceReportingServiceException;
 
 	/**
 	 * This can be used by admin to query shift details for different users.
@@ -49,7 +49,7 @@ public interface IAttendenceReportingService {
 	 * This api can be used to manually modify the shift details of a users by
 	 * admin.
 	 */
-	IUserShiftInfo updateUserShiftInfo(String userId, Long shiftStartTime, Long shiftEndTime)
+	IUserShiftInfo updateUserShiftInfo(String shiftId, Long shiftStartTime, Long shiftEndTime)
 			throws AttendanceReportingServiceException;
 
 }

@@ -26,4 +26,9 @@ public class AttendanceReportingServiceException extends Exception {
 	public AttendanceReportingServiceException(String message, Throwable cause) {
 		super(message, cause);
 	}
+	
+	public AttendanceReportingServiceException(Throwable cause)
+	{
+		super(cause);
+	}
 }

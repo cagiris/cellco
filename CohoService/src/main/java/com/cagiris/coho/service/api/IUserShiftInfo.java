@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.service.api;
 
+import java.util.Date;
+
 /**
  *
  * @author: ssnk
@@ -13,11 +15,13 @@ public interface IUserShiftInfo {
 
 	String getShiftId();
 
-	Long getShiftStartTime();
+	Date getShiftStartTime();
 
-	Long getShiftEndTime();
+	Date getShiftEndTime();
 
 	Long getShiftDuration();
+	
+	Long getTeamId();
 
 	String getUserId();
 }
