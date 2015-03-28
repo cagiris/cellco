@@ -11,6 +11,11 @@ package com.cagiris.coho.service.exception;
 
 public class LeaveManagementServiceException extends Exception {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public LeaveManagementServiceException() {
 	}
 

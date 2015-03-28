@@ -18,4 +18,6 @@ public interface IUser {
 	String getAuthToken();
 
 	AuthenicationPolicy getAuthPolicy();
+
+	UserRole getUserRole();
 }

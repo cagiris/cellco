@@ -4,7 +4,6 @@
  */
 package com.cagiris.coho.service.api;
 
-
 /**
  *
  * @author: ssnk
@@ -16,6 +15,6 @@ public interface IOrganization {
 
 	String getOrganizationName();
 
-	String getOrganizationDecription();
+	String getOrganizationDescription();
 
 }

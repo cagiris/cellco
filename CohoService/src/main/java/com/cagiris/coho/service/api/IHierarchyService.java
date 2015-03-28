@@ -13,7 +13,7 @@ import com.cagiris.coho.service.exception.HierarchyServiceException;
  * hierarchy is Organization. An Organization can have multiple teams, each team
  * can has sub teams and so on upto any levels. User can be a part of multiple
  * teams.
- * 
+ *
  * @author: ssnk
  */
 
@@ -33,9 +33,13 @@ public interface IHierarchyService {
 
 	List<ITeam> getAllSubTeams(Long parentTeamId) throws HierarchyServiceException;
 
+	IOrganization addOrganization(String organizationName, String organizationDesription)
+			throws HierarchyServiceException;
+
 	IOrganization getOrganizationInfo(Long organizationId) throws HierarchyServiceException;
 
-	ITeamUser addUserToTeam(Long teamId, String userId, String userName) throws HierarchyServiceException;
+	ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
+			AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException;
 
 	ITeamUser assignUserToTeam(Long teamId, String userId) throws HierarchyServiceException;
 

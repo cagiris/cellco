@@ -20,5 +20,5 @@ public interface ITeam {
 	Long getOrganizationId();
 
 	Long getParentTeamId();
-	
+
 }
