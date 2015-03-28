@@ -3,11 +3,13 @@
  * All rights reserved.
  */
 package com.cagiris.coho.service.entity;
+package com.cagiris.coho.service.api;
 
 import java.util.Map;
 
 import javax.persistence.Entity;
 
+import com.cagiris.coho.service.api.IUserLeaveRequest;
 import com.cagiris.coho.service.api.IUserRoleLeaveQuota;
 import com.cagiris.coho.service.api.LeaveType;
 import com.cagiris.coho.service.api.UserRole;

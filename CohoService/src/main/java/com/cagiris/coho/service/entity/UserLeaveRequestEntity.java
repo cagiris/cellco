@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.persistence.Entity;
 
+import com.cagiris.coho.service.api.ITeam;
 import com.cagiris.coho.service.api.IUserLeaveRequest;
 import com.cagiris.coho.service.api.LeaveRequestStatus;
 import com.cagiris.coho.service.api.LeaveType;
