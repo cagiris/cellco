@@ -9,8 +9,12 @@ package com.cagiris.coho.service.api;
  * @author: ssnk
  */
 
-public interface ITeamUser extends IUser {
+public interface ITeamUser {
+
+	Long getTeamUserId();
 
 	Long getTeamId();
+
+	String getUserId();
 
 }

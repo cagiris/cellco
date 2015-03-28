@@ -5,6 +5,9 @@
 package com.cagiris.coho.service.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -17,9 +20,13 @@ import com.cagiris.coho.service.api.ITeamUser;
  */
 
 @Entity
-public class TeamUserEntity extends UserEntity implements ITeamUser {
+public class TeamUserEntity implements ITeamUser {
 
 	private TeamEntity teamEntity;
+
+	private Long teamUserId;
+
+	private UserEntity userEntity;
 
 	@Transient
 	@Override
@@ -31,13 +38,43 @@ public class TeamUserEntity extends UserEntity implements ITeamUser {
 	}
 
 	@JoinColumn(name = "team_id")
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	public TeamEntity getTeamEntity() {
 		return teamEntity;
 	}
 
 	public void setTeamEntity(TeamEntity teamEntity) {
 		this.teamEntity = teamEntity;
+	}
+
+	@Id
+	@GeneratedValue
+	@Override
+	public Long getTeamUserId() {
+		return teamUserId;
+	}
+
+	public void setTeamUserId(Long teamUserId) {
+		this.teamUserId = teamUserId;
+	}
+
+	@Transient
+	@Override
+	public String getUserId() {
+		if (getUserEntity() != null) {
+			return getUserEntity().getUserId();
+		}
+		return null;
+	}
+
+	@JoinColumn(name = "user_id")
+	@ManyToOne(fetch = FetchType.EAGER)
+	public UserEntity getUserEntity() {
+		return userEntity;
+	}
+
+	public void setUserEntity(UserEntity userEntity) {
+		this.userEntity = userEntity;
 	}
 
 }

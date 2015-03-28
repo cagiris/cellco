@@ -6,11 +6,13 @@ package com.cagiris.coho.service.entity;
 
 import java.util.Date;
 
+import javax.persistence.MappedSuperclass;
+
 /**
  *
  * @author: ssnk
  */
-
+@MappedSuperclass
 public abstract class BaseEntity {
 	private Date dateAdded;
 	private Date dateModified;

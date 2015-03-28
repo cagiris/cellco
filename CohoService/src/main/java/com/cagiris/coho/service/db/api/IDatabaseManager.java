@@ -6,8 +6,14 @@ package com.cagiris.coho.service.db.api;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import org.hibernate.SessionFactory;
+
+import com.cagiris.coho.service.db.impl.CohoDeleteClause;
+import com.cagiris.coho.service.db.impl.CohoUpdateClause;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
+import com.mysema.query.types.path.EntityPathBase;
 
 /**
  *
@@ -39,4 +45,11 @@ public interface IDatabaseManager {
 	void delete(String entityName, Object entity) throws DatabaseManagerException;
 
 	void deleteAll(Collection<?> entities) throws DatabaseManagerException;
+
+	<T> List<T> executeQueryAndGetResults(HibernateQuery hibernateQuery, EntityPathBase<T> entityPath)
+			throws DatabaseManagerException;
+
+	long executeUpdateClause(CohoUpdateClause updateClause) throws DatabaseManagerException;
+
+	long executeDeleteClause(CohoDeleteClause deleteClause) throws DatabaseManagerException;
 }

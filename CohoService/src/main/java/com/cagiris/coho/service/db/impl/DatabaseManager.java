@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -26,6 +27,8 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import com.cagiris.coho.service.db.api.DatabaseManagerException;
 import com.cagiris.coho.service.db.api.IDatabaseManager;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
+import com.mysema.query.types.path.EntityPathBase;
 
 /**
  *
@@ -36,11 +39,12 @@ public class DatabaseManager implements IDatabaseManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
 	private static final String DEFAULT_HIBERNATE_CONGFIG_FILE_NAME = "hibernate.cfg.xml";
-	private SessionFactory sessionFactory;
-	private String[] packagesToScan;
 
-	public DatabaseManager() {
-		packagesToScan = new String[] { "com.cagiris.coho.service.entity" };
+	private SessionFactory sessionFactory;
+
+	private List<String> packagesToScan;
+
+	public void init() {
 		String configFileName = DEFAULT_HIBERNATE_CONGFIG_FILE_NAME;
 
 		logger.info("Using hibernate config file:{}", configFileName);
@@ -62,7 +66,7 @@ public class DatabaseManager implements IDatabaseManager {
 				false);
 		candidateComponentProvider.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
 		Set<Class<?>> classes = new HashSet<Class<?>>();
-		for (String packageName : packagesToScan) {
+		for (String packageName : getPackagesToScan()) {
 			for (BeanDefinition beanDefinition : candidateComponentProvider.findCandidateComponents(packageName)) {
 				String beanClassName = beanDefinition.getBeanClassName();
 				try {
@@ -271,6 +275,64 @@ public class DatabaseManager implements IDatabaseManager {
 		} finally {
 			closeSession(session);
 		}
+	}
+
+	public List<String> getPackagesToScan() {
+		return packagesToScan;
+	}
+
+	public void setPackagesToScan(List<String> packagesToScan) {
+		this.packagesToScan = packagesToScan;
+	}
+
+	@Override
+	public <T> List<T> executeQueryAndGetResults(HibernateQuery hibernateQuery, EntityPathBase<T> entityPath)
+			throws DatabaseManagerException {
+		Session session = sessionFactory.openSession();
+		try {
+			HibernateQuery hibernateQueryWithSession = new HibernateQuery(session, hibernateQuery.getMetadata());
+			return hibernateQueryWithSession.list(entityPath);
+		} catch (HibernateException e) {
+			throw new DatabaseManagerException(e);
+		} finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	public long executeUpdateClause(CohoUpdateClause updateClause) throws DatabaseManagerException {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			CohoUpdateClause cohoUpdateClause = new CohoUpdateClause(session, updateClause);
+			cohoUpdateClause.execute();
+			tx.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(tx);
+			throw new DatabaseManagerException(e);
+		} finally {
+			closeSession(session);
+		}
+		return 0;
+	}
+
+	@Override
+	public long executeDeleteClause(CohoDeleteClause deleteClause) throws DatabaseManagerException {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			CohoDeleteClause cohoDeleteClause = new CohoDeleteClause(session, deleteClause);
+			cohoDeleteClause.execute();
+			tx.commit();
+		} catch (HibernateException e) {
+			rollbackTransaction(tx);
+			throw new DatabaseManagerException(e);
+		} finally {
+			closeSession(session);
+		}
+		return 0;
 	}
 
 }

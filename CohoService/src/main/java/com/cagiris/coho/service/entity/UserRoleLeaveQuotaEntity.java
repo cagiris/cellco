@@ -52,11 +52,8 @@ public class UserRoleLeaveQuotaEntity extends BaseEntity implements IUserRoleLea
 		return leaveTypeVsLeaveCount;
 	}
 
-	public void setLeaveTypeVsLeaveCount(
-			Map<LeaveType, Integer> leaveTypeVsLeaveCount) {
+	public void setLeaveTypeVsLeaveCount(Map<LeaveType, Integer> leaveTypeVsLeaveCount) {
 		this.leaveTypeVsLeaveCount = leaveTypeVsLeaveCount;
 	}
-
-
 
 }

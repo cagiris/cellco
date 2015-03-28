@@ -23,10 +23,9 @@ import com.cagiris.coho.service.exception.AttendanceReportingServiceException;
  * @author: abhishek
  */
 
-public class AttendenceReportingService implements IAttendenceReportingService{
+public class AttendenceReportingService implements IAttendenceReportingService {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(AttendenceReportingService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AttendenceReportingService.class);
 
 	private IDatabaseManager databaseManager;
 
@@ -34,12 +33,10 @@ public class AttendenceReportingService implements IAttendenceReportingService{
 		this.databaseManager = databaseManager;
 	}
 
-	
 	@Override
-	public IUserShiftInfo startUserShift(Long teamId, String userId)
-			throws AttendanceReportingServiceException {
+	public IUserShiftInfo startUserShift(Long teamId, String userId) throws AttendanceReportingServiceException {
 		Date currentTime = new Date();
-		UserShiftEntity  userShiftEntity = new UserShiftEntity();
+		UserShiftEntity userShiftEntity = new UserShiftEntity();
 		userShiftEntity.setUserId(userId);
 		userShiftEntity.setShiftStartTime(currentTime);
 		userShiftEntity.setShiftEndTime(currentTime);
@@ -55,56 +52,48 @@ public class AttendenceReportingService implements IAttendenceReportingService{
 		}
 		return userShiftEntity;
 	}
-	
-	private String getShiftId()
-	{
-		//TODO change
+
+	private String getShiftId() {
+		// TODO change
 		return "shift";
 	}
 
 	@Override
-	public IUserShiftInfo endUserShift(String shiftId)
-			throws AttendanceReportingServiceException {
+	public IUserShiftInfo endUserShift(String shiftId) throws AttendanceReportingServiceException {
 		UserShiftEntity userShiftEntity;
-		try
-		{
-			 userShiftEntity=databaseManager.get(UserShiftEntity.class, shiftId);
-			 Date currentTime = new Date();
-			 userShiftEntity.setDateModified(currentTime);
-			 userShiftEntity.setShiftEndTime(currentTime);
-			 databaseManager.save(userShiftEntity);
-			 return userShiftEntity;
-		}
-		catch(DatabaseManagerException e)
-		{
-			logger.error("Error while updating user shift",e);
+		try {
+			userShiftEntity = databaseManager.get(UserShiftEntity.class, shiftId);
+			Date currentTime = new Date();
+			userShiftEntity.setDateModified(currentTime);
+			userShiftEntity.setShiftEndTime(currentTime);
+			databaseManager.save(userShiftEntity);
+			return userShiftEntity;
+		} catch (DatabaseManagerException e) {
+			logger.error("Error while updating user shift", e);
 			throw new AttendanceReportingServiceException("invalid.shift.id");
 		}
 	}
 
 	@Override
-	public ITeamShiftDetails updateTeamShiftDetails(Long teamId,
-			Long shiftStartTime, Long shiftEndTime, boolean autoExpire)
+	public ITeamShiftDetails updateTeamShiftDetails(Long teamId, Long shiftStartTime, Long shiftEndTime,
+			boolean autoExpire) throws AttendanceReportingServiceException {
+		return null;
+	}
+
+	@Override
+	public List<? extends IUserShiftInfo> getCurrentUserShiftInfo(String userId)
 			throws AttendanceReportingServiceException {
 		return null;
 	}
 
 	@Override
-	public List<IUserShiftInfo> getCurrentUserShiftInfo(String userId)
+	public List<? extends IUserShiftInfo> queryUserShiftInfo(List<String> userIds, Long startDate, Long endDate)
 			throws AttendanceReportingServiceException {
 		return null;
 	}
 
 	@Override
-	public List<IUserShiftInfo> queryUserShiftInfo(List<String> userIds,
-			Long startDate, Long endDate)
-			throws AttendanceReportingServiceException {
-		return null;
-	}
-
-	@Override
-	public IUserShiftInfo updateUserShiftInfo(String shiftId,
-			Long shiftStartTime, Long shiftEndTime)
+	public IUserShiftInfo updateUserShiftInfo(String shiftId, Long shiftStartTime, Long shiftEndTime)
 			throws AttendanceReportingServiceException {
 		return null;
 	}

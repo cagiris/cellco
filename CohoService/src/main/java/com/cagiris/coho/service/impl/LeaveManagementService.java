@@ -30,8 +30,7 @@ import com.cagiris.coho.service.exception.LeaveManagementServiceException;
 
 public class LeaveManagementService implements ILeaveManagementService {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(HierarchyService.class);
+	private static final Logger logger = LoggerFactory.getLogger(HierarchyService.class);
 
 	private IDatabaseManager databaseManager;
 
@@ -40,10 +39,8 @@ public class LeaveManagementService implements ILeaveManagementService {
 	}
 
 	@Override
-	public IUserLeaveRequest applyForLeave(String userId,
-			String approvingUserId,
-			Map<LeaveType, Integer> leaveTypeVsLeaveCount)
-			throws LeaveManagementServiceException {
+	public IUserLeaveRequest applyForLeave(String userId, String approvingUserId,
+			Map<LeaveType, Integer> leaveTypeVsLeaveCount) throws LeaveManagementServiceException {
 		UserLeaveRequestEntity userLeaveRequestEntity = new UserLeaveRequestEntity();
 		userLeaveRequestEntity.setApprovingUserId(approvingUserId);
 		userLeaveRequestEntity.setLeaveApplicationId("dsfsdf125664");
@@ -51,8 +48,7 @@ public class LeaveManagementService implements ILeaveManagementService {
 		userLeaveRequestEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
 		try {
 			Serializable save = databaseManager.save(userLeaveRequestEntity);
-			UserLeaveRequestEntity userLeaveRequestEntity2 = databaseManager
-					.get(UserLeaveRequestEntity.class, save);
+			UserLeaveRequestEntity userLeaveRequestEntity2 = databaseManager.get(UserLeaveRequestEntity.class, save);
 			System.out.println(userLeaveRequestEntity2);
 			return userLeaveRequestEntity2;
 		} catch (DatabaseManagerException e) {
@@ -62,36 +58,31 @@ public class LeaveManagementService implements ILeaveManagementService {
 	}
 
 	@Override
-	public IUserLeaveRequest updateLeaveRequestStatus(
-			String leaveApplicationId, LeaveRequestStatus leaveStatus)
+	public IUserLeaveRequest updateLeaveRequestStatus(String leaveApplicationId, LeaveRequestStatus leaveStatus)
 			throws LeaveManagementServiceException {
 		return null;
 	}
 
 	@Override
-	public IUserLeaveQuota getUserLeaveQuota(String userId)
+	public IUserLeaveQuota getUserLeaveQuota(String userId) throws LeaveManagementServiceException {
+		return null;
+	}
+
+	@Override
+	public IUserRoleLeaveQuota updateLeaveQuotaForRole(UserRole userRole, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
 			throws LeaveManagementServiceException {
 		return null;
 	}
 
 	@Override
-	public IUserRoleLeaveQuota updateLeaveQuotaForRole(UserRole userRole,
-			Map<LeaveType, Integer> leaveTypeVsLeaveCount)
+	public List<IUserLeaveRequest> getLeaveRequestsByUserId(String userId, LeaveRequestStatus leaveRequestStatus)
 			throws LeaveManagementServiceException {
 		return null;
 	}
 
 	@Override
-	public List<IUserLeaveRequest> getLeaveRequestsByUserId(String userId,
-			LeaveRequestStatus leaveRequestStatus)
-			throws LeaveManagementServiceException {
-		return null;
-	}
-
-	@Override
-	public List<IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(
-			String approvingUserId, LeaveRequestStatus leaveStatus)
-			throws LeaveManagementServiceException {
+	public List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
+			LeaveRequestStatus leaveStatus) throws LeaveManagementServiceException {
 		return null;
 	}
 

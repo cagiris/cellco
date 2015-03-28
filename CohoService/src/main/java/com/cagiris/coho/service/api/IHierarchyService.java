@@ -29,9 +29,9 @@ public interface IHierarchyService {
 
 	ITeam getTeam(Long teamId) throws HierarchyServiceException;
 
-	List<ITeam> getAllTeams(Long organizationId) throws HierarchyServiceException;
+	List<? extends ITeam> getAllTeams(Long organizationId) throws HierarchyServiceException;
 
-	List<ITeam> getAllSubTeams(Long parentTeamId) throws HierarchyServiceException;
+	List<? extends ITeam> getAllSubTeams(Long parentTeamId) throws HierarchyServiceException;
 
 	IOrganization addOrganization(String organizationName, String organizationDesription)
 			throws HierarchyServiceException;
@@ -45,12 +45,14 @@ public interface IHierarchyService {
 
 	void removeUserFromTeam(Long teamId, String userId) throws HierarchyServiceException;
 
-	List<ITeamUser> getAllUsersForTeam(Long teamId) throws HierarchyServiceException;
+	List<? extends ITeamUser> getAllUsersForTeam(Long teamId) throws HierarchyServiceException;
 
-	List<ITeamUser> getAllUsersForTeamByRole(Long teamId, UserRole userRole) throws HierarchyServiceException;
+	List<? extends ITeamUser> getAllUsersForTeamByRole(Long teamId, UserRole userRole) throws HierarchyServiceException;
 
 	void deleteUser(String userId) throws HierarchyServiceException;
 
-	List<ITeam> getTeamsForUser(String userId) throws HierarchyServiceException;
+	List<? extends ITeam> getTeamsForUser(String userId) throws HierarchyServiceException;
+
+	IUser getUser(String userId) throws HierarchyServiceException;
 
 }

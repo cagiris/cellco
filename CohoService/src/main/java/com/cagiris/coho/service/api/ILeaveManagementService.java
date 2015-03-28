@@ -52,6 +52,6 @@ public interface ILeaveManagementService {
 	 * This will return the leave requests pending approval on approvingUserId
 	 * by leave status.
 	 */
-	List<IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
+	List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
 			LeaveRequestStatus leaveStatus) throws LeaveManagementServiceException;
 }

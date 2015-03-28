@@ -37,12 +37,12 @@ public interface IAttendenceReportingService {
 	 * This will return the shift info of an active shift. i.e. the user is not
 	 * logged out yet.
 	 */
-	List<IUserShiftInfo> getCurrentUserShiftInfo(String userId) throws AttendanceReportingServiceException;
+	List<? extends IUserShiftInfo> getCurrentUserShiftInfo(String userId) throws AttendanceReportingServiceException;
 
 	/**
 	 * This can be used by admin to query shift details for different users.
 	 */
-	List<IUserShiftInfo> queryUserShiftInfo(List<String> userIds, Long startDate, Long endDate)
+	List<? extends IUserShiftInfo> queryUserShiftInfo(List<String> userIds, Long startDate, Long endDate)
 			throws AttendanceReportingServiceException;
 
 	/**
