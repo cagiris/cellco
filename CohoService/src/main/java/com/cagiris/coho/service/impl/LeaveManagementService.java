@@ -23,6 +23,7 @@ import com.cagiris.coho.service.db.api.EntityNotFoundException;
 import com.cagiris.coho.service.db.api.IDatabaseManager;
 import com.cagiris.coho.service.entity.UserLeaveRequestEntity;
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
+import com.cagiris.coho.service.utils.UniqueIDGenerator;
 
 /**
  *
@@ -35,6 +36,8 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     private IDatabaseManager databaseManager;
 
+    private UniqueIDGenerator leaveRequestIdGenerator = new UniqueIDGenerator("leave");
+
     public LeaveManagementService(IDatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
     }
@@ -44,7 +47,7 @@ public class LeaveManagementService implements ILeaveManagementService {
             Map<LeaveType, Integer> leaveTypeVsLeaveCount) throws LeaveManagementServiceException {
         UserLeaveRequestEntity userLeaveRequestEntity = new UserLeaveRequestEntity();
         userLeaveRequestEntity.setApprovingUserId(approvingUserId);
-        userLeaveRequestEntity.setLeaveApplicationId("dsfsdf125664");
+        userLeaveRequestEntity.setLeaveApplicationId(leaveRequestIdGenerator.getNextUID(userId));
         userLeaveRequestEntity.setUserId(userId);
         userLeaveRequestEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
         try {
@@ -54,8 +57,8 @@ public class LeaveManagementService implements ILeaveManagementService {
             return userLeaveRequestEntity2;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("error while adding user leave request", e);
+            throw new LeaveManagementServiceException(e.getMessage(), e);
         }
-        return null;
     }
 
     @Override
