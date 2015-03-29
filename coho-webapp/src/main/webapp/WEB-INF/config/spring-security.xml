@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/security 
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <beans:import resource="spring-database.xml"/>
-    
-    <http auto-config="true" use-expressions="true" >
-        <intercept-url pattern="/login.html*" access="permitAll"/>
-        <intercept-url pattern="/403.html*" access="permitAll"/>
-        <intercept-url pattern="/**" access="permitAll" />
-        <form-login
-            login-page="/login.html"
-            login-processing-url="/login"
-            default-target-url="/index.html"
-            authentication-failure-url="/login.html?error=true"
-            username-parameter="userName"
-            password-parameter="password" />
-        
-        <logout logout-success-url="/login.html?logout" />
-        
-    </http>
- 
-    <authentication-manager>
-      <authentication-provider>
-        <jdbc-user-service data-source-ref="dataSource"
-            users-by-username-query="select userName, password, enabled from users where userName=?" 
-            authorities-by-username-query="select userName, role from user_roles where userName=?"/>
-      </authentication-provider>
-    </authentication-manager>
+	<beans:import resource="classpath:coho-service-spring.xml" />
+
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/dashboard" access="hasRole('AGENT')" />
+		<form-login login-page="/login.html" login-processing-url="/login"
+			default-target-url="/dashboard.html" authentication-failure-url="/login.html?error=true"
+			username-parameter="userName" password-parameter="password" />
+
+		<logout logout-success-url="/login.html?logout" />
+
+	</http>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="cohoUserDetailService">
+		</authentication-provider>
+	</authentication-manager>
 </beans:beans>
