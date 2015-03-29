@@ -11,19 +11,19 @@ package com.cagiris.coho.service.exception;
 
 public class LeaveManagementServiceException extends Exception {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public LeaveManagementServiceException() {
-	}
+    public LeaveManagementServiceException() {
+    }
 
-	public LeaveManagementServiceException(String message) {
-		super(message);
-	}
+    public LeaveManagementServiceException(String message) {
+        super(message);
+    }
 
-	public LeaveManagementServiceException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public LeaveManagementServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

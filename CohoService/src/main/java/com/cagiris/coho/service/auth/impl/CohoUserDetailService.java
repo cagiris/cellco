@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.IUser;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
+import com.cagiris.coho.service.exception.ResourceNotFoundException;
 
 /**
  *
@@ -25,23 +26,23 @@ import com.cagiris.coho.service.exception.HierarchyServiceException;
 
 public class CohoUserDetailService implements UserDetailsService {
 
-	private IHierarchyService hierarchyService;
+    private IHierarchyService hierarchyService;
 
-	public CohoUserDetailService(IHierarchyService hierarchyService) {
-		this.hierarchyService = hierarchyService;
-	}
+    public CohoUserDetailService(IHierarchyService hierarchyService) {
+        this.hierarchyService = hierarchyService;
+    }
 
-	@Override
-	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		try {
-			IUser user = hierarchyService.getUser(userId);
-			Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
-			grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
-			User userDetail = new User(user.getUserId(), user.getAuthToken(), grantedAuthorities);
-			return userDetail;
-		} catch (HierarchyServiceException e) {
-			throw new UsernameNotFoundException(e.getMessage(), e);
-		}
-	}
+    @Override
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        try {
+            IUser user = hierarchyService.getUser(userId);
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
+            grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
+            User userDetail = new User(user.getUserId(), user.getAuthToken(), grantedAuthorities);
+            return userDetail;
+        } catch (HierarchyServiceException | ResourceNotFoundException e) {
+            throw new UsernameNotFoundException(e.getMessage(), e);
+        }
+    }
 
 }

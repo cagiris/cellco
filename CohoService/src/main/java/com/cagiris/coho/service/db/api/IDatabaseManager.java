@@ -22,34 +22,34 @@ import com.mysema.query.types.path.EntityPathBase;
 
 public interface IDatabaseManager {
 
-	Serializable save(Object entity) throws DatabaseManagerException;
+    Serializable save(Object entity) throws DatabaseManagerException;
 
-	Serializable save(String entityName, Object entity) throws DatabaseManagerException;
+    Serializable save(String entityName, Object entity) throws DatabaseManagerException;
 
-	void update(Object entity) throws DatabaseManagerException;
+    void update(Object entity) throws DatabaseManagerException;
 
-	void update(String entityName, Object entity) throws DatabaseManagerException;
+    void update(String entityName, Object entity) throws DatabaseManagerException;
 
-	void saveOrUpdate(Object entity) throws DatabaseManagerException;
+    void saveOrUpdate(Object entity) throws DatabaseManagerException;
 
-	void saveOrUpdate(String entityName, Object entity) throws DatabaseManagerException;
+    void saveOrUpdate(String entityName, Object entity) throws DatabaseManagerException;
 
-	<T> T get(Class<T> entityClass, Serializable id) throws DatabaseManagerException;
+    <T> T get(Class<T> entityClass, Serializable id) throws DatabaseManagerException, EntityNotFoundException;
 
-	Object get(String entityName, Serializable id) throws DatabaseManagerException;
+    Object get(String entityName, Serializable id) throws DatabaseManagerException, EntityNotFoundException;
 
-	SessionFactory getSessionFactory() throws DatabaseManagerException;
+    SessionFactory getSessionFactory() throws DatabaseManagerException;
 
-	void delete(Object entity) throws DatabaseManagerException;
+    void delete(Object entity) throws DatabaseManagerException;
 
-	void delete(String entityName, Object entity) throws DatabaseManagerException;
+    void delete(String entityName, Object entity) throws DatabaseManagerException;
 
-	void deleteAll(Collection<?> entities) throws DatabaseManagerException;
+    void deleteAll(Collection<?> entities) throws DatabaseManagerException;
 
-	<T> List<T> executeQueryAndGetResults(HibernateQuery hibernateQuery, EntityPathBase<T> entityPath)
-			throws DatabaseManagerException;
+    <T> List<T> executeQueryAndGetResults(HibernateQuery hibernateQuery, EntityPathBase<T> entityPath)
+            throws DatabaseManagerException;
 
-	long executeUpdateClause(CohoUpdateClause updateClause) throws DatabaseManagerException;
+    long executeUpdateClause(CohoUpdateClause updateClause) throws DatabaseManagerException;
 
-	long executeDeleteClause(CohoDeleteClause deleteClause) throws DatabaseManagerException;
+    long executeDeleteClause(CohoDeleteClause deleteClause) throws DatabaseManagerException;
 }

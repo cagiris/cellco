@@ -26,6 +26,7 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import com.cagiris.coho.service.db.api.DatabaseManagerException;
+import com.cagiris.coho.service.db.api.EntityNotFoundException;
 import com.cagiris.coho.service.db.api.IDatabaseManager;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.types.path.EntityPathBase;
@@ -37,302 +38,312 @@ import com.mysema.query.types.path.EntityPathBase;
 
 public class DatabaseManager implements IDatabaseManager {
 
-	private static final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
-	private static final String DEFAULT_HIBERNATE_CONGFIG_FILE_NAME = "hibernate.cfg.xml";
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
+    private static final String DEFAULT_HIBERNATE_CONGFIG_FILE_NAME = "hibernate.cfg.xml";
 
-	private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-	private List<String> packagesToScan;
+    private List<String> packagesToScan;
 
-	public void init() {
-		String configFileName = DEFAULT_HIBERNATE_CONGFIG_FILE_NAME;
+    public void init() {
+        String configFileName = DEFAULT_HIBERNATE_CONGFIG_FILE_NAME;
 
-		logger.info("Using hibernate config file:{}", configFileName);
+        logger.info("Using hibernate config file:{}", configFileName);
 
-		URL resourceURL = this.getClass().getClassLoader().getResource(configFileName);
+        URL resourceURL = this.getClass().getClassLoader().getResource(configFileName);
 
-		Configuration configuration = new Configuration().configure(resourceURL);
-		Set<Class<?>> entityClasses = scanAndGetAllClasses();
-		for (Class<?> clazz : entityClasses) {
-			configuration.addAnnotatedClass(clazz);
-		}
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-		builder.applySettings(configuration.getProperties());
-		this.sessionFactory = configuration.buildSessionFactory(builder.build());
-	}
+        Configuration configuration = new Configuration().configure(resourceURL);
+        Set<Class<?>> entityClasses = scanAndGetAllClasses();
+        for (Class<?> clazz : entityClasses) {
+            configuration.addAnnotatedClass(clazz);
+        }
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+        builder.applySettings(configuration.getProperties());
+        this.sessionFactory = configuration.buildSessionFactory(builder.build());
+    }
 
-	private Set<Class<?>> scanAndGetAllClasses() {
-		ClassPathScanningCandidateComponentProvider candidateComponentProvider = new ClassPathScanningCandidateComponentProvider(
-				false);
-		candidateComponentProvider.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
-		Set<Class<?>> classes = new HashSet<Class<?>>();
-		for (String packageName : getPackagesToScan()) {
-			for (BeanDefinition beanDefinition : candidateComponentProvider.findCandidateComponents(packageName)) {
-				String beanClassName = beanDefinition.getBeanClassName();
-				try {
-					Class<?> entityClass = Class.forName(beanClassName);
-					classes.add(entityClass);
-				} catch (ClassNotFoundException e) {
-					logger.error("Failed to load entity class:{}", beanClassName, e);
-				}
-			}
-		}
-		return classes;
-	}
+    private Set<Class<?>> scanAndGetAllClasses() {
+        ClassPathScanningCandidateComponentProvider candidateComponentProvider = new ClassPathScanningCandidateComponentProvider(
+                false);
+        candidateComponentProvider.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
+        Set<Class<?>> classes = new HashSet<Class<?>>();
+        for (String packageName : getPackagesToScan()) {
+            for (BeanDefinition beanDefinition : candidateComponentProvider.findCandidateComponents(packageName)) {
+                String beanClassName = beanDefinition.getBeanClassName();
+                try {
+                    Class<?> entityClass = Class.forName(beanClassName);
+                    classes.add(entityClass);
+                } catch (ClassNotFoundException e) {
+                    logger.error("Failed to load entity class:{}", beanClassName, e);
+                }
+            }
+        }
+        return classes;
+    }
 
-	@Override
-	public Serializable save(Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			Serializable save = session.save(entity);
-			tx.commit();
-			return save;
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public Serializable save(Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Serializable save = session.save(entity);
+            tx.commit();
+            return save;
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	private void rollbackTransaction(Transaction tx) {
-		if (tx != null) {
-			try {
-				tx.rollback();
-			} catch (HibernateException e1) {
-				logger.error("Error during rollback : {}", e1.getMessage(), e1);
-			}
-		}
-	}
+    private void rollbackTransaction(Transaction tx) {
+        if (tx != null) {
+            try {
+                tx.rollback();
+            } catch (HibernateException e1) {
+                logger.error("Error during rollback : {}", e1.getMessage(), e1);
+            }
+        }
+    }
 
-	private void closeSession(Session session) {
-		if (session != null) {
-			try {
-				session.close();
-			} catch (HibernateException e) {
-				logger.error("Error while closing session: {}", e.getMessage(), e);
-			}
-		}
-	}
+    private void closeSession(Session session) {
+        if (session != null) {
+            try {
+                session.close();
+            } catch (HibernateException e) {
+                logger.error("Error while closing session: {}", e.getMessage(), e);
+            }
+        }
+    }
 
-	@Override
-	public Serializable save(String entityName, Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			Serializable save = session.save(entityName, entity);
-			tx.commit();
-			return save;
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public Serializable save(String entityName, Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Serializable save = session.save(entityName, entity);
+            tx.commit();
+            return save;
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public void update(Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.update(entity);
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public void update(Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(entity);
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public void update(String entityName, Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.update(entityName, entity);
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public void update(String entityName, Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(entityName, entity);
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public void saveOrUpdate(Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.saveOrUpdate(entity);
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public void saveOrUpdate(Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.saveOrUpdate(entity);
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public void saveOrUpdate(String entityName, Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.saveOrUpdate(entityName, entity);
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public void saveOrUpdate(String entityName, Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.saveOrUpdate(entityName, entity);
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public <T> T get(Class<T> entityClass, Serializable id) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		try {
-			return (T) session.get(entityClass, id);
-		} catch (HibernateException e) {
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public <T> T get(Class<T> entityClass, Serializable id) throws DatabaseManagerException, EntityNotFoundException {
+        Session session = sessionFactory.openSession();
+        try {
+            T entity = (T)session.get(entityClass, id);
+            checkIfNotNull(entityClass.getClass().getName(), id, entity);
+            return entity;
+        } catch (HibernateException e) {
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public Object get(String entityName, Serializable id) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		try {
-			return session.get(entityName, id);
-		} catch (HibernateException e) {
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    private <T> void checkIfNotNull(String className, Serializable id, T entity) throws EntityNotFoundException {
+        if (entity == null) {
+            throw new EntityNotFoundException("Entity " + className + " with id " + id + " not found");
+        }
+    }
 
-	@Override
-	public SessionFactory getSessionFactory() throws DatabaseManagerException {
-		return this.sessionFactory;
-	}
+    @Override
+    public Object get(String entityName, Serializable id) throws DatabaseManagerException, EntityNotFoundException {
+        Session session = sessionFactory.openSession();
+        try {
+            Object entity = session.get(entityName, id);
+            checkIfNotNull(entityName, id, entity);
+            return entity;
+        } catch (HibernateException e) {
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public void delete(Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.delete(entity);
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public SessionFactory getSessionFactory() throws DatabaseManagerException {
+        return this.sessionFactory;
+    }
 
-	@Override
-	public void delete(String entityName, Object entity) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.delete(entityName, entity);
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public void delete(Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.delete(entity);
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public void deleteAll(Collection<?> entities) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			for (Object entity : entities) {
-				session.delete(entity);
-			}
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    @Override
+    public void delete(String entityName, Object entity) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.delete(entityName, entity);
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	public List<String> getPackagesToScan() {
-		return packagesToScan;
-	}
+    @Override
+    public void deleteAll(Collection<?> entities) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            for (Object entity : entities) {
+                session.delete(entity);
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	public void setPackagesToScan(List<String> packagesToScan) {
-		this.packagesToScan = packagesToScan;
-	}
+    public List<String> getPackagesToScan() {
+        return packagesToScan;
+    }
 
-	@Override
-	public <T> List<T> executeQueryAndGetResults(HibernateQuery hibernateQuery, EntityPathBase<T> entityPath)
-			throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		try {
-			HibernateQuery hibernateQueryWithSession = new HibernateQuery(session, hibernateQuery.getMetadata());
-			return hibernateQueryWithSession.list(entityPath);
-		} catch (HibernateException e) {
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-	}
+    public void setPackagesToScan(List<String> packagesToScan) {
+        this.packagesToScan = packagesToScan;
+    }
 
-	@Override
-	public long executeUpdateClause(CohoUpdateClause updateClause) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			CohoUpdateClause cohoUpdateClause = new CohoUpdateClause(session, updateClause);
-			cohoUpdateClause.execute();
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-		return 0;
-	}
+    @Override
+    public <T> List<T> executeQueryAndGetResults(HibernateQuery hibernateQuery, EntityPathBase<T> entityPath)
+            throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        try {
+            HibernateQuery hibernateQueryWithSession = new HibernateQuery(session, hibernateQuery.getMetadata());
+            return hibernateQueryWithSession.list(entityPath);
+        } catch (HibernateException e) {
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
 
-	@Override
-	public long executeDeleteClause(CohoDeleteClause deleteClause) throws DatabaseManagerException {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			CohoDeleteClause cohoDeleteClause = new CohoDeleteClause(session, deleteClause);
-			cohoDeleteClause.execute();
-			tx.commit();
-		} catch (HibernateException e) {
-			rollbackTransaction(tx);
-			throw new DatabaseManagerException(e);
-		} finally {
-			closeSession(session);
-		}
-		return 0;
-	}
+    @Override
+    public long executeUpdateClause(CohoUpdateClause updateClause) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            CohoUpdateClause cohoUpdateClause = new CohoUpdateClause(session, updateClause);
+            cohoUpdateClause.execute();
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+        return 0;
+    }
+
+    @Override
+    public long executeDeleteClause(CohoDeleteClause deleteClause) throws DatabaseManagerException {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            CohoDeleteClause cohoDeleteClause = new CohoDeleteClause(session, deleteClause);
+            cohoDeleteClause.execute();
+            tx.commit();
+        } catch (HibernateException e) {
+            rollbackTransaction(tx);
+            throw new DatabaseManagerException(e);
+        } finally {
+            closeSession(session);
+        }
+        return 0;
+    }
 
 }
