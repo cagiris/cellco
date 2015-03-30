@@ -8,8 +8,12 @@
 
 	<beans:import resource="classpath:coho-service-spring.xml" />
 
+	<http pattern="/resources/**" security="none" />
+	
 	<http auto-config="true" use-expressions="true">
-		<intercept-url pattern="/dashboard" access="hasRole('AGENT')" />
+        <intercept-url pattern="/login.html*" access="permitAll"/>
+        <intercept-url pattern="/403.html*" access="permitAll"/>
+        <intercept-url pattern="/**" access="hasRole('AGENT')" />
 		<form-login login-page="/login.html" login-processing-url="/login"
 			default-target-url="/dashboard.html" authentication-failure-url="/login.html?error=true"
 			username-parameter="userName" password-parameter="password" />
