@@ -19,9 +19,19 @@ public class QTeamShiftDetailsEntity extends EntityPathBase<TeamShiftDetailsEnti
 
     public static final QTeamShiftDetailsEntity teamShiftDetailsEntity = new QTeamShiftDetailsEntity("teamShiftDetailsEntity");
 
-    public final NumberPath<Long> shiftEndTime = createNumber("shiftEndTime", Long.class);
+    public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final NumberPath<Long> shiftStartTime = createNumber("shiftStartTime", Long.class);
+    public final BooleanPath autoExpire = createBoolean("autoExpire");
+
+    //inherited
+    public final DateTimePath<java.util.Date> dateAdded = _super.dateAdded;
+
+    //inherited
+    public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
+
+    public final DateTimePath<java.util.Date> shiftEndTime = createDateTime("shiftEndTime", java.util.Date.class);
+
+    public final DateTimePath<java.util.Date> shiftStartTime = createDateTime("shiftStartTime", java.util.Date.class);
 
     public final NumberPath<Long> teamId = createNumber("teamId", Long.class);
 

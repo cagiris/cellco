@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.service.api;
 
+import java.util.Date;
+
 /**
  * This will maintain the shift timings for a particular team.
  *
@@ -14,8 +16,8 @@ public interface ITeamShiftDetails {
 
 	Long getTeamId();
 
-	Long getShiftStartTime();
+	Date getShiftStartTime();
 
-	Long getShiftEndTime();
+	Date getShiftEndTime();
 
 }

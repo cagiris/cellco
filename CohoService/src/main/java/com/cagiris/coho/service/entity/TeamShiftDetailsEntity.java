@@ -4,8 +4,11 @@
  */
 package com.cagiris.coho.service.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.cagiris.coho.service.api.ITeamShiftDetails;
 
@@ -15,15 +18,15 @@ import com.cagiris.coho.service.api.ITeamShiftDetails;
  */
 
 @Entity(name = "team_shift_details")
-public class TeamShiftDetailsEntity implements ITeamShiftDetails {
+public class TeamShiftDetailsEntity extends BaseEntity implements
+		ITeamShiftDetails {
 
-	 private Long teamId;
+	private Long teamId;
+	private Date shiftStartTime;
+	private Date shiftEndTime;
+	private boolean autoExpire;
 
-     private Long shiftStartTime;
-
-     private Long shiftEndTime;
-
-    @Id
+	@Id
 	@Override
 	public Long getTeamId() {
 		return teamId;
@@ -34,21 +37,37 @@ public class TeamShiftDetailsEntity implements ITeamShiftDetails {
 	}
 
 	@Override
-	public Long getShiftStartTime() {
+	public Date getShiftStartTime() {
 		return shiftStartTime;
 	}
 
-	public void setShiftStartTime(Long shiftStartTime) {
+	public void setShiftStartTime(Date shiftStartTime) {
 		this.shiftStartTime = shiftStartTime;
 	}
 
 	@Override
-	public Long getShiftEndTime() {
+	public Date getShiftEndTime() {
 		return shiftEndTime;
 	}
 
-	public void setShiftEndTime(Long shiftEndTime) {
+	public void setShiftEndTime(Date shiftEndTime) {
 		this.shiftEndTime = shiftEndTime;
+	}
+
+	public boolean isAutoExpire() {
+		return autoExpire;
+	}
+
+	public void setAutoExpire(boolean autoExpire) {
+		this.autoExpire = autoExpire;
+	}
+
+	@Transient
+	public Long getShiftDuration() {
+		if ((shiftStartTime == null) || (shiftEndTime == null)) {
+			return 0L;
+		}
+		return shiftEndTime.getTime() - shiftStartTime.getTime();
 	}
 
 }
