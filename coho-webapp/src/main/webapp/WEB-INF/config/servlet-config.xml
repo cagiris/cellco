@@ -26,16 +26,4 @@
 	       </list>
 	   </property>
 	</bean>
-	
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan"  value="com.cagiris.model" />
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
-				<prop key="show_sql">true</prop>
-				<prop key="hbm2ddl.auto">update</prop>
-			</props>
-		</property>
-	</bean>
 </beans>
