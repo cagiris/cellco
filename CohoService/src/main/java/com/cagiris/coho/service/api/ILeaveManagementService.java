@@ -45,7 +45,7 @@ public interface ILeaveManagementService {
 	 * This will return the the list of leave requests by leaveRequestStatus
 	 * applied by userId.
 	 */
-	List<IUserLeaveRequest> getLeaveRequestsByUserId(String userId, LeaveRequestStatus leaveRequestStatus)
+	List<? extends IUserLeaveRequest> getLeaveRequestsByUserId(String userId, LeaveRequestStatus leaveRequestStatus)
 			throws LeaveManagementServiceException;
 
 	/**

@@ -144,7 +144,6 @@ public class AttendenceReportingService implements IAttendenceReportingService {
     @Override
     public List<? extends IUserShiftInfo> queryUserShiftInfo(List<String> userIds, Date startTime, Date endTime)
             throws AttendenceReportingServiceException {
-
         try {
             QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity).where(
