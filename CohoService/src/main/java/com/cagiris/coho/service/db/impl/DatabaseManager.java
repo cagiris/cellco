@@ -5,10 +5,17 @@
 package com.cagiris.coho.service.db.impl;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -40,12 +47,19 @@ public class DatabaseManager implements IDatabaseManager {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
     private static final String DEFAULT_HIBERNATE_CONGFIG_FILE_NAME = "hibernate.cfg.xml";
+    private static final String HIBERNATE_CONNECTION_URL_PROPERTY = "connection.url";
+    private static final String DB_EXIST_SQL_STATE = "42P04";
+    private static final String HIBERNATE_USERNAME_PROPERTY = "connection.username";
+    private static final String JDBC_USERNAME_PROPERTY = "user";
+    private static final String HIBERNATE_PASSWORD_PROPERTY = "connection.password";
+    private static final String JDBC_PASSWORD_PROPERTY = "password";
+    private static final String DB_DRIVER_CLASS_NAME = "connection.driver_class";
 
     private SessionFactory sessionFactory;
 
     private List<String> packagesToScan;
 
-    public void init() {
+    public void init() throws DatabaseManagerException {
         String configFileName = DEFAULT_HIBERNATE_CONGFIG_FILE_NAME;
 
         logger.info("Using hibernate config file:{}", configFileName);
@@ -53,6 +67,13 @@ public class DatabaseManager implements IDatabaseManager {
         URL resourceURL = this.getClass().getClassLoader().getResource(configFileName);
 
         Configuration configuration = new Configuration().configure(resourceURL);
+
+        String connectionURL = configuration.getProperty(HIBERNATE_CONNECTION_URL_PROPERTY);
+        Properties properties = new Properties();
+        properties.setProperty(JDBC_USERNAME_PROPERTY, configuration.getProperty(HIBERNATE_USERNAME_PROPERTY));
+        properties.setProperty(JDBC_PASSWORD_PROPERTY, configuration.getProperty(HIBERNATE_PASSWORD_PROPERTY));
+        properties.setProperty(DB_DRIVER_CLASS_NAME, configuration.getProperty(DB_DRIVER_CLASS_NAME));
+        createDBIfNotPresent(connectionURL, properties);
         Set<Class<?>> entityClasses = scanAndGetAllClasses();
         for (Class<?> clazz : entityClasses) {
             configuration.addAnnotatedClass(clazz);
@@ -60,6 +81,49 @@ public class DatabaseManager implements IDatabaseManager {
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
         this.sessionFactory = configuration.buildSessionFactory(builder.build());
+    }
+
+    private void createDBIfNotPresent(String dbURL, Properties properties) throws DatabaseManagerException {
+        URI dbURI;
+        try {
+            dbURI = new URI(dbURL.substring(5));
+        } catch (URISyntaxException e) {
+            logger.error("Invalid db url:{}", dbURL);
+            throw new DatabaseManagerException(e.getMessage(), e);
+        }
+        String host = dbURI.getHost();
+        String dbName = dbURI.getPath();
+        dbName = dbName.replace("/", "");
+        int port = dbURI.getPort();
+        String connectionURL = "jdbc:" + dbURI.getScheme() + "://" + host;
+        if (port != -1) {
+            connectionURL += ":" + port;
+        }
+        logger.info("Database name: {}, Connection URL: {}", dbName, connectionURL);
+
+        String dbDriverClazz = properties.getProperty(DB_DRIVER_CLASS_NAME);
+        try {
+            Class.forName(dbDriverClazz);
+        } catch (ClassNotFoundException e) {
+            logger.error("Failed to load driver: {}", dbDriverClazz, e);
+            throw new DatabaseManagerException(e.getMessage(), e);
+        }
+
+        try (Connection connection = DriverManager.getConnection(connectionURL, properties)) {
+            try (Statement createStatement = connection.createStatement()) {
+                createStatement.executeUpdate("Create database " + dbName);
+            } catch (SQLException e) {
+                if (DB_EXIST_SQL_STATE.equals(e.getSQLState())) {
+                    logger.info("DB already exists: {}", dbName);
+                } else {
+                    logger.error("Error while creating db:{}", e.getMessage());
+                    throw new DatabaseManagerException(e);
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("Error while creating db connection:{}", e.getMessage());
+            throw new DatabaseManagerException(e.getMessage(), e);
+        }
     }
 
     private Set<Class<?>> scanAndGetAllClasses() {
