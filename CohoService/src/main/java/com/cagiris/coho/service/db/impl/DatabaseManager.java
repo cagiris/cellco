@@ -78,6 +78,7 @@ public class DatabaseManager implements IDatabaseManager {
         for (Class<?> clazz : entityClasses) {
             configuration.addAnnotatedClass(clazz);
         }
+        configuration.setNamingStrategy(new CohoDBNamingStratergy());
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
         this.sessionFactory = configuration.buildSessionFactory(builder.build());

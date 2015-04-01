@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AddUser {
 
-	@RequestMapping(value = {"/add-user"}, method = RequestMethod.GET)
-	public String showAddUserPage () {
-		return "usermanager/add-user";
-	}
+    @RequestMapping(value = {"/add-user"}, method = RequestMethod.GET)
+    public String showAddUserPage() {
+
+        return "usermanager/add-user";
+    }
 }

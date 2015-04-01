@@ -26,67 +26,64 @@ import com.cagiris.coho.service.api.LeaveType;
  *
  * @author: ssnk
  */
-@Entity(name = "userLeaveRequest")
-public class UserLeaveRequestEntity extends BaseEntity implements
-		IUserLeaveRequest {
+@Entity
+public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequest {
 
-	private String leaveApplicationId;
-	private String userId;
-	private Map<LeaveType, Integer> leaveTypeVsLeaveCount;
-	private LeaveRequestStatus leaveApplicationStatus;
-	private String approvingUserId;
+    private String leaveApplicationId;
+    private String userId;
+    private Map<LeaveType, Integer> leaveTypeVsLeaveCount;
+    private LeaveRequestStatus leaveApplicationStatus;
+    private String approvingUserId;
 
-	@Id
-	@Override
-	public String getLeaveApplicationId() {
-		return leaveApplicationId;
-	}
+    @Id
+    @Override
+    public String getLeaveApplicationId() {
+        return leaveApplicationId;
+    }
 
-	public void setLeaveApplicationId(String leaveApplicationId) {
-		this.leaveApplicationId = leaveApplicationId;
-	}
+    public void setLeaveApplicationId(String leaveApplicationId) {
+        this.leaveApplicationId = leaveApplicationId;
+    }
 
-	@Override
-	public String getUserId() {
-		return userId;
-	}
+    @Override
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	@ElementCollection(targetClass = java.lang.Integer.class, fetch = FetchType.EAGER)
-	@MapKeyEnumerated(EnumType.STRING)
-	@MapKeyColumn(name = "leave_type")
-	@Column(name = "leave_quota")
-	@CollectionTable(name = "request_leave_type_vs_quota", joinColumns = @JoinColumn(name = "user_id"))
-	@Override
-	public Map<LeaveType, Integer> getLeaveTypeVsLeaveCount() {
-		return leaveTypeVsLeaveCount;
-	}
+    @ElementCollection(targetClass = java.lang.Integer.class, fetch = FetchType.EAGER)
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "leave_type")
+    @Column(name = "leave_quota")
+    @CollectionTable(name = "request_leave_type_vs_quota", joinColumns = @JoinColumn(name = "user_id"))
+    @Override
+    public Map<LeaveType, Integer> getLeaveTypeVsLeaveCount() {
+        return leaveTypeVsLeaveCount;
+    }
 
-	public void setLeaveTypeVsLeaveCount(
-			Map<LeaveType, Integer> leaveTypeVsLeaveCount) {
-		this.leaveTypeVsLeaveCount = leaveTypeVsLeaveCount;
-	}
+    public void setLeaveTypeVsLeaveCount(Map<LeaveType, Integer> leaveTypeVsLeaveCount) {
+        this.leaveTypeVsLeaveCount = leaveTypeVsLeaveCount;
+    }
 
-	@Override
-	public LeaveRequestStatus getLeaveApplicationStatus() {
-		return leaveApplicationStatus;
-	}
+    @Override
+    public LeaveRequestStatus getLeaveApplicationStatus() {
+        return leaveApplicationStatus;
+    }
 
-	public void setLeaveApplicationStatus(
-			LeaveRequestStatus leaveApplicationStatus) {
-		this.leaveApplicationStatus = leaveApplicationStatus;
-	}
+    public void setLeaveApplicationStatus(LeaveRequestStatus leaveApplicationStatus) {
+        this.leaveApplicationStatus = leaveApplicationStatus;
+    }
 
-	@Override
-	public String getApprovingUserId() {
-		return approvingUserId;
-	}
+    @Override
+    public String getApprovingUserId() {
+        return approvingUserId;
+    }
 
-	public void setApprovingUserId(String approvingUserId) {
-		this.approvingUserId = approvingUserId;
-	}
+    public void setApprovingUserId(String approvingUserId) {
+        this.approvingUserId = approvingUserId;
+    }
 
 }
