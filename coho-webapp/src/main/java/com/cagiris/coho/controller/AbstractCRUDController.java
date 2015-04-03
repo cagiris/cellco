@@ -40,7 +40,12 @@ public abstract class AbstractCRUDController <T> implements IController {
 	public final ModelAndView createInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult, ModelMap modelMap) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
-		modelAndView.addAllObjects(create(bean, bindingResult, modelMap));
+		
+		if (!bindingResult.hasErrors()) {
+			modelAndView.addAllObjects(create(bean, bindingResult, modelMap));
+		} else {
+			modelAndView.addObject(bean);
+		}
 		
 		return modelAndView;
 	}

@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cagiris.coho.model.UserBean;
+import com.cagiris.coho.service.api.UserRole;
 
 /**
  * @author Ashish Jindal
@@ -47,8 +48,10 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
 	@Override
 	public ModelMap showCreatePage(ModelMap modelMap) {
-		// TODO Auto-generated method stub
-		return null;
+		ModelMap responseModelMap = new ModelMap();
+		responseModelMap.addAttribute("user", new UserBean());
+		responseModelMap.addAttribute("userRoles", UserRole.values());
+		return responseModelMap;
 	}
 
 	@Override
