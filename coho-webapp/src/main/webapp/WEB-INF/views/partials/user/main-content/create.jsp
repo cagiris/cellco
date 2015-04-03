@@ -2,10 +2,10 @@
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <h1 class="page-header">Add a new user</h1>
-<form:form commandName="user" cssClass="form-horizontal form-coho" id="createUserForm">
+<form:form commandName="userBean" cssClass="form-horizontal form-coho" id="createUserForm">
 	<div class="form-group">
-		<form:label path="userName" cssClass="control-label col-xs-4">User name</form:label>
-		<div class="col-xs-4">
+		<form:label path="userName" cssClass="control-label col-xs-2">User name</form:label>
+		<div class="col-xs-6">
 			<form:input cssClass="form-control" path="userName" required="true" />
 		</div>
 		<div class="col-xs-4">
@@ -13,8 +13,8 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<form:label path="password" cssClass="control-label col-xs-4">Password</form:label>
-		<div class="col-xs-4">
+		<form:label path="password" cssClass="control-label col-xs-2">Password</form:label>
+		<div class="col-xs-6">
 			<form:password cssClass="form-control" path="password" required="true" />
 		</div>
 		<div class="col-xs-4">
@@ -22,10 +22,10 @@
 		</div>
 	</div>
 	<div class="form-group">
-        <form:label path="userRole" cssClass="control-label col-xs-4">User Role</form:label>
-        <div class="col-xs-4">
+        <form:label path="userRole" cssClass="control-label col-xs-2">User Role</form:label>
+        <div class="col-xs-6">
         	<form:select path="userRole" cssClass="form-control">
-        		<core:forEach var="role" items="${userRoles}">
+        		<core:forEach var="role" items="${userRoleList}">
         			<option>${role}</option>
         		</core:forEach>
         	</form:select>
@@ -35,7 +35,7 @@
 		</div>
     </div>
     <div class="form-group">
-        <div class="col-xs-offset-4 col-xs-8">
+        <div class="col-xs-offset-2 col-xs-8">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>

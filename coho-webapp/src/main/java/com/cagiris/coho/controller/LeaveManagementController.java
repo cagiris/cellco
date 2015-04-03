@@ -29,7 +29,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	public static final String MY_LEAVES_URL_MAPPING = "/my-leaves-list";
 	
 	@Override
-	public ModelMap create(LeaveBean bean, ModelMap modelMap) {
+	public ModelMap create(LeaveBean bean, BindingResult bindingResult, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -58,8 +58,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	}
 
 	@Override
-	public ModelMap showFilteredListPage(LeaveBean bean,
-			ModelMap modelMap) {
+	public ModelMap showFilteredListPage(LeaveBean bean, BindingResult bindingResult, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -77,8 +76,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	}
 
 	@Override
-	public ModelMap update(Long entityId, LeaveBean bean,
-			ModelMap modelMap) {
+	public ModelMap update(Long entityId, LeaveBean bean, BindingResult bindingResult, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}

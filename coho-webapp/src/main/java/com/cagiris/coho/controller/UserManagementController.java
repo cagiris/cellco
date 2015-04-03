@@ -6,6 +6,7 @@ package com.cagiris.coho.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cagiris.coho.model.UserBean;
@@ -22,9 +23,14 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 	public static final String URL_MAPPING = "user";
 
 	@Override
-	public ModelMap create(UserBean bean, ModelMap modelMap) {
-		// TODO Auto-generated method stub
-		return null;
+	public ModelMap create(UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
+		ModelMap responseModelMap = new ModelMap();
+		if  (bindingResult.hasErrors()) {
+			responseModelMap.addAllAttributes(modelMap);
+			responseModelMap.addAttribute(UserRole.values());
+		}
+		
+		return responseModelMap;
 	}
 
 	@Override
@@ -47,14 +53,13 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 	@Override
 	public ModelMap showCreatePage(ModelMap modelMap) {
 		ModelMap responseModelMap = new ModelMap();
-		responseModelMap.addAttribute("user", new UserBean());
-		responseModelMap.addAttribute("userRoles", UserRole.values());
+		responseModelMap.addAttribute(new UserBean());
+		responseModelMap.addAttribute(UserRole.values());
 		return responseModelMap;
 	}
 
 	@Override
-	public ModelMap showFilteredListPage(UserBean bean,
-			ModelMap modelMap) {
+	public ModelMap showFilteredListPage(UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -72,8 +77,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 	}
 
 	@Override
-	public ModelMap update(Long entityId, UserBean bean,
-			ModelMap modelMap) {
+	public ModelMap update(Long entityId, UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
