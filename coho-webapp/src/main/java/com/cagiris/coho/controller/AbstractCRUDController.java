@@ -30,11 +30,10 @@ public abstract class AbstractCRUDController <T> implements IController {
 	/**
 	 * Handle the service call for creating a entity.
 	 * @param bean - Bean which contains the data entered in form.
-	 * @param bindingResult - Any validation errors while putting data in bean.
 	 * @param modelMap
 	 * @return - A model map containing attributes that need to be brought to view.
 	 */
-	public abstract ModelMap create(T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap create(T bean, ModelMap modelMap);
 	
 	@RequestMapping(value = CREATE_URL_MAPPING, method = RequestMethod.POST)
 	public final ModelAndView createInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult, ModelMap modelMap) {
@@ -42,7 +41,7 @@ public abstract class AbstractCRUDController <T> implements IController {
 		modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
 		
 		if (!bindingResult.hasErrors()) {
-			modelAndView.addAllObjects(create(bean, bindingResult, modelMap));
+			modelAndView.addAllObjects(create(bean, modelMap));
 		} else {
 			modelAndView.addObject(bean);
 		}
@@ -108,18 +107,20 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * Show a list after handling the post request to filter the data in list.
 	 * 
 	 * @param bean - Bean containing the filter parameters.
-	 * 
-	 * @param bindingResult - Any errors while mapping the filter parameters in the bean to the form data.
 	 * @param modelMap - Request scoped data.
+	 * 
 	 * @return - A model map containing the filtered list of data.
 	 */
-	public abstract ModelMap showFilteredListPage(T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap showFilteredListPage(T bean, ModelMap modelMap);
 
 	@RequestMapping(value = LIST_URL_MAPPING, method = RequestMethod.POST)
 	public final  ModelAndView showFilteredListPageInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult, ModelMap modelMap) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + LIST_URL_MAPPING);
-		modelAndView.addAllObjects(showFilteredListPage(bean, bindingResult, modelMap));
+		
+		if (!bindingResult.hasErrors()) {
+			modelAndView.addAllObjects(showFilteredListPage(bean, modelMap));
+		}
 		
 		return modelAndView;
 	}
@@ -165,11 +166,10 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * 
 	 * @param entityId - ID of the entity to be update.
 	 * @param bean - Bean containing the updated data.
-	 * @param bindingResult - Contains any error while mapping the bean with the input form data.
 	 * @param modelMap - Request scope data.
 	 * @return - A model map containing any attributes (Success/error message etc) to be sent to view.
 	 */
-	public abstract ModelMap update(Long entityId, T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap update(Long entityId, T bean, ModelMap modelMap);
 
 	@RequestMapping(value = (UPDATE_URL_MAPPING + "/{entityId}"), method = RequestMethod.POST)
 	public final  ModelAndView updateInternal(@PathVariable Long entityId, 
@@ -178,7 +178,10 @@ public abstract class AbstractCRUDController <T> implements IController {
 												ModelMap modelMap) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
-		modelAndView.addAllObjects(update(entityId, bean, bindingResult, modelMap));
+		
+		if (!bindingResult.hasErrors()) {
+			modelAndView.addAllObjects(update(entityId, bean, modelMap));
+		}
 		
 		return modelAndView;
 	}

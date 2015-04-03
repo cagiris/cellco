@@ -6,7 +6,6 @@ package com.cagiris.coho.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cagiris.coho.model.UserBean;
@@ -23,8 +22,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 	public static final String URL_MAPPING = "user";
 
 	@Override
-	public ModelMap create(UserBean bean, BindingResult bindingResult,
-			ModelMap modelMap) {
+	public ModelMap create(UserBean bean, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -56,7 +54,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
 	@Override
 	public ModelMap showFilteredListPage(UserBean bean,
-			BindingResult bindingResult, ModelMap modelMap) {
+			ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -75,7 +73,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
 	@Override
 	public ModelMap update(Long entityId, UserBean bean,
-			BindingResult bindingResult, ModelMap modelMap) {
+			ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
