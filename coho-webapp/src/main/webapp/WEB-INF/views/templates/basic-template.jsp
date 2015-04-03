@@ -18,12 +18,13 @@
 <title>COHO</title>
 
 <!-- Bootstrap core CSS -->
-<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="resources/css/bootstrap-theme.min.css">
+
+<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/bootstrap.min.css' />">
+<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/bootstrap-theme.min.css' />">
 <!-- Bootstrap Calendar CSS -->
-<link rel="stylesheet" type="text/css" href="resources/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/datepicker.css' />">
 <!-- Custom CSS -->
-<link rel="stylesheet" type="text/css" href="resources/css/style.css">
+<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/style.css' />">
 
 </head>
 <body>
@@ -41,13 +42,13 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     
-    <script src="resources/js/jquery.min.js"></script>
-    <script src="resources/js/bootstrap.min.js"></script>
-    <script src="resources/js/bootstrap-datepicker.js"></script>
+    <script src="<core:url value = '/resources/js/jquery.min.js' />"></script>
+    <script src="<core:url value = '/resources/js/bootstrap.min.js' />"></script>
+    <script src="<core:url value = '/resources/js/bootstrap-datepicker.js' />"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="resources/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="<core:url value = '/resources/js/ie10-viewport-bug-workaround.js' />"></script>
     
     <!-- Custom Javascript -->
-    <script src="resources/js/script.js"></script>
+    <script src="<core:url value = '/resources/js/script.js' />"></script>
 </body>
 </html>

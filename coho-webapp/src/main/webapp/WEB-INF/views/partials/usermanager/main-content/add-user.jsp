@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@page import="com.cagiris.coho.service.api.UserRole"%>
 <h1 class="page-header">Add User</h1>
-<core:url value="/add-user" var="addUserUrl" />
+<core:url value="/add-user.html" var="addUserUrl" />
 <f:form class="form-horizontal form-coho" action="${addUserUrl}" modelAttribute="userBean" method="POST">
     <div class="form-group">
         <label for="userId" class="control-label col-xs-2">User Id</label>
