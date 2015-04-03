@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  */
 @Controller
+@RequestMapping(value = Tracker.abc)
 public class Tracker {
 
+	public static final String abc = "abc";
+	
 	@RequestMapping(value = {"/tracker"}, method = RequestMethod.GET)
 	public String showTrackerPage () {
 		return "usermanager/tracker";
