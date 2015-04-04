@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.controller;
 
+import java.io.Serializable;
+
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -35,13 +37,13 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	}
 
 	@Override
-	public LeaveBean delete(Long entityId) {
+	public LeaveBean delete(Serializable entityId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ModelMap get(Long entityId) {
+	public ModelMap get(Serializable entityId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -70,13 +72,13 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	}
 
 	@Override
-	public ModelMap showUpdatePage(Long entityId, ModelMap modelMap) {
+	public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ModelMap update(Long entityId, LeaveBean bean, BindingResult bindingResult, ModelMap modelMap) {
+	public ModelMap update(Serializable entityId, LeaveBean bean, BindingResult bindingResult, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}

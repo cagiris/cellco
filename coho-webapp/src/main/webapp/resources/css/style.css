@@ -190,3 +190,14 @@ body {
 	transform: translateY(50%);
 }
  
+.error-msg {
+	color: red;
+	font-size: 12px;
+	padding: 3px;		
+}
+
+.success-msg {
+	color: green;
+	font-size: 12px;
+	padding: 3px;	
+}

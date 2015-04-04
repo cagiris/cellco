@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.controller;
 
+import java.io.Serializable;
+
 import javax.validation.Valid;
 
 import org.springframework.ui.ModelMap;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,6 +29,11 @@ public abstract class AbstractCRUDController <T> implements IController {
 	public static final String UPDATE_URL_MAPPING = "/update";
 	public static final String DELETE_URL_MAPPING = "/delete";
 	public static final String LIST_URL_MAPPING = "/list";
+	
+	public static final String ATTR_ERROR_MSG = "errorMsg";
+	public static final String ATTR_SUCCESS_MSG = "successMsg";
+	
+	public static final String REQUEST_PARAM_ENTITYID = "entityId";
 	
 	/**
 	 * Handle the service call for creating a entity.
@@ -51,11 +59,11 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param entityId - ID of the entity to be deleted.
 	 * @return - An instance of the bean containing the deleted data, which will be served as JSON to view.
 	 */
-	public abstract T delete(Long entityId);
+	public abstract T delete(Serializable entityId);
 
-	@RequestMapping(value = (DELETE_URL_MAPPING + "/{entityId}"), method = RequestMethod.POST)
+	@RequestMapping(value = DELETE_URL_MAPPING)
 	@ResponseBody
-	public final  T deleteInternal(@PathVariable Long entityId) {
+	public final  T deleteInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId) {
 		return delete(entityId);
 	}
 
@@ -65,12 +73,13 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param entityId - ID of the entity to be loaded.
 	 * @return - A model map containing an attribute with bean data (From entity).
 	 */
-	public abstract ModelMap get(Long entityId);
+	public abstract ModelMap get(Serializable entityId);
 
-	@RequestMapping(value = (GET_URL_MAPPING + "/{entityId}"))
-	public final  ModelAndView getInternal(@PathVariable Long entityId) {
+	@RequestMapping(value = GET_URL_MAPPING )
+	public final  ModelAndView getInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, ModelMap modelMap) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
+		modelAndView.addAllObjects(modelMap);
 		modelAndView.addAllObjects(get(entityId));
 		
 		return modelAndView;
@@ -144,10 +153,11 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap - Request scope data.
 	 * @return - A model map containing an instance of the bean to be mapped with the input form.
 	 */
-	public abstract ModelMap showUpdatePage(Long entityId, ModelMap modelMap);
+	public abstract ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap);
 
-	@RequestMapping(value = (UPDATE_URL_MAPPING + "/{entityId}"), method = RequestMethod.GET)
-	public final  ModelAndView showUpdatePageInternal(@PathVariable Long entityId, ModelMap modelMap) {
+	@RequestMapping(value = UPDATE_URL_MAPPING, method = RequestMethod.GET)
+	public final  ModelAndView showUpdatePageInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, 
+														ModelMap modelMap) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
 		modelAndView.addAllObjects(showUpdatePage(entityId, modelMap));
@@ -164,10 +174,10 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap - Request scope data.
 	 * @return - A model map containing any attributes (Success/error message etc) to be sent to view.
 	 */
-	public abstract ModelMap update(Long entityId, T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap update(Serializable entityId, T bean, BindingResult bindingResult, ModelMap modelMap);
 
-	@RequestMapping(value = (UPDATE_URL_MAPPING + "/{entityId}"), method = RequestMethod.POST)
-	public final  ModelAndView updateInternal(@PathVariable Long entityId, 
+	@RequestMapping(value = UPDATE_URL_MAPPING, method = RequestMethod.POST)
+	public final  ModelAndView updateInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, 
 												@Valid @ModelAttribute T bean, 
 												BindingResult bindingResult, 
 												ModelMap modelMap) {

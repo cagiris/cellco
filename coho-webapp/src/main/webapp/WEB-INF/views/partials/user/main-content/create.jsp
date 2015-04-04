@@ -1,8 +1,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 
 <h1 class="page-header">Add a new user</h1>
 <form:form commandName="userBean" cssClass="form-horizontal form-coho" id="createUserForm">
+	
+	<tiles:insertAttribute name="feedback-msg" />
+	
 	<div class="form-group">
 		<form:label path="userId" cssClass="control-label col-xs-2">User Id</form:label>
 		<div class="col-xs-6">
