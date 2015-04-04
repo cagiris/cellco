@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.impl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.cagiris.coho.service.db.api.EntityNotFoundException;
 import com.cagiris.coho.service.db.api.IDatabaseManager;
 import com.cagiris.coho.service.db.impl.CohoDeleteClause;
 import com.cagiris.coho.service.entity.OrganizationEntity;
+import com.cagiris.coho.service.entity.QOrganizationEntity;
 import com.cagiris.coho.service.entity.QTeamEntity;
 import com.cagiris.coho.service.entity.QTeamUserEntity;
 import com.cagiris.coho.service.entity.TeamEntity;
@@ -66,10 +68,12 @@ public class HierarchyService implements IHierarchyService {
 	@Override
 	public ITeam addTeam(Long organizationId, Long parentTeamId, String teamName, String teamDescription)
 			throws HierarchyServiceException {
+		Date currentTime = new Date(System.currentTimeMillis());
 		TeamEntity teamEntity = new TeamEntity();
 		teamEntity.setTeamName(teamName);
 		teamEntity.setTeamDescription(teamDescription);
-		teamEntity.setParentTeamEntity(null);
+		teamEntity.setDateAdded(currentTime);
+		teamEntity.setDateModified(currentTime);
 		OrganizationEntity organizationEntity;
 		try {
 			organizationEntity = databaseManager.get(OrganizationEntity.class, organizationId);
@@ -148,12 +152,15 @@ public class HierarchyService implements IHierarchyService {
 	@Override
 	public ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
 			AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException {
+		Date currentTime = new Date(System.currentTimeMillis());
 		UserEntity userEntity = new UserEntity();
 		userEntity.setAuthPolicy(authenicationPolicy);
 		userEntity.setUserId(userId);
 		userEntity.setAuthToken(authToken);
 		userEntity.setUserRole(userRole);
 		userEntity.setUserName(userName);
+		userEntity.setDateAdded(currentTime);
+		userEntity.setDateModified(currentTime);
 		TeamUserEntity teamUserEntity = new TeamUserEntity();
 		teamUserEntity.setUserEntity(userEntity);
 		try {
@@ -257,9 +264,12 @@ public class HierarchyService implements IHierarchyService {
 	@Override
 	public IOrganization addOrganization(String organizationName, String organizationDescription)
 			throws HierarchyServiceException {
+		Date currentTime = new Date(System.currentTimeMillis());
 		OrganizationEntity organizationEntity = new OrganizationEntity();
 		organizationEntity.setOrganizationName(organizationName);
 		organizationEntity.setOrganizationDescription(organizationDescription);
+		organizationEntity.setDateAdded(currentTime);
+		organizationEntity.setDateModified(currentTime);
 		try {
 			databaseManager.save(organizationEntity);
 		} catch (DatabaseManagerException e) {
@@ -279,6 +289,18 @@ public class HierarchyService implements IHierarchyService {
 			throw new HierarchyServiceException(e);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public List<? extends IOrganization> getAllOrganizationInfo()
+			throws HierarchyServiceException, ResourceNotFoundException {
+		QOrganizationEntity qOrganizationEntity = QOrganizationEntity.organizationEntity;
+		HibernateQuery hibernateQuery = new HibernateQuery().from(qOrganizationEntity);
+		try {
+			return databaseManager.executeQueryAndGetResults(hibernateQuery, qOrganizationEntity);
+		} catch (DatabaseManagerException e) {
+			throw new HierarchyServiceException(e);
 		}
 	}
 

@@ -16,6 +16,14 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @GroupSequence({ ValidationCheckForEmpty.class, ValidationCheckForLength.class, ValidationCheckForPattern.class, UserBean.class})
 public class UserBean extends AbstractBean {
+	
+	
+	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
+	@Pattern (regexp = "^[a-zA-Z0-9]*$", message = "Can only be alphanumeric", groups = ValidationCheckForPattern.class)
+	@Size (min = 5, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
+	
+	private String userId;
+	
 	/**
 	 * Username chosen at the time of registration (Unique for each user).
 	 */
@@ -57,5 +65,13 @@ public class UserBean extends AbstractBean {
 
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

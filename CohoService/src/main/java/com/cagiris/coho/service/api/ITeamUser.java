@@ -16,5 +16,9 @@ public interface ITeamUser {
 	Long getTeamId();
 
 	String getUserId();
+	
+	String getUserName();
+	
+	String getUserRole();
 
 }

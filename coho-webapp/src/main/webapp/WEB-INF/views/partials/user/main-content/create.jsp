@@ -4,6 +4,16 @@
 <h1 class="page-header">Add a new user</h1>
 <form:form commandName="userBean" cssClass="form-horizontal form-coho" id="createUserForm">
 	<div class="form-group">
+		<form:label path="userId" cssClass="control-label col-xs-2">User Id</form:label>
+		<div class="col-xs-6">
+			<form:input cssClass="form-control" path="userId" required="true" />
+		</div>
+		<div class="col-xs-4">
+			<form:errors path="userId" cssClass="text-danger"/>
+		</div>
+	</div>
+	
+	<div class="form-group">
 		<form:label path="userName" cssClass="control-label col-xs-2">User name</form:label>
 		<div class="col-xs-6">
 			<form:input cssClass="form-control" path="userName" required="true" />

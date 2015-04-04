@@ -38,6 +38,8 @@ public interface IHierarchyService {
             throws HierarchyServiceException;
 
     IOrganization getOrganizationInfo(Long organizationId) throws HierarchyServiceException, ResourceNotFoundException;
+    
+    List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException, ResourceNotFoundException;
 
     ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
             AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException;

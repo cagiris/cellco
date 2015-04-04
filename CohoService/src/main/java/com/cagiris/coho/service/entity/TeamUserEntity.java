@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class TeamUserEntity implements ITeamUser {
 	}
 
 	@JoinColumn(name = "team_id")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER,cascade={CascadeType.REMOVE})
 	public TeamEntity getTeamEntity() {
 		return teamEntity;
 	}
@@ -75,6 +76,26 @@ public class TeamUserEntity implements ITeamUser {
 
 	public void setUserEntity(UserEntity userEntity) {
 		this.userEntity = userEntity;
+	}
+
+	@Transient
+	@Override
+	public String getUserName() {
+		if(userEntity!=null)
+		{
+			return userEntity.getUserName();
+		}
+		return null;
+	}
+
+	@Transient
+	@Override
+	public String getUserRole() {
+		if(userEntity!=null&&userEntity.getUserRole()!=null)
+		{
+			return userEntity.getUserRole().toString();
+		}
+		return null;
 	}
 
 }
