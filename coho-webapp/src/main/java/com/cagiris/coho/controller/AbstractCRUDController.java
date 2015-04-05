@@ -70,14 +70,11 @@ public abstract class AbstractCRUDController <T extends ICRUDBean> implements IC
 
 	@RequestMapping(value = DELETE_URL_MAPPING)
 	@ResponseBody
-	public final  ModelMap deleteInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId) throws Exception {
+	public final  String deleteInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId) throws Exception {
 		
 		delete(entityId);
 		
-		ModelMap modelMap = new ModelMap();
-		modelMap.addAttribute(ATTR_SUCCESS_MSG, ENTITY_DELETE_SUCCESS_MSG);
-		
-		return modelMap;
+		return ENTITY_DELETE_SUCCESS_MSG;
 	}
 
 	/**
