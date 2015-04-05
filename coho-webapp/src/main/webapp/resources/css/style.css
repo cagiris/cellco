@@ -201,3 +201,9 @@ body {
 	font-size: 12px;
 	padding: 3px;	
 }
+
+.form-field-error {
+	color: red;
+	font-size: 11px;
+	padding: 3px;
+}

@@ -10,13 +10,7 @@ import java.io.Serializable;
  * @author Ashish Jindal
  *
  */
-public class LeaveBean extends AbstractBean implements ICRUDBean {
+public interface ICRUDBean {
 
-	private String leaveid;
-	
-	@Override
-	public Serializable getEntityId() {
-		return leaveid;
-	}
-
+	Serializable getEntityId();
 }

@@ -5,35 +5,37 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cagiris.coho.model.ICRUDBean;
+
 /**
  *  Ashish Jindal
  *
  */
-public abstract class AbstractCRUDController <T> implements IController {
+public abstract class AbstractCRUDController <T extends ICRUDBean> implements IController {
 
+	public static final String springFilterUrlSuffix = ".html";
+	
 	public static final String CREATE_URL_MAPPING = "/create";
 	public static final String GET_URL_MAPPING = "/get";
 	public static final String UPDATE_URL_MAPPING = "/update";
 	public static final String DELETE_URL_MAPPING = "/delete";
 	public static final String LIST_URL_MAPPING = "/list";
 	
-	public static final String ATTR_ERROR_MSG = "errorMsg";
-	public static final String ATTR_SUCCESS_MSG = "successMsg";
-	
 	public static final String REQUEST_PARAM_ENTITYID = "entityId";
+	public static final String ENTITY_DELETE_SUCCESS_MSG = "Deleted successfully";
 	
 	/**
 	 * Handle the service call for creating a entity.
@@ -42,13 +44,18 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap
 	 * @return - A model map containing attributes that need to be brought to view.
 	 */
-	public abstract ModelMap create(T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap create(T bean, BindingResult bindingResult, ModelMap modelMap) throws Exception;
 	
 	@RequestMapping(value = CREATE_URL_MAPPING, method = RequestMethod.POST)
-	public final ModelAndView createInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult, ModelMap modelMap) {
+	public final ModelAndView createInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult, ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
+		
 		modelAndView.addAllObjects(create(bean, bindingResult, modelMap));
+		if (!bindingResult.hasErrors()) {
+			modelAndView.addObject(REQUEST_PARAM_ENTITYID, bean.getEntityId());
+			modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING));
+		}
 		
 		return modelAndView;
 	}
@@ -59,12 +66,18 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param entityId - ID of the entity to be deleted.
 	 * @return - An instance of the bean containing the deleted data, which will be served as JSON to view.
 	 */
-	public abstract T delete(Serializable entityId);
+	public abstract void delete(Serializable entityId) throws Exception;
 
 	@RequestMapping(value = DELETE_URL_MAPPING)
 	@ResponseBody
-	public final  T deleteInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId) {
-		return delete(entityId);
+	public final  ModelMap deleteInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId) throws Exception {
+		
+		delete(entityId);
+		
+		ModelMap modelMap = new ModelMap();
+		modelMap.addAttribute(ATTR_SUCCESS_MSG, ENTITY_DELETE_SUCCESS_MSG);
+		
+		return modelMap;
 	}
 
 	/**
@@ -73,10 +86,11 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param entityId - ID of the entity to be loaded.
 	 * @return - A model map containing an attribute with bean data (From entity).
 	 */
-	public abstract ModelMap get(Serializable entityId);
+	public abstract ModelMap get(Serializable entityId) throws Exception ;
 
 	@RequestMapping(value = GET_URL_MAPPING )
-	public final  ModelAndView getInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, ModelMap modelMap) {
+	public final  ModelAndView getInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, 
+											ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
 		modelAndView.addAllObjects(modelMap);
@@ -96,10 +110,10 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap - Data in the model map of request.
 	 * @return - A model map containing an instance of the bean used to map the form.
 	 */
-	public abstract ModelMap showCreatePage(ModelMap modelMap);
+	public abstract ModelMap showCreatePage(ModelMap modelMap) throws Exception;
 	
 	@RequestMapping(value = CREATE_URL_MAPPING, method = RequestMethod.GET)
-	public final ModelAndView showCreatePageInternal(ModelMap modelMap) {
+	public final ModelAndView showCreatePageInternal(ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
 		modelAndView.addAllObjects(showCreatePage(modelMap));
@@ -107,23 +121,22 @@ public abstract class AbstractCRUDController <T> implements IController {
 		return modelAndView;
 	}
 
-	
 	/**
 	 * Show a list after handling the post request to filter the data in list.
 	 * 
-	 * @param bean - Bean containing the filter parameters.
-	 * 
-	 * @param bindingResult - Any errors while mapping the filter parameters in the bean to the form data.
+	 * @param filterParams - Bean containing the filter parameters.
 	 * @param modelMap - Request scoped data.
+	 * 
 	 * @return - A model map containing the filtered list of data.
 	 */
-	public abstract ModelMap showFilteredListPage(T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap showFilteredListPage(Map<String, String> filterParams, ModelMap modelMap) throws Exception;
 
 	@RequestMapping(value = LIST_URL_MAPPING, method = RequestMethod.POST)
-	public final  ModelAndView showFilteredListPageInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult, ModelMap modelMap) {
+	public final  ModelAndView showFilteredListPageInternal(@RequestParam Map<String, String> params, 
+															ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + LIST_URL_MAPPING);
-		modelAndView.addAllObjects(showFilteredListPage(bean, bindingResult, modelMap));
+		modelAndView.addAllObjects(showFilteredListPage(params, modelMap));
 		
 		return modelAndView;
 	}
@@ -134,10 +147,10 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap - Data in request scope.
 	 * @return - A model map containing the list of data.
 	 */
-	public abstract ModelMap showListPage(ModelMap modelMap);
+	public abstract ModelMap showListPage(ModelMap modelMap) throws Exception;
 
 	@RequestMapping(value = LIST_URL_MAPPING, method = RequestMethod.GET)
-	public final  ModelAndView showListPageInternal(ModelMap modelMap) {
+	public final  ModelAndView showListPageInternal(ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + LIST_URL_MAPPING);
 		modelAndView.addAllObjects(showListPage(modelMap));
@@ -153,11 +166,11 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap - Request scope data.
 	 * @return - A model map containing an instance of the bean to be mapped with the input form.
 	 */
-	public abstract ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap);
+	public abstract ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) throws Exception;
 
 	@RequestMapping(value = UPDATE_URL_MAPPING, method = RequestMethod.GET)
 	public final  ModelAndView showUpdatePageInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, 
-														ModelMap modelMap) {
+														ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
 		modelAndView.addAllObjects(showUpdatePage(entityId, modelMap));
@@ -174,17 +187,26 @@ public abstract class AbstractCRUDController <T> implements IController {
 	 * @param modelMap - Request scope data.
 	 * @return - A model map containing any attributes (Success/error message etc) to be sent to view.
 	 */
-	public abstract ModelMap update(Serializable entityId, T bean, BindingResult bindingResult, ModelMap modelMap);
+	public abstract ModelMap update(Serializable entityId, T bean, BindingResult bindingResult, ModelMap modelMap) throws Exception;
 
 	@RequestMapping(value = UPDATE_URL_MAPPING, method = RequestMethod.POST)
 	public final  ModelAndView updateInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, 
 												@Valid @ModelAttribute T bean, 
 												BindingResult bindingResult, 
-												ModelMap modelMap) {
+												ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
 		modelAndView.addAllObjects(update(entityId, bean, bindingResult, modelMap));
 		
+		if (!bindingResult.hasErrors()) {
+			modelAndView.addObject(REQUEST_PARAM_ENTITYID, bean.getEntityId());
+			modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING));
+		}
+		
 		return modelAndView;
+	}
+	
+	private String getRedirectUrl(String mappingUrl) {
+		return ("redirect:" + mappingUrl.substring(1) + springFilterUrlSuffix);
 	}
 }

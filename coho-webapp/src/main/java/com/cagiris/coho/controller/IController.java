@@ -11,4 +11,7 @@ package com.cagiris.coho.controller;
 
 public interface IController {
 
+	public static final String ATTR_ERROR_MSG = "errorMsg";
+	public static final String ATTR_SUCCESS_MSG = "successMsg";
+	
 }

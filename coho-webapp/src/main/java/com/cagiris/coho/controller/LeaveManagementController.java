@@ -5,6 +5,7 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -37,9 +38,8 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	}
 
 	@Override
-	public LeaveBean delete(Serializable entityId) {
+	public void delete(Serializable entityId) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveBean>
 	}
 
 	@Override
-	public ModelMap showFilteredListPage(LeaveBean bean, BindingResult bindingResult, ModelMap modelMap) {
+	public ModelMap showFilteredListPage(Map<String, String> filterParams, ModelMap modelMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}

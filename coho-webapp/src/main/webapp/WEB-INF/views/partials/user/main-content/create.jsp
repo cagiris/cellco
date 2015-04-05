@@ -8,36 +8,44 @@
 	<tiles:insertAttribute name="feedback-msg" />
 	
 	<div class="form-group">
-		<form:label path="userId" cssClass="control-label col-xs-2">User Id</form:label>
-		<div class="col-xs-6">
+		<form:label path="userId" cssClass="control-label col-xs-3">User Id</form:label>
+		<div class="col-xs-5">
 			<form:input cssClass="form-control" path="userId" required="true" />
 		</div>
 		<div class="col-xs-4">
-			<form:errors path="userId" cssClass="text-danger"/>
+			<form:errors path="userId" cssClass="form-field-error"/>
 		</div>
 	</div>
-	
 	<div class="form-group">
-		<form:label path="userName" cssClass="control-label col-xs-2">User name</form:label>
-		<div class="col-xs-6">
+		<form:label path="userName" cssClass="control-label col-xs-3">Full name of user</form:label>
+		<div class="col-xs-5">
 			<form:input cssClass="form-control" path="userName" required="true" />
 		</div>
 		<div class="col-xs-4">
-			<form:errors path="userName" cssClass="text-danger"/>
+			<form:errors path="userName" cssClass="form-field-error"/>
 		</div>
 	</div>
 	<div class="form-group">
-		<form:label path="password" cssClass="control-label col-xs-2">Password</form:label>
-		<div class="col-xs-6">
+		<form:label path="password" cssClass="control-label col-xs-3">Password</form:label>
+		<div class="col-xs-5">
 			<form:password cssClass="form-control" path="password" required="true" />
 		</div>
 		<div class="col-xs-4">
-			<form:errors path="password" cssClass="text-danger"/>
+			<form:errors path="password" cssClass="form-field-error"/>
 		</div>
 	</div>
 	<div class="form-group">
-        <form:label path="userRole" cssClass="control-label col-xs-2">User Role</form:label>
-        <div class="col-xs-6">
+		<form:label path="userName" cssClass="control-label col-xs-3">Re-enter Password</form:label>
+		<div class="col-xs-5">
+			<form:input cssClass="form-control" path="reEnterdPassword" required="true" />
+		</div>
+		<div class="col-xs-4">
+			<form:errors path="reEnterdPassword" cssClass="form-field-error"/>
+		</div>
+	</div>
+	<div class="form-group">
+        <form:label path="userRole" cssClass="control-label col-xs-3">User Role</form:label>
+        <div class="col-xs-5">
         	<form:select path="userRole" cssClass="form-control">
         		<core:forEach var="role" items="${userRoleList}">
         			<option>${role}</option>
@@ -45,11 +53,11 @@
         	</form:select>
         </div>
         <div class="col-xs-4">
-			<form:errors path="userRole" cssClass="text-danger"/>
+			<form:errors path="userRole" cssClass="form-field-error"/>
 		</div>
     </div>
     <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-8">
+        <div class="col-xs-offset-3 col-xs-8">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </div>

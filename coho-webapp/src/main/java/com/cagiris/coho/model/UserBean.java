@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.model;
 
+import java.io.Serializable;
+
 import javax.validation.GroupSequence;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -15,33 +17,44 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 @GroupSequence({ ValidationCheckForEmpty.class, ValidationCheckForLength.class, ValidationCheckForPattern.class, UserBean.class})
-public class UserBean extends AbstractBean {
-	
+public class UserBean extends AbstractBean implements ICRUDBean {
 	
 	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
 	@Pattern (regexp = "^[a-zA-Z0-9]*$", message = "Can only be alphanumeric", groups = ValidationCheckForPattern.class)
-	@Size (min = 5, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
-	
+	@Size (min = 6, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
 	private String userId;
 	
 	/**
-	 * Username chosen at the time of registration (Unique for each user).
+	 * First name + Last name of the user.
 	 */
 	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
-	@Pattern (regexp = "^[a-zA-Z0-9]*$", message = "Can only be alphanumeric", groups = ValidationCheckForPattern.class)
-	@Size (min = 5, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
+	@Pattern (regexp = "^[a-zA-Z ]*$", message = "Field can only contain alphabets", groups = ValidationCheckForPattern.class)
+	@Size (min = 1, max = 50, message = "Name too long (Maximum {max} characters)", groups = ValidationCheckForLength.class)
 	private String userName;
 	
 	/**
-	 * Password corresponding to the username.
+	 * Password corresponding to the userId.
 	 */
 	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
 	@Pattern (regexp = "^[a-zA-Z0-9]*$", message = "Can only be alphanumeric", groups = ValidationCheckForPattern.class)
-	@Size (min = 10, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
+	@Size (min = 6, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
 	private String password;
 
+	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
+	@Pattern (regexp = "^[a-zA-Z0-9]*$", message = "Can only be alphanumeric", groups = ValidationCheckForPattern.class)
+	@Size (min = 6, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
+	private String reEnterdPassword;
+	
 	@NotBlank (message = "Field can't be left empty", groups = ValidationCheckForEmpty.class)
 	private String userRole;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getUserName() {
 		return userName;
@@ -59,6 +72,14 @@ public class UserBean extends AbstractBean {
 		this.password = password;
 	}
 
+	public String getReEnterdPassword() {
+		return reEnterdPassword;
+	}
+
+	public void setReEnterdPassword(String reEnterdPassword) {
+		this.reEnterdPassword = reEnterdPassword;
+	}
+
 	public String getUserRole() {
 		return userRole;
 	}
@@ -67,11 +88,8 @@ public class UserBean extends AbstractBean {
 		this.userRole = userRole;
 	}
 
-	public String getUserId() {
+	@Override
+	public Serializable getEntityId() {
 		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 }
