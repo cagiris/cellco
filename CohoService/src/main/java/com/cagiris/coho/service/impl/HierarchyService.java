@@ -245,7 +245,7 @@ public class HierarchyService implements IHierarchyService {
     private void createUserDependentEntities(String userId) throws HierarchyServiceException {
         try {
             leaveManagementService.addUserLeaveQuota(userId);
-        } catch (LeaveManagementServiceException | ResourceNotFoundException e) {
+        } catch (LeaveManagementServiceException e) {
             throw new HierarchyServiceException(e);
         }
     }

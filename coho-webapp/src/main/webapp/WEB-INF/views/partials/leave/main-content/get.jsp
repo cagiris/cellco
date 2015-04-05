@@ -1,49 +1,58 @@
-<h1 class="page-header">Details of the leave request</h1>
-<form class="form-horizontal form-coho">
-    <div class="form-group">
-        <label for="leaveSubject" class="control-label col-xs-2">Subject</label>
-        <div class="col-xs-6">
-            <input type="text" class="form-control" id="leaveSubject" required>
-        </div>
-        <div class="col-xs-4"></div>
-    </div>
-	<div class="form-group">
-        <label for="startDate" class="control-label col-xs-2">Start Date</label>
-        <div class="col-xs-6">
-            <div class="input-group date form-datepicker" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
-                <input type="text" class="form-control" id="startDate" placeholder="Start Date" required>
-                <span class="input-group-addon add-on"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-xs-4">
-        
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="endDate" class="control-label col-xs-2">End Date</label>
-        <div class="col-xs-6">
-            <div class="input-group date form-datepicker" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
-                <input type="text" class="form-control" id="endDate" placeholder="End Date" required>
-                <span class="input-group-addon add-on"><i class="glyphicon glyphicon-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-xs-4">
-        
-        </div>
-    </div>
-	<div class="form-group">
-        <label for="description" class="control-label col-xs-2">Description</label>
-        <div class="col-xs-6">
-            <textarea rows="5" id="description" class="form-control"></textarea>
-        </div>
-        <div class="col-xs-4">
-        
-        </div>
-    </div>
-	<div class="form-group">
-		<div class="col-xs-offset-2 col-xs-10">
-			<button type="submit" class="btn btn-primary">Apply</button>
-		</div>
-	</div>
-</form>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 
+<h1 class="page-header">Leave Request Details</h1>
+
+<form class="form-horizontal form-coho" id="createUserForm">
+
+	<tiles:insertAttribute name="feedback-msg" />
+
+	<div class="form-group">
+		<label class="control-label col-xs-3">Leave Subject :</label>
+		<div class="col-xs-5">
+			<p class="form-control-static">${ leaveRequestBean.requestSubject }</p>
+		</div>
+		<div class="col-xs-4"></div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-xs-3">Leave Description :</label>
+		<div class="col-xs-5">
+			<p class="form-control-static">${ leaveRequestBean.requestDescription }</p>
+		</div>
+		<div class="col-xs-4"></div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-3">Leave Start Date :</label>
+		<div class="col-xs-5">
+			<p class="form-control-static">${ leaveRequestBean.leaveStartDate }</p>
+		</div>
+		<div class="col-xs-4"></div>
+	</div>
+	
+	<div class="form-group">
+		<label class="control-label col-xs-3">Leave End Date :</label>
+		<div class="col-xs-5">
+			<p class="form-control-static">${ leaveRequestBean.leaveEndDate }</p>
+		</div>
+		<div class="col-xs-4"></div>
+	</div>
+	
+	<div class="form-group">
+		<label class="control-label col-xs-3">Leave Request Status :</label>
+		<div class="col-xs-5">
+			<p class="form-control-static">${ leaveRequestBean.leaveRequestStatus }</p>
+		</div>
+		<div class="col-xs-4"></div>
+	</div>
+	
+	<div class="form-group">
+		<label class="control-label col-xs-3">Leave Count :</label>
+		<div class="col-xs-5">
+			<p class="form-control-static">${ leaveRequestBean.leaveCount }</p>
+		</div>
+		<div class="col-xs-4"></div>
+	</div>
+	
+</form>

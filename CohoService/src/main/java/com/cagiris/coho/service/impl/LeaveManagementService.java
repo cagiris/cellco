@@ -72,7 +72,8 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     @Override
     public IUserLeaveRequest applyForLeave(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount,
-            Date leaveStartDate, Date leaveEndDate, String requestDescription) throws LeaveManagementServiceException {
+            Date leaveStartDate, Date leaveEndDate, String requestDescription, String requestSubject)
+            throws LeaveManagementServiceException {
         Integer requiredLeaveCount = getTotalNoOfDays(leaveStartDate, leaveEndDate)
                 - getNoOfHolidays(leaveStartDate, leaveEndDate);
         Date currentTime = new Date();
@@ -91,12 +92,14 @@ public class LeaveManagementService implements ILeaveManagementService {
         userLeaveRequestEntity.setLeaveStartDate(leaveStartDate);
         userLeaveRequestEntity.setLeaveEndDate(leaveEndDate);
         userLeaveRequestEntity.setRequiredLeaveCount(requiredLeaveCount);
+        userLeaveRequestEntity.setLeaveApplicationStatus(LeaveRequestStatus.NEW);
         userLeaveRequestEntity.setDateAdded(currentTime);
         userLeaveRequestEntity.setDateModified(currentTime);
+        userLeaveRequestEntity.setRequestSubject(requestSubject);
         try {
-            databaseManager.save(userLeaveRequestEntity);
-            return userLeaveRequestEntity;
-        } catch (DatabaseManagerException e) {
+            Serializable id = databaseManager.save(userLeaveRequestEntity);
+            return databaseManager.get(UserLeaveRequestEntity.class, id);
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("error while adding user leave request", e);
             throw new LeaveManagementServiceException(e.getMessage(), e);
         }
@@ -121,17 +124,19 @@ public class LeaveManagementService implements ILeaveManagementService {
     @Override
     public IUserLeaveRequest updateLeaveRequestStatus(String approvingUserId, String leaveApplicationId,
             LeaveRequestStatus leaveStatus, String comments) throws LeaveManagementServiceException {
-        // quota decrement
         try {
             Date currentTime = new Date();
             UserLeaveRequestEntity userLeaveRequestEntity = databaseManager.get(UserLeaveRequestEntity.class,
                     leaveApplicationId);
-            if (LeaveRequestStatus.APPROVED.equals(leaveStatus)) {
-                approveLeave(userLeaveRequestEntity);
-            }
             userLeaveRequestEntity.setLeaveApplicationStatus(leaveStatus);
             userLeaveRequestEntity.setDateModified(currentTime);
+            userLeaveRequestEntity.setApprovingUserComments(comments);
+            userLeaveRequestEntity.setApprovingUserId(approvingUserId);
+            Map<LeaveType, Integer> leaveTypeVsLeaveCount = approveLeave(userLeaveRequestEntity);
             databaseManager.saveOrUpdate(userLeaveRequestEntity);
+            if (LeaveRequestStatus.APPROVED.equals(leaveStatus)) {
+                updateUserLeaveQuota(userLeaveRequestEntity.getUserId(), leaveTypeVsLeaveCount);
+            }
             return userLeaveRequestEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("error while adding user leave request", e);
@@ -140,7 +145,8 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     }
 
-    private void approveLeave(UserLeaveRequestEntity userLeaveRequestEntity) throws LeaveManagementServiceException {
+    private Map<LeaveType, Integer> approveLeave(UserLeaveRequestEntity userLeaveRequestEntity)
+            throws LeaveManagementServiceException {
         IUserLeaveQuota userLeaveQuota = getUserLeaveQuota(userLeaveRequestEntity.getUserId());
         Map<LeaveType, Integer> leaveTypeVsLeaveQuota = userLeaveQuota.getLeaveTypeVsLeaveQuota();
         for (Map.Entry<LeaveType, Integer> entry : userLeaveRequestEntity.getLeaveTypeVsLeaveCount().entrySet()) {
@@ -152,7 +158,7 @@ public class LeaveManagementService implements ILeaveManagementService {
                 leaveTypeVsLeaveQuota.put(leaveType, leaveTypeVsLeaveQuota.get(leaveType) - leaveCount);
             }
         }
-
+        return leaveTypeVsLeaveQuota;
     }
 
     private void validateLeaveRequest(String userId, Integer requredLeaveCount) throws LeaveManagementServiceException {
@@ -195,13 +201,12 @@ public class LeaveManagementService implements ILeaveManagementService {
     }
 
     @Override
-    public List<? extends IUserLeaveRequest> getLeaveRequestsByUserId(String userId,
-            LeaveRequestStatus leaveRequestStatus) throws LeaveManagementServiceException {
+    public List<? extends IUserLeaveRequest> getLeaveRequestsByUserId(String userId)
+            throws LeaveManagementServiceException {
         try {
             QUserLeaveRequestEntity qUserLeaveRequestEntity = QUserLeaveRequestEntity.userLeaveRequestEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserLeaveRequestEntity).where(
-                    qUserLeaveRequestEntity.userId.eq(userId).and(
-                            qUserLeaveRequestEntity.leaveApplicationStatus.eq(leaveRequestStatus)));
+                    qUserLeaveRequestEntity.userId.eq(userId));
 
             List<UserLeaveRequestEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(
                     hibernateQuery, qUserLeaveRequestEntity);
@@ -290,7 +295,7 @@ public class LeaveManagementService implements ILeaveManagementService {
                 .collect(Collectors.toSet());
         LocalDate localStartDate = new LocalDate(startDate);
         LocalDate localEndDate = new LocalDate(endDate);
-        while (localStartDate.isBefore(localEndDate)) {
+        while (localStartDate.isBefore(localEndDate) || localStartDate.isEqual(localEndDate)) {
             if (weeklyHolidays.contains(localStartDate.getDayOfWeek())) {
                 noOfHolidays++;
             } else {
@@ -302,10 +307,13 @@ public class LeaveManagementService implements ILeaveManagementService {
         return noOfHolidays;
     }
 
-    Integer getTotalNoOfDays(Date startDate, Date endDate) {
+    Integer getTotalNoOfDays(Date startDate, Date endDate) throws LeaveManagementServiceException {
         LocalDate localStartDate = new LocalDate(startDate);
         LocalDate localEndDate = new LocalDate(endDate);
-        return Days.daysBetween(localStartDate, localEndDate).getDays();
+        if (localStartDate.isAfter(localEndDate) || localStartDate.isEqual(localEndDate)) {
+            throw new LeaveManagementServiceException("Leave end date is greater than leave start date");
+        }
+        return Days.daysBetween(localStartDate, localEndDate).getDays() + 1;
     }
 
     @Override
@@ -351,16 +359,17 @@ public class LeaveManagementService implements ILeaveManagementService {
     }
 
     public static void main(String[] args) {
-        LocalDate localDate = new LocalDate(new Date());
+        LocalDate start = new LocalDate(new Date());
+        LocalDate localDate = start;
         System.err.println(localDate);
         DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
         String[] weekdays = dateFormatSymbols.getWeekdays();
+        System.out.println(Days.daysBetween(start, start.plusDays(1)).getDays());
         System.out.println(weekdays[0]);
     }
 
     @Override
-    public IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException,
-            ResourceNotFoundException {
+    public IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException {
         logger.info("Going to add user leave quota for userId:{}", userId);
         UserLeaveQuotaEntity userLeaveQuotaEntity = new UserLeaveQuotaEntity();
         userLeaveQuotaEntity.setUserId(userId);
@@ -384,7 +393,7 @@ public class LeaveManagementService implements ILeaveManagementService {
         } catch (DatabaseManagerException e) {
             throw new LeaveManagementServiceException(e);
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException(e);
+            throw new LeaveManagementServiceException(e);
         }
 
     }
@@ -401,5 +410,28 @@ public class LeaveManagementService implements ILeaveManagementService {
             logger.error("User role quota not found for orgId:{}, userRole:{}", organizationId, userRole);
             throw new ResourceNotFoundException(e);
         }
+    }
+
+    @Override
+    public IUserLeaveRequest getLeaveRequestById(String leaveApplicationId) throws LeaveManagementServiceException {
+        try {
+            return databaseManager.get(UserLeaveRequestEntity.class, leaveApplicationId);
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+    }
+
+    @Override
+    public IUserLeaveQuota updateUserLeaveQuota(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
+            throws LeaveManagementServiceException {
+        try {
+            UserLeaveQuotaEntity userLeaveQuotaEntity = databaseManager.get(UserLeaveQuotaEntity.class, userId);
+            userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(leaveTypeVsLeaveCount);
+            databaseManager.update(userLeaveQuotaEntity);
+            return userLeaveQuotaEntity;
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+
     }
 }

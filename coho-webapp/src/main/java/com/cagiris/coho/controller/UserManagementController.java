@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -64,7 +65,11 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
-    public void delete(Serializable entityId) throws HierarchyServiceException {
+    public void delete(Serializable entityId) throws Exception {
+        User loggedInUser = getLoggedInUser();
+        if (StringUtils.equals((String)entityId, loggedInUser.getUsername())) {
+            throw new Exception("Can not delete your own account");
+        }
         hierarchyService.removeUserFromTeam(getDefaultTeam().getTeamId(), (String)entityId);
     }
 
@@ -73,10 +78,10 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         ModelMap modelMap = new ModelMap();
 
         if (entityId == null) {
-        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        	entityId = auth.getName();
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            entityId = auth.getName();
         }
-        
+
         ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
 
         UserBean userBean = new UserBean();

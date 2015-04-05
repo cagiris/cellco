@@ -24,6 +24,8 @@ public interface IUserLeaveRequest {
 
     String getApprovingUserId();
 
+    String getRequestSubject();
+
     String getRequestDescription();
 
     String getApprovingUserComments();

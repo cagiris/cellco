@@ -34,6 +34,6 @@ public class LeaveManagementServiceTest extends AbstractTestCase {
         leaveTypeVsLeaveCount.put(LeaveType.CASUAL_LEAVE, 2);
         Date leaveStartDate = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000l);
 
-        leaveManagementService.applyForLeave("agent", null, leaveStartDate, new Date(), "having fun");
+        leaveManagementService.applyForLeave("agent", null, leaveStartDate, new Date(), "having fun", "fun");
     }
 }

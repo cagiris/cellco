@@ -43,6 +43,8 @@ public class QUserLeaveRequestEntity extends EntityPathBase<UserLeaveRequestEnti
 
     public final StringPath requestDescription = createString("requestDescription");
 
+    public final StringPath requestSubject = createString("requestSubject");
+
     public final NumberPath<Integer> requiredLeaveCount = createNumber("requiredLeaveCount", Integer.class);
 
     public final StringPath userId = createString("userId");

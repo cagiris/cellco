@@ -40,6 +40,7 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
     private Date leaveStartDate;
     private Date leaveEndDate;
     private Integer requiredLeaveCount;
+    private String requestSubject;
 
     @Id
     @Override
@@ -135,6 +136,15 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 
     public void setRequiredLeaveCount(Integer requiredLeaveCount) {
         this.requiredLeaveCount = requiredLeaveCount;
+    }
+
+    @Override
+    public String getRequestSubject() {
+        return requestSubject;
+    }
+
+    public void setRequestSubject(String requestSubject) {
+        this.requestSubject = requestSubject;
     }
 
 }

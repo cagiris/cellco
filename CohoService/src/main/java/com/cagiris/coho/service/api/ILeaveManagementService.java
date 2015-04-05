@@ -22,7 +22,7 @@ public interface ILeaveManagementService {
      * Called when a user applies for a leave. The leave request
      */
     IUserLeaveRequest applyForLeave(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount, Date leaveStartDate,
-            Date leaveEndDate, String requestDescription) throws LeaveManagementServiceException;
+            Date leaveEndDate, String requestSubject, String requestDescription) throws LeaveManagementServiceException;
 
     // used by the requester to cancel the leave request ... 
     void cancelLeaveRequest(String leaveApplicationId) throws LeaveManagementServiceException;
@@ -40,7 +40,10 @@ public interface ILeaveManagementService {
      */
     IUserLeaveQuota getUserLeaveQuota(String userId) throws LeaveManagementServiceException;
 
-    IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException, ResourceNotFoundException;
+    IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException;
+
+    IUserLeaveQuota updateUserLeaveQuota(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
+            throws LeaveManagementServiceException;
 
     /**
      * The number of leaves can be configured per user role.
@@ -56,8 +59,7 @@ public interface ILeaveManagementService {
      * This will return the the list of leave requests by leaveRequestStatus
      * applied by userId.
      */
-    List<? extends IUserLeaveRequest> getLeaveRequestsByUserId(String userId, LeaveRequestStatus leaveRequestStatus)
-            throws LeaveManagementServiceException;
+    List<? extends IUserLeaveRequest> getLeaveRequestsByUserId(String userId) throws LeaveManagementServiceException;
 
     /**
      * This will return the leave requests pending approval on approvingUserId
@@ -78,4 +80,6 @@ public interface ILeaveManagementService {
     List<? extends IAnnualHoliday> getAllAnnualHolidays(Long organizationId) throws LeaveManagementServiceException;
 
     List<? extends IWeeklyHoliday> getAllWeeklyHolidays(Long organizationId) throws LeaveManagementServiceException;
+
+    IUserLeaveRequest getLeaveRequestById(String leaveApplicationId) throws LeaveManagementServiceException;
 }
