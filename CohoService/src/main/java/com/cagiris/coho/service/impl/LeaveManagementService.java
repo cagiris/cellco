@@ -361,6 +361,7 @@ public class LeaveManagementService implements ILeaveManagementService {
     @Override
     public IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException,
             ResourceNotFoundException {
+        logger.info("Going to add user leave quota for userId:{}", userId);
         UserLeaveQuotaEntity userLeaveQuotaEntity = new UserLeaveQuotaEntity();
         userLeaveQuotaEntity.setUserId(userId);
         IOrganization defaultOrganization;
@@ -375,7 +376,6 @@ public class LeaveManagementService implements ILeaveManagementService {
         try {
             IUserRoleLeaveQuota userRoleQuota = getUserRoleQuota(defaultOrganization.getOrganizationId(),
                     user.getUserRole());
-            user.getDateAdded();
             userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(userRoleQuota.getLeaveTypeVsLeaveCount());
             Serializable id = databaseManager.save(userLeaveQuotaEntity);
             return databaseManager.get(UserLeaveQuotaEntity.class, id);
@@ -398,6 +398,7 @@ public class LeaveManagementService implements ILeaveManagementService {
         } catch (DatabaseManagerException e) {
             throw new LeaveManagementServiceException(e);
         } catch (EntityNotFoundException e) {
+            logger.error("User role quota not found for orgId:{}, userRole:{}", organizationId, userRole);
             throw new ResourceNotFoundException(e);
         }
     }

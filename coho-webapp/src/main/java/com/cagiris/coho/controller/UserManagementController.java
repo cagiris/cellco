@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,7 +45,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         ModelMap responseModelMap = new ModelMap();
         if (bindingResult.hasErrors()) {
             responseModelMap.addAllAttributes(modelMap);
-            responseModelMap.addAttribute(UserRole.values());
+            responseModelMap.addAttribute(getAvailableUserRoles());
         } else {
             hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
                     bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
@@ -53,6 +54,10 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         }
 
         return responseModelMap;
+    }
+
+    private Set<UserRole> getAvailableUserRoles() throws HierarchyServiceException {
+        return hierarchyService.getAvailableUserRoles(getDefaultTeam().getTeamId());
     }
 
     @Override
@@ -137,7 +142,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         UserBean userBean = new UserBean();
         prepareUserBean(userBean, user);
         responseModelMap.addAttribute(userBean);
-        responseModelMap.addAttribute(UserRole.values());
+        responseModelMap.addAttribute(getAvailableUserRoles());
 
         return responseModelMap;
     }
@@ -148,7 +153,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         ModelMap responseModelMap = new ModelMap();
         if (bindingResult.hasErrors()) {
             responseModelMap.addAllAttributes(modelMap);
-            responseModelMap.addAttribute(UserRole.values());
+            responseModelMap.addAttribute(getAvailableUserRoles());
         } else {
             hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
                     bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
