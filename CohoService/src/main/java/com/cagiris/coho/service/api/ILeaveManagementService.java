@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
+import com.cagiris.coho.service.exception.ResourceNotFoundException;
 
 /**
  * 
@@ -20,9 +21,8 @@ public interface ILeaveManagementService {
     /**
      * Called when a user applies for a leave. The leave request
      */
-    IUserLeaveRequest applyForLeave(String userId, String approvingUserId,
-            Map<LeaveType, Integer> leaveTypeVsLeaveCount, Date leaveStartDate, Date leaveEndDate,
-            String requestDescription) throws LeaveManagementServiceException;
+    IUserLeaveRequest applyForLeave(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount, Date leaveStartDate,
+            Date leaveEndDate, String requestDescription) throws LeaveManagementServiceException;
 
     // used by the requester to cancel the leave request ... 
     void cancelLeaveRequest(String leaveApplicationId) throws LeaveManagementServiceException;
@@ -40,11 +40,17 @@ public interface ILeaveManagementService {
      */
     IUserLeaveQuota getUserLeaveQuota(String userId) throws LeaveManagementServiceException;
 
+    IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException, ResourceNotFoundException;
+
     /**
      * The number of leaves can be configured per user role.
      */
-    IUserRoleLeaveQuota updateLeaveQuotaForRole(UserRole userRole, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
+    IUserRoleLeaveQuota updateLeaveQuotaForRole(Long organizationId, UserRole userRole,
+            Map<LeaveType, Integer> leaveTypeVsLeaveCount, LeaveAccumulationPolicy leaveAccumulationPolicy)
             throws LeaveManagementServiceException;
+
+    IUserRoleLeaveQuota getUserRoleQuota(Long organizationId, UserRole userRole)
+            throws LeaveManagementServiceException, ResourceNotFoundException;
 
     /**
      * This will return the the list of leave requests by leaveRequestStatus
@@ -59,4 +65,17 @@ public interface ILeaveManagementService {
      */
     List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
             LeaveRequestStatus leaveStatus) throws LeaveManagementServiceException;
+
+    IAnnualHoliday addAnnualHoliday(Long organizationId, Integer year, Integer day, String description)
+            throws LeaveManagementServiceException;
+
+    // weekday Monday = 1 and Sunday = 7 
+    IWeeklyHoliday addWeeklyHoliday(Long organizationId, UserRole userRole, Integer weekDay, String description)
+            throws LeaveManagementServiceException;
+
+    List<IHoliday> getAllHolidaysForOrganization(Long organizationId) throws LeaveManagementServiceException;
+
+    List<? extends IAnnualHoliday> getAllAnnualHolidays(Long organizationId) throws LeaveManagementServiceException;
+
+    List<? extends IWeeklyHoliday> getAllWeeklyHolidays(Long organizationId) throws LeaveManagementServiceException;
 }

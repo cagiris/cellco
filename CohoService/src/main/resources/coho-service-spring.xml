@@ -29,9 +29,10 @@
 		<constructor-arg>
 			<ref bean="databaseManager" />
 		</constructor-arg>
-		<constructor-arg>
-			<ref bean="attendenceReportingService" />
-		</constructor-arg>
+
+		<property name="attendenceReportingService" ref="attendenceReportingService" />
+
+		<property name="leaveManagementService" ref="leaveManagementService" />
 	</bean>
 
 
@@ -39,6 +40,7 @@
 		<constructor-arg>
 			<ref bean="databaseManager" />
 		</constructor-arg>
+		<property name="hierarchyService" ref="hierarchyService" />
 	</bean>
 
 	<bean id="cohoUserDetailService"

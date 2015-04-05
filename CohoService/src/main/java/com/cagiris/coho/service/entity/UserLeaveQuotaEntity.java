@@ -11,11 +11,10 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
-import javax.persistence.MapKeyEnumerated;
+import javax.persistence.Transient;
 
 import com.cagiris.coho.service.api.IUserLeaveQuota;
 import com.cagiris.coho.service.api.LeaveType;
@@ -27,12 +26,11 @@ import com.cagiris.coho.service.api.LeaveType;
 @Entity
 public class UserLeaveQuotaEntity extends BaseEntity implements IUserLeaveQuota {
 
-    private String userLeaveQuotaId;
     private String userId;
     private Map<LeaveType, Integer> leaveTypeVsLeaveQuota;
 
+    @Id
     @Override
-    @Column(name = "user_id")
     public String getUserId() {
         return userId;
     }
@@ -41,11 +39,10 @@ public class UserLeaveQuotaEntity extends BaseEntity implements IUserLeaveQuota 
         this.userId = userId;
     }
 
-    @ElementCollection(targetClass = java.lang.String.class)
-    @MapKeyEnumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name = "leave_type")
     @Column(name = "leave_quota")
-    @CollectionTable(name = "leave_type_vs_quota", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable
     @Override
     public Map<LeaveType, Integer> getLeaveTypeVsLeaveQuota() {
         return leaveTypeVsLeaveQuota;
@@ -55,13 +52,14 @@ public class UserLeaveQuotaEntity extends BaseEntity implements IUserLeaveQuota 
         this.leaveTypeVsLeaveQuota = leaveTypeVsLeaveQuota;
     }
 
-    @Id
-    public String getUserLeaveQuotaId() {
-        return userLeaveQuotaId;
-    }
-
-    public void setUserLeaveQuotaId(String userLeaveQuotaId) {
-        this.userLeaveQuotaId = userLeaveQuotaId;
+    @Transient
+    @Override
+    public Integer getTotalLeaveCount() {
+        Integer totalLeaveCount = 0;
+        for (Map.Entry<LeaveType, Integer> entry : leaveTypeVsLeaveQuota.entrySet()) {
+            totalLeaveCount += entry.getValue();
+        }
+        return totalLeaveCount;
     }
 
 }

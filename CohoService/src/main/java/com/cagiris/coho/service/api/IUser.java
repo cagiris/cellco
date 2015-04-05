@@ -9,7 +9,7 @@ package com.cagiris.coho.service.api;
  * @author: ssnk
  */
 
-public interface IUser {
+public interface IUser extends IBaseEntity {
 
     String getUserId();
 
@@ -22,4 +22,5 @@ public interface IUser {
     UserRole getUserRole();
 
     Long getOrganizationId();
+
 }

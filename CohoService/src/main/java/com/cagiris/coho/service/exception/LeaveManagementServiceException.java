@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.exception;
 
+
 /**
  *
  * @author: ssnk
@@ -25,5 +26,9 @@ public class LeaveManagementServiceException extends Exception {
 
     public LeaveManagementServiceException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public LeaveManagementServiceException(Throwable e) {
+        super(e);
     }
 }

@@ -39,38 +39,38 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     private IHierarchyService hierarchyService;
 
     @Override
-
-    public ModelMap create(UserBean bean, BindingResult bindingResult, ModelMap modelMap) throws HierarchyServiceException {
+    public ModelMap create(UserBean bean, BindingResult bindingResult, ModelMap modelMap)
+            throws HierarchyServiceException {
         ModelMap responseModelMap = new ModelMap();
         if (bindingResult.hasErrors()) {
             responseModelMap.addAllAttributes(modelMap);
             responseModelMap.addAttribute(UserRole.values());
         } else {
-        	hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
+            hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
                     bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
 
             responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
         }
-        
+
         return responseModelMap;
     }
 
     @Override
     public void delete(Serializable entityId) throws HierarchyServiceException {
-    	hierarchyService.removeUserFromTeam(getDefaultTeam().getTeamId(), (String) entityId);
+        hierarchyService.removeUserFromTeam(getDefaultTeam().getTeamId(), (String)entityId);
     }
 
     @Override
     public ModelMap get(Serializable entityId) throws HierarchyServiceException, ResourceNotFoundException {
         ModelMap modelMap = new ModelMap();
 
-        ITeamUser user = hierarchyService.getTeamUser(getDefaultTeam().getTeamId(), (String) entityId);
+        ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
 
         UserBean userBean = new UserBean();
         prepareUserBean(userBean, user);
 
         modelMap.addAttribute(userBean);
-        
+
         return modelMap;
     }
 
@@ -90,17 +90,17 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
      * @param userBean
      * @param userEntity
      */
-    private void prepareUserBean (UserBean userBean, ITeamUser user) {
-    	userBean.setUserId(user.getUserId());
-    	userBean.setUserName(user.getUserName());
-    	userBean.setUserRole(user.getUserRole());
+    private void prepareUserBean(UserBean userBean, ITeamUser user) {
+        userBean.setUserId(user.getUserId());
+        userBean.setUserName(user.getUserName());
+        userBean.setUserRole(user.getUserRole());
     }
 
     @Override
     public ModelMap showCreatePage(ModelMap modelMap) throws HierarchyServiceException {
         ModelMap responseModelMap = new ModelMap();
         responseModelMap.addAttribute(new UserBean());
-        
+
         IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
         responseModelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
 
@@ -115,40 +115,42 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     @Override
     public ModelMap showListPage(ModelMap modelMap) throws HierarchyServiceException {
-    	List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(getDefaultTeam().getTeamId());
+        List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(getDefaultTeam().getTeamId());
         List<UserBean> userBeans = new ArrayList<UserBean>();
         for (ITeamUser teamUser : allUsersForTeam) {
             UserBean userBean = new UserBean();
             prepareUserBean(userBean, teamUser);
             userBeans.add(userBean);
         }
-        
+
         modelMap.addAttribute(userBeans);
         return modelMap;
     }
 
     @Override
-    public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) throws HierarchyServiceException, ResourceNotFoundException {
+    public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) throws HierarchyServiceException,
+            ResourceNotFoundException {
         ModelMap responseModelMap = new ModelMap();
 
-        ITeamUser user = hierarchyService.getTeamUser(getDefaultTeam().getTeamId(), (String) entityId);
-        
+        ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
+
         UserBean userBean = new UserBean();
         prepareUserBean(userBean, user);
         responseModelMap.addAttribute(userBean);
         responseModelMap.addAttribute(UserRole.values());
-        
+
         return responseModelMap;
     }
-    
+
     @Override
-    public ModelMap update(Serializable entityId, UserBean bean, BindingResult bindingResult, ModelMap modelMap) throws HierarchyServiceException {
+    public ModelMap update(Serializable entityId, UserBean bean, BindingResult bindingResult, ModelMap modelMap)
+            throws HierarchyServiceException {
         ModelMap responseModelMap = new ModelMap();
         if (bindingResult.hasErrors()) {
             responseModelMap.addAllAttributes(modelMap);
             responseModelMap.addAttribute(UserRole.values());
         } else {
-        	hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
+            hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
                     bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
 
             responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User details successfuly updated.");

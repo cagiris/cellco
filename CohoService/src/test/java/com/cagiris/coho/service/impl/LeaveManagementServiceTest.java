@@ -32,7 +32,8 @@ public class LeaveManagementServiceTest extends AbstractTestCase {
     public void applyLeaveTest() throws LeaveManagementServiceException {
         HashMap<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>();
         leaveTypeVsLeaveCount.put(LeaveType.CASUAL_LEAVE, 2);
-        leaveManagementService.applyForLeave("agent", "admin", leaveTypeVsLeaveCount, new Date(), new Date(),
-                "having fun");
+        Date leaveStartDate = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000l);
+
+        leaveManagementService.applyForLeave("agent", null, leaveStartDate, new Date(), "having fun");
     }
 }

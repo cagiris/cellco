@@ -27,6 +27,7 @@ public class TeamEntity extends BaseEntity implements ITeam {
     private String teamDescription;
     private TeamEntity parentTeamEntity;
     private OrganizationEntity organizationEntity;
+    private Boolean isDefault;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,6 +95,14 @@ public class TeamEntity extends BaseEntity implements ITeam {
 
     public void setTeamDescription(String teamDescription) {
         this.teamDescription = teamDescription;
+    }
+
+    public Boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
 }

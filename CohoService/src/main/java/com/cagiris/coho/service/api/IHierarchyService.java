@@ -74,4 +74,11 @@ public interface IHierarchyService {
     IOrganization getDefaultOrganization() throws HierarchyServiceException;
 
     ITeam getDefaultTeam(Long organizationId) throws HierarchyServiceException;
+
+    List<? extends IUser> getReportingUsers(String userId) throws HierarchyServiceException;
+
+    List<? extends ITeamUser> getAllTeamUserByUserId(String userId) throws HierarchyServiceException;
+
+    ITeamUser getTeamUserByUserId(Long teamId, String userId) throws HierarchyServiceException,
+            ResourceNotFoundException;
 }

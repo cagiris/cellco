@@ -9,22 +9,28 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.joda.time.DateTimeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cagiris.coho.service.api.AuthenicationPolicy;
 import com.cagiris.coho.service.api.IAttendenceReportingService;
 import com.cagiris.coho.service.api.IHierarchyService;
+import com.cagiris.coho.service.api.ILeaveManagementService;
 import com.cagiris.coho.service.api.IOrganization;
 import com.cagiris.coho.service.api.IOrganizationMetaConfiguration;
 import com.cagiris.coho.service.api.ITeam;
 import com.cagiris.coho.service.api.ITeamUser;
 import com.cagiris.coho.service.api.IUser;
 import com.cagiris.coho.service.api.IUserProfile;
+import com.cagiris.coho.service.api.LeaveAccumulationPolicy;
+import com.cagiris.coho.service.api.LeaveType;
 import com.cagiris.coho.service.api.UserIdGenerationPolicy;
 import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.db.api.DatabaseManagerException;
@@ -36,12 +42,14 @@ import com.cagiris.coho.service.entity.OrganizationMetaConfigurationEntity;
 import com.cagiris.coho.service.entity.QOrganizationEntity;
 import com.cagiris.coho.service.entity.QTeamEntity;
 import com.cagiris.coho.service.entity.QTeamUserEntity;
+import com.cagiris.coho.service.entity.QUserEntity;
 import com.cagiris.coho.service.entity.TeamEntity;
 import com.cagiris.coho.service.entity.TeamUserEntity;
 import com.cagiris.coho.service.entity.UserEntity;
 import com.cagiris.coho.service.entity.UserProfileEntity;
 import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
+import com.cagiris.coho.service.exception.LeaveManagementServiceException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 
@@ -60,11 +68,28 @@ public class HierarchyService implements IHierarchyService {
 
     private IDatabaseManager databaseManager;
 
+    public IAttendenceReportingService getAttendenceReportingService() {
+        return attendenceReportingService;
+    }
+
+    public void setAttendenceReportingService(IAttendenceReportingService attendenceReportingService) {
+        this.attendenceReportingService = attendenceReportingService;
+    }
+
+    public ILeaveManagementService getLeaveManagementService() {
+        return leaveManagementService;
+    }
+
+    public void setLeaveManagementService(ILeaveManagementService leaveManagementService) {
+        this.leaveManagementService = leaveManagementService;
+    }
+
     private IAttendenceReportingService attendenceReportingService;
 
-    public HierarchyService(IDatabaseManager databaseManager, IAttendenceReportingService attendenceReportingService) {
+    private ILeaveManagementService leaveManagementService;
+
+    public HierarchyService(IDatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
-        this.attendenceReportingService = attendenceReportingService;
     }
 
     public void createDefaultHierarchy() {
@@ -105,11 +130,11 @@ public class HierarchyService implements IHierarchyService {
             logger.error("Error while adding team:{}", e.getMessage(), e);
             throw new HierarchyServiceException(e);
         }
-        createDependentEntities(teamEntity);
+        createTeamDependentEntities(teamEntity);
         return teamEntity;
     }
 
-    private void createDependentEntities(TeamEntity teamEntity) throws HierarchyServiceException {
+    private void createTeamDependentEntities(TeamEntity teamEntity) throws HierarchyServiceException {
         Calendar shiftStart = new GregorianCalendar();
         shiftStart.set(Calendar.HOUR, 9);
         shiftStart.set(Calendar.MINUTE, 0);
@@ -124,6 +149,7 @@ public class HierarchyService implements IHierarchyService {
         } catch (AttendenceReportingServiceException e) {
             throw new HierarchyServiceException(e);
         }
+
     }
 
     @Override
@@ -208,9 +234,18 @@ public class HierarchyService implements IHierarchyService {
             userProfileEntity.setUserEntity(userEntity);
             userProfileEntity.setUserName(userName);
             databaseManager.save(userProfileEntity);
+            createUserDependentEntities(userId);
             return teamUserEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("Error while adding team user:{}", e.getMessage(), e);
+            throw new HierarchyServiceException(e);
+        }
+    }
+
+    private void createUserDependentEntities(String userId) throws HierarchyServiceException {
+        try {
+            leaveManagementService.addUserLeaveQuota(userId);
+        } catch (LeaveManagementServiceException | ResourceNotFoundException e) {
             throw new HierarchyServiceException(e);
         }
     }
@@ -312,11 +347,35 @@ public class HierarchyService implements IHierarchyService {
             availableUserRoles.add(UserRole.AGENT);
             addOrganizationMetaConfiguration(organizationId, organizationName, UserIdGenerationPolicy.MANUAL,
                     AuthenicationPolicy.PASSWORD_BASED, 100, 10, 3, availableUserRoles);
+            createOrgDependentEntities(organizationEntity);
         } catch (DatabaseManagerException e) {
             logger.error("Error while adding organization:{}", e.getMessage(), e);
             throw new HierarchyServiceException(e);
         }
         return organizationEntity;
+    }
+
+    private void createOrgDependentEntities(OrganizationEntity organizationEntity) throws HierarchyServiceException {
+        IOrganizationMetaConfiguration organizationMetaConfiguration;
+        try {
+            organizationMetaConfiguration = getOrganizationMetaConfiguration(organizationEntity.getOrganizationId());
+            for (UserRole userRole : organizationMetaConfiguration.getAvailableUserRoles()) {
+                Map<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>();
+                for (LeaveType leaveType : LeaveType.values()) {
+                    leaveTypeVsLeaveCount.put(leaveType, 0);
+                }
+                leaveTypeVsLeaveCount.put(LeaveType.SICK_LEAVE, 1);
+                leaveManagementService.updateLeaveQuotaForRole(organizationEntity.getOrganizationId(), userRole,
+                        leaveTypeVsLeaveCount, LeaveAccumulationPolicy.MONTHLY);
+            }
+
+            for (UserRole userRole : organizationMetaConfiguration.getAvailableUserRoles()) {
+                leaveManagementService.addWeeklyHoliday(organizationEntity.getOrganizationId(), userRole,
+                        DateTimeConstants.SUNDAY, "Sunday");
+            }
+        } catch (ResourceNotFoundException | LeaveManagementServiceException e) {
+            throw new HierarchyServiceException(e);
+        }
     }
 
     private IOrganizationMetaConfiguration addOrganizationMetaConfiguration(Long organizationId, String orgPrefix,
@@ -449,4 +508,56 @@ public class HierarchyService implements IHierarchyService {
         throw new HierarchyServiceException("No default org found");
     }
 
+    @Override
+    public List<? extends IUser> getReportingUsers(String userId) throws HierarchyServiceException {
+        try {
+            IUser user = getUser(userId);
+            IOrganizationMetaConfiguration organizationMetaConfiguration = getOrganizationMetaConfiguration(getDefaultOrganization()
+                    .getOrganizationId());
+            List<UserRole> reportinUserRoles = new ArrayList<UserRole>();
+            for (UserRole userRole : organizationMetaConfiguration.getAvailableUserRoles()) {
+                if (user.getUserRole().getLevel() > userRole.getLevel()) {
+                    reportinUserRoles.add(userRole);
+                }
+            }
+            QUserEntity qUserEntity = QUserEntity.userEntity;
+            HibernateQuery hibernateQuery = new HibernateQuery().from(qUserEntity).where(
+                    qUserEntity.userRole.in(reportinUserRoles));
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qUserEntity);
+        } catch (ResourceNotFoundException | DatabaseManagerException e) {
+            throw new HierarchyServiceException(e);
+        }
+    }
+
+    @Override
+    public List<? extends ITeamUser> getAllTeamUserByUserId(String userId) throws HierarchyServiceException {
+        QTeamUserEntity qTeamUserEntity = QTeamUserEntity.teamUserEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qTeamUserEntity).where(
+                qTeamUserEntity.userEntity.userId.eq(userId));
+        try {
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qTeamUserEntity);
+        } catch (DatabaseManagerException e) {
+            throw new HierarchyServiceException(e);
+        }
+    }
+
+    @Override
+    public ITeamUser getTeamUserByUserId(Long teamId, String userId) throws HierarchyServiceException,
+            ResourceNotFoundException {
+        QTeamUserEntity qTeamUserEntity = QTeamUserEntity.teamUserEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qTeamUserEntity).where(
+                qTeamUserEntity.teamEntity.teamId.eq(teamId).and(qTeamUserEntity.userEntity.userId.eq(userId)));
+        List<TeamUserEntity> teamUsers;
+        try {
+            teamUsers = databaseManager.executeQueryAndGetResults(hibernateQuery, qTeamUserEntity);
+
+        } catch (DatabaseManagerException e) {
+            throw new HierarchyServiceException(e);
+        }
+        if (teamUsers.size() > 0) {
+            return teamUsers.get(0);
+        } else {
+            throw new ResourceNotFoundException("User not found");
+        }
+    }
 }

@@ -4,28 +4,50 @@
  */
 package com.cagiris.coho.service.impl;
 
+import java.io.Serializable;
+import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.cagiris.coho.service.api.IAnnualHoliday;
+import com.cagiris.coho.service.api.IHierarchyService;
+import com.cagiris.coho.service.api.IHoliday;
 import com.cagiris.coho.service.api.ILeaveManagementService;
+import com.cagiris.coho.service.api.IOrganization;
+import com.cagiris.coho.service.api.IUser;
 import com.cagiris.coho.service.api.IUserLeaveQuota;
 import com.cagiris.coho.service.api.IUserLeaveRequest;
 import com.cagiris.coho.service.api.IUserRoleLeaveQuota;
+import com.cagiris.coho.service.api.IWeeklyHoliday;
+import com.cagiris.coho.service.api.LeaveAccumulationPolicy;
 import com.cagiris.coho.service.api.LeaveRequestStatus;
 import com.cagiris.coho.service.api.LeaveType;
 import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.db.api.DatabaseManagerException;
 import com.cagiris.coho.service.db.api.EntityNotFoundException;
 import com.cagiris.coho.service.db.api.IDatabaseManager;
+import com.cagiris.coho.service.entity.AnnualHolidayEntity;
+import com.cagiris.coho.service.entity.QAnnualHolidayEntity;
 import com.cagiris.coho.service.entity.QUserLeaveRequestEntity;
+import com.cagiris.coho.service.entity.QWeeklyHolidayEntity;
 import com.cagiris.coho.service.entity.UserLeaveQuotaEntity;
 import com.cagiris.coho.service.entity.UserLeaveRequestEntity;
 import com.cagiris.coho.service.entity.UserRoleLeaveQuotaEntity;
+import com.cagiris.coho.service.entity.UserRoleLeaveQuotaEntity.UserRoleLeaveQuotaPK;
+import com.cagiris.coho.service.entity.WeeklyHolidayEntity;
+import com.cagiris.coho.service.exception.HierarchyServiceException;
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
+import com.cagiris.coho.service.exception.ResourceNotFoundException;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 
@@ -40,6 +62,8 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     private IDatabaseManager databaseManager;
 
+    private IHierarchyService hierarchyService;
+
     private UniqueIDGenerator leaveRequestIdGenerator = new UniqueIDGenerator("leave");
 
     public LeaveManagementService(IDatabaseManager databaseManager) {
@@ -47,23 +71,28 @@ public class LeaveManagementService implements ILeaveManagementService {
     }
 
     @Override
-    public IUserLeaveRequest applyForLeave(String userId, String approvingUserId,
-            Map<LeaveType, Integer> leaveTypeVsLeaveCount, Date leaveStartDate, Date leaveEndDate,
-            String requestDescription) throws LeaveManagementServiceException {
-        // validate 
+    public IUserLeaveRequest applyForLeave(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount,
+            Date leaveStartDate, Date leaveEndDate, String requestDescription) throws LeaveManagementServiceException {
+        Integer requiredLeaveCount = getTotalNoOfDays(leaveStartDate, leaveEndDate)
+                - getNoOfHolidays(leaveStartDate, leaveEndDate);
         Date currentTime = new Date();
+        validateLeaveRequest(userId, requiredLeaveCount);
+
         UserLeaveRequestEntity userLeaveRequestEntity = new UserLeaveRequestEntity();
-        userLeaveRequestEntity.setApprovingUserId(approvingUserId);
         userLeaveRequestEntity.setLeaveApplicationId(leaveRequestIdGenerator.getNextUID(userId));
         userLeaveRequestEntity.setUserId(userId);
-        userLeaveRequestEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
+
+        if (leaveTypeVsLeaveCount == null) {
+            userLeaveRequestEntity.setLeaveTypeVsLeaveCount(getLeaveTypeVsLeaveCount(userId, requiredLeaveCount));
+        } else {
+            userLeaveRequestEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
+        }
         userLeaveRequestEntity.setRequestDescription(requestDescription);
         userLeaveRequestEntity.setLeaveStartDate(leaveStartDate);
         userLeaveRequestEntity.setLeaveEndDate(leaveEndDate);
-
+        userLeaveRequestEntity.setRequiredLeaveCount(requiredLeaveCount);
         userLeaveRequestEntity.setDateAdded(currentTime);
         userLeaveRequestEntity.setDateModified(currentTime);
-        validateLeaveRequest(userLeaveRequestEntity);
         try {
             databaseManager.save(userLeaveRequestEntity);
             return userLeaveRequestEntity;
@@ -71,6 +100,22 @@ public class LeaveManagementService implements ILeaveManagementService {
             logger.error("error while adding user leave request", e);
             throw new LeaveManagementServiceException(e.getMessage(), e);
         }
+    }
+
+    private Map<LeaveType, Integer> getLeaveTypeVsLeaveCount(String userId, Integer requiredLeaveCount)
+            throws LeaveManagementServiceException {
+        IUserLeaveQuota userLeaveQuota = getUserLeaveQuota(userId);
+        Map<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>();
+        for (LeaveType leaveType : LeaveType.values()) {
+            Integer leaveCount = userLeaveQuota.getLeaveTypeVsLeaveQuota().get(leaveType);
+            if (requiredLeaveCount <= leaveCount) {
+                leaveTypeVsLeaveCount.put(leaveType, requiredLeaveCount);
+            } else {
+                leaveTypeVsLeaveCount.put(leaveType, leaveCount);
+                requiredLeaveCount -= leaveCount;
+            }
+        }
+        return leaveTypeVsLeaveCount;
     }
 
     @Override
@@ -110,16 +155,10 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     }
 
-    private void validateLeaveRequest(UserLeaveRequestEntity userLeaveRequestEntity)
-            throws LeaveManagementServiceException {
-        IUserLeaveQuota userLeaveQuota = getUserLeaveQuota(userLeaveRequestEntity.getUserId());
-        Map<LeaveType, Integer> leaveTypeVsLeaveQuota = userLeaveQuota.getLeaveTypeVsLeaveQuota();
-        for (Map.Entry<LeaveType, Integer> entry : userLeaveRequestEntity.getLeaveTypeVsLeaveCount().entrySet()) {
-            LeaveType leaveType = entry.getKey();
-            Integer leaveCount = entry.getValue();
-            if (leaveTypeVsLeaveQuota.get(leaveType) - leaveCount < 0) {
-                throw new LeaveManagementServiceException("User does not have enough leaves");
-            }
+    private void validateLeaveRequest(String userId, Integer requredLeaveCount) throws LeaveManagementServiceException {
+        IUserLeaveQuota userLeaveQuota = getUserLeaveQuota(userId);
+        if (userLeaveQuota.getTotalLeaveCount() < requredLeaveCount) {
+            throw new LeaveManagementServiceException("User does not have enough leaves");
         }
     }
 
@@ -134,20 +173,22 @@ public class LeaveManagementService implements ILeaveManagementService {
         }
     }
 
+    // creates or updates ... 
     @Override
-    public IUserRoleLeaveQuota updateLeaveQuotaForRole(UserRole userRole, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
+    public IUserRoleLeaveQuota updateLeaveQuotaForRole(Long organizationId, UserRole userRole,
+            Map<LeaveType, Integer> leaveTypeVsLeaveCount, LeaveAccumulationPolicy leaveAccumulationPolicy)
             throws LeaveManagementServiceException {
-
-        // TODO
         try {
             Date currentTime = new Date();
-            UserRoleLeaveQuotaEntity userRoleLeaveQuotaEntity = databaseManager.get(UserRoleLeaveQuotaEntity.class,
-                    userRole);
+            UserRoleLeaveQuotaEntity userRoleLeaveQuotaEntity = new UserRoleLeaveQuotaEntity();
+            userRoleLeaveQuotaEntity.setOrganizationId(organizationId);
             userRoleLeaveQuotaEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
+            userRoleLeaveQuotaEntity.setLeaveAccumulationPolicy(leaveAccumulationPolicy);
+            userRoleLeaveQuotaEntity.setUserRole(userRole);
             userRoleLeaveQuotaEntity.setDateModified(currentTime);
-            databaseManager.save(userRoleLeaveQuotaEntity);
+            databaseManager.saveOrUpdate(userRoleLeaveQuotaEntity);
             return userRoleLeaveQuotaEntity;
-        } catch (DatabaseManagerException | EntityNotFoundException e) {
+        } catch (DatabaseManagerException e) {
             logger.error("error while adding user leave request", e);
             throw new LeaveManagementServiceException(e.getMessage(), e);
         }
@@ -176,12 +217,19 @@ public class LeaveManagementService implements ILeaveManagementService {
     public List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
             LeaveRequestStatus leaveStatus) throws LeaveManagementServiceException {
 
+        List<String> reportingUserIds;
+        try {
+            List<? extends IUser> reportingUsers = getHierarchyService().getReportingUsers(approvingUserId);
+            reportingUserIds = reportingUsers.stream().map(IUser::getUserId).collect(Collectors.toList());
+
+        } catch (HierarchyServiceException e) {
+            throw new LeaveManagementServiceException(e);
+        }
         try {
             QUserLeaveRequestEntity qUserLeaveRequestEntity = QUserLeaveRequestEntity.userLeaveRequestEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserLeaveRequestEntity).where(
-                    qUserLeaveRequestEntity.approvingUserId.eq(approvingUserId).and(
-                            qUserLeaveRequestEntity.leaveApplicationStatus.eq(leaveStatus)));
-
+                    qUserLeaveRequestEntity.leaveApplicationStatus.eq(leaveStatus).and(
+                            qUserLeaveRequestEntity.userId.in(reportingUserIds)));
             List<UserLeaveRequestEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(
                     hibernateQuery, qUserLeaveRequestEntity);
             return executeQueryAndGetResults;
@@ -193,5 +241,164 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     @Override
     public void cancelLeaveRequest(String leaveApplicationId) throws LeaveManagementServiceException {
+    }
+
+    @Override
+    public IAnnualHoliday addAnnualHoliday(Long organizationId, Integer year, Integer day, String description)
+            throws LeaveManagementServiceException {
+        AnnualHolidayEntity annualHolidayEntity = new AnnualHolidayEntity();
+        annualHolidayEntity.setOrganizationId(organizationId);
+        annualHolidayEntity.setDay(day);
+        annualHolidayEntity.setYear(year);
+        annualHolidayEntity.setDescription(description);
+        try {
+            Serializable id = databaseManager.save(annualHolidayEntity);
+            return databaseManager.get(AnnualHolidayEntity.class, id);
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+    }
+
+    @Override
+    public IWeeklyHoliday addWeeklyHoliday(Long organizationId, UserRole userRole, Integer weekDay, String description)
+            throws LeaveManagementServiceException {
+        WeeklyHolidayEntity weeklyHolidayEntity = new WeeklyHolidayEntity();
+        weeklyHolidayEntity.setDescription(description);
+        weeklyHolidayEntity.setOrganizationId(organizationId);
+        weeklyHolidayEntity.setUserRole(userRole);
+        weeklyHolidayEntity.setWeekDay(weekDay);
+        try {
+            Serializable id = databaseManager.save(weeklyHolidayEntity);
+            return databaseManager.get(WeeklyHolidayEntity.class, id);
+        } catch (DatabaseManagerException e) {
+            throw new LeaveManagementServiceException(e);
+        } catch (EntityNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+    }
+
+    Integer getNoOfHolidays(Date startDate, Date endDate) throws LeaveManagementServiceException {
+        Integer noOfWorkingDays = 0;
+        Integer noOfHolidays = 0;
+        List<? extends IWeeklyHoliday> allWeeklyHolidays;
+        try {
+            allWeeklyHolidays = getAllWeeklyHolidays(hierarchyService.getDefaultOrganization().getOrganizationId());
+        } catch (LeaveManagementServiceException | HierarchyServiceException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+        Set<Integer> weeklyHolidays = allWeeklyHolidays.stream().map(IWeeklyHoliday::getWeekDay)
+                .collect(Collectors.toSet());
+        LocalDate localStartDate = new LocalDate(startDate);
+        LocalDate localEndDate = new LocalDate(endDate);
+        while (localStartDate.isBefore(localEndDate)) {
+            if (weeklyHolidays.contains(localStartDate.getDayOfWeek())) {
+                noOfHolidays++;
+            } else {
+                noOfWorkingDays++;
+            }
+            localStartDate = localStartDate.plusDays(1);
+
+        }
+        return noOfHolidays;
+    }
+
+    Integer getTotalNoOfDays(Date startDate, Date endDate) {
+        LocalDate localStartDate = new LocalDate(startDate);
+        LocalDate localEndDate = new LocalDate(endDate);
+        return Days.daysBetween(localStartDate, localEndDate).getDays();
+    }
+
+    @Override
+    public List<IHoliday> getAllHolidaysForOrganization(Long organizationId) throws LeaveManagementServiceException {
+        List<IHoliday> holidays = new ArrayList<IHoliday>();
+        holidays.addAll(getAllAnnualHolidays(organizationId));
+        holidays.addAll(getAllWeeklyHolidays(organizationId));
+        return holidays;
+    }
+
+    @Override
+    public List<? extends IAnnualHoliday> getAllAnnualHolidays(Long organizationId)
+            throws LeaveManagementServiceException {
+        QAnnualHolidayEntity qAnnualHolidayEntity = QAnnualHolidayEntity.annualHolidayEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qAnnualHolidayEntity).where(
+                qAnnualHolidayEntity.organizationId.eq(organizationId));
+        try {
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qAnnualHolidayEntity);
+        } catch (DatabaseManagerException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+    }
+
+    @Override
+    public List<? extends IWeeklyHoliday> getAllWeeklyHolidays(Long organizationId)
+            throws LeaveManagementServiceException {
+        QWeeklyHolidayEntity qWeeklyHolidayEntity = QWeeklyHolidayEntity.weeklyHolidayEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qWeeklyHolidayEntity).where(
+                qWeeklyHolidayEntity.organizationId.eq(organizationId));
+        try {
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qWeeklyHolidayEntity);
+        } catch (DatabaseManagerException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+    }
+
+    public IHierarchyService getHierarchyService() {
+        return hierarchyService;
+    }
+
+    public void setHierarchyService(IHierarchyService hierarchyService) {
+        this.hierarchyService = hierarchyService;
+    }
+
+    public static void main(String[] args) {
+        LocalDate localDate = new LocalDate(new Date());
+        System.err.println(localDate);
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+        String[] weekdays = dateFormatSymbols.getWeekdays();
+        System.out.println(weekdays[0]);
+    }
+
+    @Override
+    public IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException,
+            ResourceNotFoundException {
+        UserLeaveQuotaEntity userLeaveQuotaEntity = new UserLeaveQuotaEntity();
+        userLeaveQuotaEntity.setUserId(userId);
+        IOrganization defaultOrganization;
+        IUser user;
+        try {
+            defaultOrganization = hierarchyService.getDefaultOrganization();
+            user = hierarchyService.getUser(userId);
+        } catch (HierarchyServiceException | ResourceNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+
+        try {
+            IUserRoleLeaveQuota userRoleQuota = getUserRoleQuota(defaultOrganization.getOrganizationId(),
+                    user.getUserRole());
+            user.getDateAdded();
+            userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(userRoleQuota.getLeaveTypeVsLeaveCount());
+            Serializable id = databaseManager.save(userLeaveQuotaEntity);
+            return databaseManager.get(UserLeaveQuotaEntity.class, id);
+        } catch (ResourceNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        } catch (DatabaseManagerException e) {
+            throw new LeaveManagementServiceException(e);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
+
+    }
+
+    @Override
+    public IUserRoleLeaveQuota getUserRoleQuota(Long organizationId, UserRole userRole)
+            throws LeaveManagementServiceException, ResourceNotFoundException {
+        UserRoleLeaveQuotaPK userRoleLeaveQuotaPK = new UserRoleLeaveQuotaPK(organizationId, userRole);
+        try {
+            return databaseManager.get(UserRoleLeaveQuotaEntity.class, userRoleLeaveQuotaPK);
+        } catch (DatabaseManagerException e) {
+            throw new LeaveManagementServiceException(e);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
     }
 }

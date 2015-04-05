@@ -31,8 +31,6 @@ public class QUserLeaveQuotaEntity extends EntityPathBase<UserLeaveQuotaEntity> 
 
     public final StringPath userId = createString("userId");
 
-    public final StringPath userLeaveQuotaId = createString("userLeaveQuotaId");
-
     public QUserLeaveQuotaEntity(String variable) {
         super(UserLeaveQuotaEntity.class, forVariable(variable));
     }

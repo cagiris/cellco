@@ -31,4 +31,6 @@ public interface IUserLeaveRequest {
     Date getLeaveStartDate();
 
     Date getLeaveEndDate();
+
+    Integer getRequiredLeaveCount();
 }

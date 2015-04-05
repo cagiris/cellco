@@ -13,7 +13,9 @@ import java.util.Map;
 
 public interface IUserLeaveQuota {
 
-	String getUserId();
+    String getUserId();
 
-	Map<LeaveType, Integer> getLeaveTypeVsLeaveQuota();
+    Map<LeaveType, Integer> getLeaveTypeVsLeaveQuota();
+
+    Integer getTotalLeaveCount();
 }

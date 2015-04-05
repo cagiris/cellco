@@ -39,6 +39,7 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
     private String approvingUserComments;
     private Date leaveStartDate;
     private Date leaveEndDate;
+    private Integer requiredLeaveCount;
 
     @Id
     @Override
@@ -63,7 +64,7 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "leave_type")
     @Column(name = "leave_quota")
-    @CollectionTable(name = "request_leave_type_vs_quota", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(joinColumns = @JoinColumn(name = "user_id"))
     @Override
     public Map<LeaveType, Integer> getLeaveTypeVsLeaveCount() {
         return leaveTypeVsLeaveCount;
@@ -125,6 +126,15 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 
     public void setLeaveEndDate(Date leaveEndDate) {
         this.leaveEndDate = leaveEndDate;
+    }
+
+    @Override
+    public Integer getRequiredLeaveCount() {
+        return requiredLeaveCount;
+    }
+
+    public void setRequiredLeaveCount(Integer requiredLeaveCount) {
+        this.requiredLeaveCount = requiredLeaveCount;
     }
 
 }

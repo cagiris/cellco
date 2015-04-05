@@ -34,8 +34,6 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final QOrganizationEntity organizationEntity;
 
     public final StringPath userId = createString("userId");

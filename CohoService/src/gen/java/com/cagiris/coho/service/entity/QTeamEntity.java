@@ -30,6 +30,8 @@ public class QTeamEntity extends EntityPathBase<TeamEntity> {
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
+    public final BooleanPath isDefault = createBoolean("isDefault");
+
     public final QOrganizationEntity organizationEntity;
 
     public final QTeamEntity parentTeamEntity;

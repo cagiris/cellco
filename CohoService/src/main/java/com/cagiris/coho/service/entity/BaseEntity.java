@@ -8,28 +8,32 @@ import java.util.Date;
 
 import javax.persistence.MappedSuperclass;
 
+import com.cagiris.coho.service.api.IBaseEntity;
+
 /**
  *
  * @author: ssnk
  */
 @MappedSuperclass
-public abstract class BaseEntity {
-	private Date dateAdded;
-	private Date dateModified;
+public abstract class BaseEntity implements IBaseEntity {
+    private Date dateAdded;
+    private Date dateModified;
 
-	public Date getDateModified() {
-		return dateModified;
-	}
+    @Override
+    public Date getDateModified() {
+        return dateModified;
+    }
 
-	public void setDateModified(Date dateModified) {
-		this.dateModified = dateModified;
-	}
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
 
-	public Date getDateAdded() {
-		return dateAdded;
-	}
+    @Override
+    public Date getDateAdded() {
+        return dateAdded;
+    }
 
-	public void setDateAdded(Date dateAdded) {
-		this.dateAdded = dateAdded;
-	}
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
+    }
 }
