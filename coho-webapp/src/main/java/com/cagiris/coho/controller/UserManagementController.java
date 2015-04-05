@@ -33,169 +33,146 @@ import com.cagiris.coho.service.exception.ResourceNotFoundException;
 @RequestMapping(UserManagementController.URL_MAPPING)
 public class UserManagementController extends AbstractCRUDController<UserBean> {
 
-	public static final String URL_MAPPING = "user";
-	
-	@Autowired
-	private IHierarchyService hierarchyService;
+    public static final String URL_MAPPING = "user";
 
-	@Override
-	public ModelMap create(UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
-		ModelMap responseModelMap = new ModelMap();
-		if  (bindingResult.hasErrors()) {
-			responseModelMap.addAllAttributes(modelMap);
-			responseModelMap.addAttribute(UserRole.values());
-		}
-		else
-		{
-			try {
-				hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), 
-						bean.getUserId(), 
-						bean.getUserName(), 
-						bean.getPassword(), 
-						UserRole.valueOf(bean.getUserRole()), 
-						AuthenicationPolicy.PASSWORD_BASED);
-				
-				responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
+    @Autowired
+    private IHierarchyService hierarchyService;
 
-			} catch (HierarchyServiceException e) {
-				e.printStackTrace();
-			} catch (ResourceNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return responseModelMap;
-	}
+    @Override
+    public ModelMap create(UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
+        ModelMap responseModelMap = new ModelMap();
+        if (bindingResult.hasErrors()) {
+            responseModelMap.addAllAttributes(modelMap);
+            responseModelMap.addAttribute(UserRole.values());
+        } else {
+            try {
+                hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
+                        bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
 
-	private ITeam getDefaultTeam() throws HierarchyServiceException,
-			ResourceNotFoundException {
-		List<? extends IOrganization> allOrganizationInfo = hierarchyService.getAllOrganizationInfo();
-		if(allOrganizationInfo==null||allOrganizationInfo.size()==0)
-		{
-			//TODO throw exception
-		}
-		ITeam team=null;
-		for (IOrganization iOrganization : allOrganizationInfo) {
-			List<? extends ITeam> allTeams = hierarchyService.getAllTeams(iOrganization.getOrganizationId());
-			if(allTeams!=null&&allTeams.size()>0)
-			{
-				team=allTeams.get(0);
-				break;
-			}
-		}
-		return team;
-	}
+                responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
 
-	@Override
-	public UserBean delete(Serializable entityId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+            } catch (HierarchyServiceException e) {
+                e.printStackTrace();
+            }
+        }
+        return responseModelMap;
+    }
 
-	@Override
-	public ModelMap get(Serializable entityId) {
-		ModelMap modelMap = new ModelMap();
-		
-		try {
-			IUser user = hierarchyService.getUser((String)entityId);
-			UserBean userBean = new UserBean();
-			userBean.setUserId(user.getUserId());
-			userBean.setUserName(user.getUserName());
-			userBean.setUserRole(user.getUserRole().name());
-			
-			modelMap.addAttribute(userBean);
-			
-		} catch (HierarchyServiceException | ResourceNotFoundException e) {
-			modelMap.addAttribute(ATTR_ERROR_MSG, e.getMessage());
-		}
-		
-		return modelMap;
-	}
+    private ITeam getDefaultTeam() throws HierarchyServiceException {
+        IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
+        return hierarchyService.getDefaultTeam(defaultOrganization.getOrganizationId());
+    }
 
-	@Override
-	public String getURLMapping() {
-		return URL_MAPPING;
-	}
+    @Override
+    public UserBean delete(Serializable entityId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public ModelMap showCreatePage(ModelMap modelMap) {
-		ModelMap responseModelMap = new ModelMap();
-		responseModelMap.addAttribute(new UserBean());
-		responseModelMap.addAttribute(UserRole.values());
-		return responseModelMap;
-	}
+    @Override
+    public ModelMap get(Serializable entityId) {
+        ModelMap modelMap = new ModelMap();
 
-	@Override
-	public ModelMap showFilteredListPage(UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        try {
+            IUser user = hierarchyService.getUser((String)entityId);
+            UserBean userBean = new UserBean();
+            userBean.setUserId(user.getUserId());
+            userBean.setUserName(user.getUserName());
+            userBean.setUserRole(user.getUserRole().name());
 
-	@Override
-	public ModelMap showListPage(ModelMap modelMap) {
-		try {
-			List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(getDefaultTeam().getTeamId());
-			List<UserBean> userBeans = new ArrayList<UserBean>();
-			for (ITeamUser teamUser : allUsersForTeam) {
-			UserBean userBean = new UserBean();
-			userBean.setUserId(teamUser.getUserId());
-			userBean.setUserName(teamUser.getUserName());
-			userBean.setUserRole(teamUser.getUserRole());
-			userBeans.add(userBean);
-			}
-			modelMap.addAttribute(userBeans);
-		} catch (HierarchyServiceException | ResourceNotFoundException e) {
-			e.printStackTrace();
-		}
-		return modelMap;
-	}
+            modelMap.addAttribute(userBean);
 
-	@Override
-	public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) {
-		ModelMap responseModelMap = new ModelMap();
-		
-		try {
-			IUser user = hierarchyService.getUser((String)entityId);
-			UserBean userBean = new UserBean();
-			userBean.setUserId(user.getUserId());
-			userBean.setUserName(user.getUserName());
-			userBean.setPassword(user.getAuthToken());
-			userBean.setUserRole(user.getUserRole().name());
-			
-			responseModelMap.addAttribute(userBean);
-			responseModelMap.addAttribute(UserRole.values());
-			
-		} catch (HierarchyServiceException | ResourceNotFoundException e) {
-			responseModelMap.addAttribute(ATTR_ERROR_MSG, e.getMessage());
-		}
-		
-		return responseModelMap;
-	}
+        } catch (HierarchyServiceException | ResourceNotFoundException e) {
+            modelMap.addAttribute(ATTR_ERROR_MSG, e.getMessage());
+        }
 
-	@Override
-	public ModelMap update(Serializable entityId, UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
-		ModelMap responseModelMap = new ModelMap();
-		if  (bindingResult.hasErrors()) {
-			responseModelMap.addAllAttributes(modelMap);
-			responseModelMap.addAttribute(UserRole.values());
-		}
-		else
-		{
-			try {
-				hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), 
-						bean.getUserId(), 
-						bean.getUserName(), 
-						bean.getPassword(), 
-						UserRole.valueOf(bean.getUserRole()), 
-						AuthenicationPolicy.PASSWORD_BASED);
-				
-				responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
+        return modelMap;
+    }
 
-			} catch (HierarchyServiceException e) {
-				e.printStackTrace();
-			} catch (ResourceNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return responseModelMap;
-	}
+    @Override
+    public String getURLMapping() {
+        return URL_MAPPING;
+    }
+
+    @Override
+    public ModelMap showCreatePage(ModelMap modelMap) {
+        ModelMap responseModelMap = new ModelMap();
+        responseModelMap.addAttribute(new UserBean());
+        try {
+            IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
+            responseModelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization
+                    .getOrganizationId()));
+        } catch (HierarchyServiceException e) {
+            // TODO: ssnk. Write exception handling code
+        }
+        return responseModelMap;
+    }
+
+    @Override
+    public ModelMap showFilteredListPage(UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ModelMap showListPage(ModelMap modelMap) {
+        try {
+            List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(getDefaultTeam()
+                    .getTeamId());
+            List<UserBean> userBeans = new ArrayList<UserBean>();
+            for (ITeamUser teamUser : allUsersForTeam) {
+                UserBean userBean = new UserBean();
+                userBean.setUserId(teamUser.getUserId());
+                userBean.setUserName(teamUser.getUserName());
+                userBean.setUserRole(teamUser.getUserRole());
+                userBeans.add(userBean);
+            }
+            modelMap.addAttribute(userBeans);
+        } catch (HierarchyServiceException e) {
+            e.printStackTrace();
+        }
+        return modelMap;
+    }
+
+    @Override
+    public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) {
+        ModelMap responseModelMap = new ModelMap();
+
+        try {
+            IUser user = hierarchyService.getUser((String)entityId);
+            UserBean userBean = new UserBean();
+            userBean.setUserId(user.getUserId());
+            userBean.setUserName(user.getUserName());
+            userBean.setPassword(user.getAuthToken());
+            userBean.setUserRole(user.getUserRole().name());
+
+            responseModelMap.addAttribute(userBean);
+            responseModelMap.addAttribute(UserRole.values());
+
+        } catch (HierarchyServiceException | ResourceNotFoundException e) {
+            responseModelMap.addAttribute(ATTR_ERROR_MSG, e.getMessage());
+        }
+
+        return responseModelMap;
+    }
+
+    @Override
+    public ModelMap update(Serializable entityId, UserBean bean, BindingResult bindingResult, ModelMap modelMap) {
+        ModelMap responseModelMap = new ModelMap();
+        if (bindingResult.hasErrors()) {
+            responseModelMap.addAllAttributes(modelMap);
+            responseModelMap.addAttribute(UserRole.values());
+        } else {
+            try {
+                hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
+                        bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
+
+                responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
+
+            } catch (HierarchyServiceException e) {
+                e.printStackTrace();
+            }
+        }
+        return responseModelMap;
+    }
 }

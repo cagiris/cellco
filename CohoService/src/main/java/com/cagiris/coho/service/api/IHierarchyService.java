@@ -41,7 +41,7 @@ public interface IHierarchyService {
 
     IOrganization getOrganizationInfo(Long organizationId) throws HierarchyServiceException, ResourceNotFoundException;
 
-    List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException, ResourceNotFoundException;
+    List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException;
 
     ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
             AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException;
@@ -70,4 +70,8 @@ public interface IHierarchyService {
     IUserProfile getUserProfile(String userId) throws HierarchyServiceException, ResourceNotFoundException;
 
     Set<UserRole> getAvailableUserRoles(Long organizationId) throws HierarchyServiceException;
+
+    IOrganization getDefaultOrganization() throws HierarchyServiceException;
+
+    ITeam getDefaultTeam(Long organizationId) throws HierarchyServiceException;
 }

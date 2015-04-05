@@ -54,6 +54,10 @@ public class HierarchyService implements IHierarchyService {
 
     private static final Logger logger = LoggerFactory.getLogger(HierarchyService.class);
 
+    private static final String DEFAULT_TEAM_NAME = "Default Team";
+
+    private static final String DEFAULT_ORG_NAME = "Coho";
+
     private IDatabaseManager databaseManager;
 
     private IAttendenceReportingService attendenceReportingService;
@@ -65,8 +69,9 @@ public class HierarchyService implements IHierarchyService {
 
     public void createDefaultHierarchy() {
         try {
-            IOrganization defaultOrganization = addOrganization("Coho", "Default Organization");
-            ITeam defaultTeam = addTeam(defaultOrganization.getOrganizationId(), null, "Default Team", "Default team");
+            IOrganization defaultOrganization = addOrganization(DEFAULT_ORG_NAME, "Default Organization");
+            ITeam defaultTeam = addTeam(defaultOrganization.getOrganizationId(), null, DEFAULT_TEAM_NAME,
+                    "Default team");
             addUserToTeam(defaultTeam.getTeamId(), "agent", "agent", "agent", UserRole.AGENT,
                     AuthenicationPolicy.PASSWORD_BASED);
             addUserToTeam(defaultTeam.getTeamId(), "supervisor", "supervisor", "supervisor", UserRole.SUPERVISOR,
@@ -363,8 +368,7 @@ public class HierarchyService implements IHierarchyService {
     }
 
     @Override
-    public List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException,
-            ResourceNotFoundException {
+    public List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException {
         QOrganizationEntity qOrganizationEntity = QOrganizationEntity.organizationEntity;
         HibernateQuery hiberateQuery = new HibernateQuery().from(qOrganizationEntity);
         try {
@@ -421,6 +425,28 @@ public class HierarchyService implements IHierarchyService {
         } catch (ResourceNotFoundException e) {
             throw new HierarchyServiceException(e);
         }
+    }
+
+    @Override
+    public ITeam getDefaultTeam(Long organizationId) throws HierarchyServiceException {
+        List<? extends ITeam> allTeams = getAllTeams(organizationId);
+        for (ITeam team : allTeams) {
+            if (DEFAULT_TEAM_NAME.equals(team.getTeamName())) {
+                return team;
+            }
+        }
+        throw new HierarchyServiceException("No default team found");
+    }
+
+    @Override
+    public IOrganization getDefaultOrganization() throws HierarchyServiceException {
+        List<? extends IOrganization> allOrganizationInfo = getAllOrganizationInfo();
+        for (IOrganization organization : allOrganizationInfo) {
+            if (DEFAULT_ORG_NAME.equals(organization.getOrganizationName())) {
+                return organization;
+            }
+        }
+        throw new HierarchyServiceException("No default org found");
     }
 
 }
