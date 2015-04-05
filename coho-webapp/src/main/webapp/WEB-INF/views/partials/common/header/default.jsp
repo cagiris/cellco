@@ -13,7 +13,7 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="dashboard.html"> <span class="glyphicon glyphicon-home"
+				<li><a href="<core:url value = '/dashboard.html' />"> <span class="glyphicon glyphicon-home"
 						aria-hidden="false"></span> Dashboard
 				</a></li>
 				<li role="presentation" class="dropdown"><a
