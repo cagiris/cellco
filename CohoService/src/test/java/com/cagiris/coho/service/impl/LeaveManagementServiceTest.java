@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import org.junit.Before;
@@ -31,6 +32,7 @@ public class LeaveManagementServiceTest extends AbstractTestCase {
     public void applyLeaveTest() throws LeaveManagementServiceException {
         HashMap<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>();
         leaveTypeVsLeaveCount.put(LeaveType.CASUAL_LEAVE, 2);
-        leaveManagementService.applyForLeave("agent2", "agent3", leaveTypeVsLeaveCount);
+        leaveManagementService.applyForLeave("agent", "admin", leaveTypeVsLeaveCount, new Date(), new Date(),
+                "having fun");
     }
 }

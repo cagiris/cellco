@@ -4,7 +4,9 @@
  */
 package com.cagiris.coho.service.api;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.cagiris.coho.service.exception.HierarchyServiceException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
@@ -38,7 +40,7 @@ public interface IHierarchyService {
             throws HierarchyServiceException;
 
     IOrganization getOrganizationInfo(Long organizationId) throws HierarchyServiceException, ResourceNotFoundException;
-    
+
     List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException, ResourceNotFoundException;
 
     ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
@@ -58,4 +60,14 @@ public interface IHierarchyService {
 
     IUser getUser(String userId) throws HierarchyServiceException, ResourceNotFoundException;
 
+    IOrganizationMetaConfiguration getOrganizationMetaConfiguration(Long organizationId)
+            throws HierarchyServiceException, ResourceNotFoundException;
+
+    IUserProfile updateUserProfile(String userId, String userName, String email, String phone, String address,
+            String city, String postalCode, Date dateOfBirth, Date workStartDate, Date workEndDate)
+            throws HierarchyServiceException;
+
+    IUserProfile getUserProfile(String userId) throws HierarchyServiceException, ResourceNotFoundException;
+
+    Set<UserRole> getAvailableUserRoles(Long organizationId) throws HierarchyServiceException;
 }

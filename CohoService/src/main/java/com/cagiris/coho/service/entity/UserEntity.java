@@ -4,10 +4,16 @@
  */
 package com.cagiris.coho.service.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import com.cagiris.coho.service.api.AuthenicationPolicy;
 import com.cagiris.coho.service.api.IUser;
@@ -19,6 +25,8 @@ import com.cagiris.coho.service.api.UserRole;
  */
 @Entity
 public class UserEntity extends BaseEntity implements IUser {
+    private Long id;
+
     private String userId;
 
     private String userName;
@@ -28,6 +36,8 @@ public class UserEntity extends BaseEntity implements IUser {
     private AuthenicationPolicy authPolicy;
 
     private UserRole userRole;
+
+    private OrganizationEntity organizationEntity;
 
     @Enumerated(EnumType.STRING)
     @Override
@@ -40,8 +50,9 @@ public class UserEntity extends BaseEntity implements IUser {
         return this.authToken;
     }
 
-    @Override
     @Id
+    @Override
+    @Column(unique = true)
     public String getUserId() {
         return this.userId;
     }
@@ -75,5 +86,32 @@ public class UserEntity extends BaseEntity implements IUser {
 
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Transient
+    @Override
+    public Long getOrganizationId() {
+        if (organizationEntity != null) {
+            return organizationEntity.getOrganizationId();
+        }
+        return null;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    public OrganizationEntity getOrganizationEntity() {
+        return organizationEntity;
+    }
+
+    public void setOrganizationEntity(OrganizationEntity organizationEntity) {
+        this.organizationEntity = organizationEntity;
     }
 }

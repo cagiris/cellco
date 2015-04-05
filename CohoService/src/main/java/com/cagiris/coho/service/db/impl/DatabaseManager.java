@@ -26,6 +26,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.ImprovedNamingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -78,7 +79,7 @@ public class DatabaseManager implements IDatabaseManager {
         for (Class<?> clazz : entityClasses) {
             configuration.addAnnotatedClass(clazz);
         }
-        configuration.setNamingStrategy(new CohoDBNamingStratergy());
+        configuration.setNamingStrategy(new ImprovedNamingStrategy());
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
         this.sessionFactory = configuration.buildSessionFactory(builder.build());

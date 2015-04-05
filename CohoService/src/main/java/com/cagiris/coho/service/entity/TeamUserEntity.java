@@ -4,7 +4,6 @@
  */
 package com.cagiris.coho.service.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,79 +22,77 @@ import com.cagiris.coho.service.api.ITeamUser;
 @Entity
 public class TeamUserEntity implements ITeamUser {
 
-	private TeamEntity teamEntity;
+    private TeamEntity teamEntity;
 
-	private Long teamUserId;
+    private Long teamUserId;
 
-	private UserEntity userEntity;
+    private UserEntity userEntity;
 
-	@Transient
-	@Override
-	public Long getTeamId() {
-		if (teamEntity != null) {
-			return teamEntity.getTeamId();
-		}
-		return null;
-	}
+    @Transient
+    @Override
+    public Long getTeamId() {
+        if (teamEntity != null) {
+            return teamEntity.getTeamId();
+        }
+        return null;
+    }
 
-	@JoinColumn(name = "team_id")
-	@ManyToOne(fetch = FetchType.EAGER,cascade={CascadeType.REMOVE})
-	public TeamEntity getTeamEntity() {
-		return teamEntity;
-	}
+    @JoinColumn(name = "team_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    public TeamEntity getTeamEntity() {
+        return teamEntity;
+    }
 
-	public void setTeamEntity(TeamEntity teamEntity) {
-		this.teamEntity = teamEntity;
-	}
+    public void setTeamEntity(TeamEntity teamEntity) {
+        this.teamEntity = teamEntity;
+    }
 
-	@Id
-	@GeneratedValue
-	@Override
-	public Long getTeamUserId() {
-		return teamUserId;
-	}
+    @Id
+    @GeneratedValue
+    @Override
+    public Long getTeamUserId() {
+        return teamUserId;
+    }
 
-	public void setTeamUserId(Long teamUserId) {
-		this.teamUserId = teamUserId;
-	}
+    public void setTeamUserId(Long teamUserId) {
+        this.teamUserId = teamUserId;
+    }
 
-	@Transient
-	@Override
-	public String getUserId() {
-		if (getUserEntity() != null) {
-			return getUserEntity().getUserId();
-		}
-		return null;
-	}
+    @Transient
+    @Override
+    public String getUserId() {
+        if (getUserEntity() != null) {
+            return getUserEntity().getUserId();
+        }
+        return null;
+    }
 
-	@JoinColumn(name = "user_id")
-	@ManyToOne(fetch = FetchType.EAGER)
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
 
-	public void setUserEntity(UserEntity userEntity) {
-		this.userEntity = userEntity;
-	}
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 
-	@Transient
-	@Override
-	public String getUserName() {
-		if(userEntity!=null)
-		{
-			return userEntity.getUserName();
-		}
-		return null;
-	}
+    @Transient
+    @Override
+    public String getUserName() {
+        if (userEntity != null) {
+            return userEntity.getUserName();
+        }
+        return null;
+    }
 
-	@Transient
-	@Override
-	public String getUserRole() {
-		if(userEntity!=null&&userEntity.getUserRole()!=null)
-		{
-			return userEntity.getUserRole().toString();
-		}
-		return null;
-	}
+    @Transient
+    @Override
+    public String getUserRole() {
+        if (userEntity != null && userEntity.getUserRole() != null) {
+            return userEntity.getUserRole().toString();
+        }
+        return null;
+    }
 
 }

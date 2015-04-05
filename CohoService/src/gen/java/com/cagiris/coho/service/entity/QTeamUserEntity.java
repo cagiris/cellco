@@ -47,7 +47,7 @@ public class QTeamUserEntity extends EntityPathBase<TeamUserEntity> {
     public QTeamUserEntity(Class<? extends TeamUserEntity> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
         this.teamEntity = inits.isInitialized("teamEntity") ? new QTeamEntity(forProperty("teamEntity"), inits.get("teamEntity")) : null;
-        this.userEntity = inits.isInitialized("userEntity") ? new QUserEntity(forProperty("userEntity")) : null;
+        this.userEntity = inits.isInitialized("userEntity") ? new QUserEntity(forProperty("userEntity"), inits.get("userEntity")) : null;
     }
 
 }

@@ -92,7 +92,7 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
         // SUCCESS 
         String shiftId = "82c8c9c57e5e46b5-shiftId-shiftId-14c677c83af";
         //String shiftId = "shift";
-        attendenceReportingService.endUserShift(shiftId);
+        attendenceReportingService.endUserShift(shiftId, "logout");
         //Assert.assertSame(startUserShift1.getShiftStartTime(), endUserShift1.getShiftStartTime());
         //Assert.assertNotSame(startUserShift1.getShiftEndTime(), endUserShift1.getShiftEndTime());
 
@@ -117,7 +117,7 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
         shiftEndTime.setHours(hours + 1);
         long teamId = 21L;
         ITeamShiftDetails teamShiftDetails = attendenceReportingService.createTeamShiftDetails(teamId, shiftStartTime,
-                shiftEndTime, true);
+                shiftEndTime, 60l, true);
         // Assert.assertEqual(teamShiftDetails.getUserId(),id);
         // Assert.assertEqual(teamShiftDetails.getUserId(), id);
         // Assert.assertEqual(teamShiftDetails.getUserId(), id);
@@ -136,10 +136,10 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
         shiftEndTime.setHours(6);
 
         //ITeamShiftDetails teamShiftDetails1 =
-        attendenceReportingService.createTeamShiftDetails(22L, shiftStartTime, shiftStartTime, true);
+        attendenceReportingService.createTeamShiftDetails(2l, shiftStartTime, shiftEndTime, 60l, true);
 
         // ITeamShiftDetails teamShiftDetails2 =
-        attendenceReportingService.updateTeamShiftDetails(22L, shiftEndTime, shiftEndTime, true);
+        attendenceReportingService.updateTeamShiftDetails(2l, shiftStartTime, shiftEndTime, 60l, true);
     }
 
     @Ignore
@@ -232,7 +232,7 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
         String shiftId = "shift1";
 
         IUserShiftInfo userShiftInfo = attendenceReportingService.updateUserShiftInfo(shiftId, shiftStartTime,
-                shiftEndTime);
+                shiftEndTime, "change");
 
         //Assert.assertSame(userShiftInfo.getShiftId(), "ShiftId5");
         //Assert.assertSame(userShiftInfo.getShiftStartTime(), "2015-05-28 19:30:12.304");

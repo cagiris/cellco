@@ -14,10 +14,12 @@ import java.util.Date;
 
 public interface ITeamShiftDetails {
 
-	Long getTeamId();
+    Long getTeamId();
 
-	Date getShiftStartTime();
+    Date getShiftStartTime();
 
-	Date getShiftEndTime();
+    Date getShiftEndTime();
 
+    // the time in minutes after which the user's session should auto expire ..
+    Long getShiftBuffer();
 }

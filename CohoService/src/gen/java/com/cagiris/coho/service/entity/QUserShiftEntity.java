@@ -27,9 +27,13 @@ public class QUserShiftEntity extends EntityPathBase<UserShiftEntity> {
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
+    public final StringPath shiftEndReason = createString("shiftEndReason");
+
     public final DateTimePath<java.util.Date> shiftEndTime = createDateTime("shiftEndTime", java.util.Date.class);
 
     public final StringPath shiftId = createString("shiftId");
+
+    public final StringPath shiftStartReason = createString("shiftStartReason");
 
     public final DateTimePath<java.util.Date> shiftStartTime = createDateTime("shiftStartTime", java.util.Date.class);
 

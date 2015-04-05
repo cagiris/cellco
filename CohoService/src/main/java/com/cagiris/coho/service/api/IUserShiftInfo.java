@@ -13,15 +13,19 @@ import java.util.Date;
 
 public interface IUserShiftInfo {
 
-	String getShiftId();
+    String getShiftId();
 
-	Date getShiftStartTime();
+    Date getShiftStartTime();
 
-	Date getShiftEndTime();
+    Date getShiftEndTime();
 
-	Long getShiftDuration();
-	
-	Long getTeamId();
+    Long getShiftDuration();
 
-	String getUserId();
+    Long getTeamId();
+
+    String getUserId();
+
+    String getShiftStartReason();
+
+    String getShiftEndReason();
 }

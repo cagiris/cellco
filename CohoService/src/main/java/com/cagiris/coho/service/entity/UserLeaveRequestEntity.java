@@ -5,6 +5,7 @@
 
 package com.cagiris.coho.service.entity;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
@@ -34,6 +35,10 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
     private Map<LeaveType, Integer> leaveTypeVsLeaveCount;
     private LeaveRequestStatus leaveApplicationStatus;
     private String approvingUserId;
+    private String requestDescription;
+    private String approvingUserComments;
+    private Date leaveStartDate;
+    private Date leaveEndDate;
 
     @Id
     @Override
@@ -84,6 +89,42 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
 
     public void setApprovingUserId(String approvingUserId) {
         this.approvingUserId = approvingUserId;
+    }
+
+    @Override
+    public String getRequestDescription() {
+        return requestDescription;
+    }
+
+    public void setRequestDescription(String requestDescription) {
+        this.requestDescription = requestDescription;
+    }
+
+    @Override
+    public String getApprovingUserComments() {
+        return approvingUserComments;
+    }
+
+    public void setApprovingUserComments(String approvingUserComments) {
+        this.approvingUserComments = approvingUserComments;
+    }
+
+    @Override
+    public Date getLeaveStartDate() {
+        return leaveStartDate;
+    }
+
+    public void setLeaveStartDate(Date leaveStartDate) {
+        this.leaveStartDate = leaveStartDate;
+    }
+
+    @Override
+    public Date getLeaveEndDate() {
+        return leaveEndDate;
+    }
+
+    public void setLeaveEndDate(Date leaveEndDate) {
+        this.leaveEndDate = leaveEndDate;
     }
 
 }

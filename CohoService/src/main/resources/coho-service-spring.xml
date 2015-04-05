@@ -17,19 +17,23 @@
 		</property>
 	</bean>
 
-	<bean id="hierarchyService" class="com.cagiris.coho.service.impl.HierarchyService"
-		init-method="createDefaultHierarchy">
-		<constructor-arg>
-			<ref bean="databaseManager" />
-		</constructor-arg>
-	</bean>
-
 	<bean id="attendenceReportingService"
 		class="com.cagiris.coho.service.impl.AttendenceReportingService">
 		<constructor-arg>
 			<ref bean="databaseManager" />
 		</constructor-arg>
 	</bean>
+
+	<bean id="hierarchyService" class="com.cagiris.coho.service.impl.HierarchyService"
+		init-method="createDefaultHierarchy">
+		<constructor-arg>
+			<ref bean="databaseManager" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="attendenceReportingService" />
+		</constructor-arg>
+	</bean>
+
 
 	<bean id="leaveManagementService" class="com.cagiris.coho.service.impl.LeaveManagementService">
 		<constructor-arg>

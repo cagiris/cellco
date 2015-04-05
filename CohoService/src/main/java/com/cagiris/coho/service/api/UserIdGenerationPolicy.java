@@ -9,6 +9,7 @@ package com.cagiris.coho.service.api;
  * @author: ssnk
  */
 
-public enum LeaveRequestStatus {
-    NEW, APPROVED, PENDING, CANCELED
+public enum UserIdGenerationPolicy {
+
+    SEQUENCE, MANUAL, SEQUENCE_WITH_PREFIX
 }

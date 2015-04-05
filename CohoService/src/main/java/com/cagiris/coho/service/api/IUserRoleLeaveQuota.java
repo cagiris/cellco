@@ -13,7 +13,11 @@ import java.util.Map;
 
 public interface IUserRoleLeaveQuota {
 
-	UserRole getUserRole();
+    UserRole getUserRole();
 
-	Map<LeaveType, Integer> getLeaveTypeVsLeaveCount();
+    Long getOrganizationId();
+
+    Map<LeaveType, Integer> getLeaveTypeVsLeaveCount();
+
+    LeaveAccumulationPolicy getLeaveAccumulationPolicy();
 }

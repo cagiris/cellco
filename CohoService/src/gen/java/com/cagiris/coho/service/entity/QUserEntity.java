@@ -7,6 +7,7 @@ import com.mysema.query.types.path.*;
 import com.mysema.query.types.PathMetadata;
 import javax.annotation.Generated;
 import com.mysema.query.types.Path;
+import com.mysema.query.types.path.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.mysema.query.types.Path;
 public class QUserEntity extends EntityPathBase<UserEntity> {
 
     private static final long serialVersionUID = 1776112068L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QUserEntity userEntity = new QUserEntity("userEntity");
 
@@ -31,6 +34,10 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final QOrganizationEntity organizationEntity;
+
     public final StringPath userId = createString("userId");
 
     public final StringPath userName = createString("userName");
@@ -38,15 +45,24 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
     public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = createEnum("userRole", com.cagiris.coho.service.api.UserRole.class);
 
     public QUserEntity(String variable) {
-        super(UserEntity.class, forVariable(variable));
+        this(UserEntity.class, forVariable(variable), INITS);
     }
 
     public QUserEntity(Path<? extends UserEntity> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), path.getMetadata().isRoot() ? INITS : PathInits.DEFAULT);
     }
 
     public QUserEntity(PathMetadata<?> metadata) {
-        super(UserEntity.class, metadata);
+        this(metadata, metadata.isRoot() ? INITS : PathInits.DEFAULT);
+    }
+
+    public QUserEntity(PathMetadata<?> metadata, PathInits inits) {
+        this(UserEntity.class, metadata, inits);
+    }
+
+    public QUserEntity(Class<? extends UserEntity> type, PathMetadata<?> metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.organizationEntity = inits.isInitialized("organizationEntity") ? new QOrganizationEntity(forProperty("organizationEntity")) : null;
     }
 
 }

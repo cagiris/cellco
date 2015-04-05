@@ -11,10 +11,10 @@ package com.cagiris.coho.service.api;
 
 public interface IOrganization {
 
-	Long getOrganizationId();
+    Long getOrganizationId();
 
-	String getOrganizationName();
+    String getOrganizationName();
 
-	String getOrganizationDescription();
+    String getOrganizationDescription();
 
 }

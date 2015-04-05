@@ -4,7 +4,6 @@
  */
 package com.cagiris.coho.service.api;
 
-
 /**
  *
  * @author: ssnk
@@ -12,13 +11,15 @@ package com.cagiris.coho.service.api;
 
 public interface IUser {
 
-	String getUserId();
+    String getUserId();
 
-	String getUserName();
+    String getUserName();
 
-	String getAuthToken();
+    String getAuthToken();
 
-	AuthenicationPolicy getAuthPolicy();
+    AuthenicationPolicy getAuthPolicy();
 
-	UserRole getUserRole();
+    UserRole getUserRole();
+
+    Long getOrganizationId();
 }

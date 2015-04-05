@@ -27,7 +27,11 @@ public class QUserRoleLeaveQuotaEntity extends EntityPathBase<UserRoleLeaveQuota
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
+    public final EnumPath<com.cagiris.coho.service.api.LeaveAccumulationPolicy> leaveAccumulationPolicy = createEnum("leaveAccumulationPolicy", com.cagiris.coho.service.api.LeaveAccumulationPolicy.class);
+
     public final MapPath<com.cagiris.coho.service.api.LeaveType, Integer, NumberPath<Integer>> leaveTypeVsLeaveCount = this.<com.cagiris.coho.service.api.LeaveType, Integer, NumberPath<Integer>>createMap("leaveTypeVsLeaveCount", com.cagiris.coho.service.api.LeaveType.class, Integer.class, NumberPath.class);
+
+    public final NumberPath<Long> organizationId = createNumber("organizationId", Long.class);
 
     public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = createEnum("userRole", com.cagiris.coho.service.api.UserRole.class);
 

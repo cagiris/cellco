@@ -45,11 +45,11 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         UserShiftEntity userShiftEntity = new UserShiftEntity();
         userShiftEntity.setUserId(userId);
         userShiftEntity.setShiftStartTime(currentTime);
-        userShiftEntity.setShiftEndTime(currentTime);
-        userShiftEntity.setShiftId(getShiftId());
+        userShiftEntity.setShiftId(getShiftId(userId));
         userShiftEntity.setDateAdded(currentTime);
         userShiftEntity.setDateModified(currentTime);
         userShiftEntity.setTeamId(teamId);
+        userShiftEntity.setShiftStartReason("Started_By_User");
         try {
             databaseManager.save(userShiftEntity);
         } catch (DatabaseManagerException e) {
@@ -59,20 +59,21 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         return userShiftEntity;
     }
 
-    private String getShiftId() {
-        // TODO change
-        UniqueIDGenerator uid = new UniqueIDGenerator("shiftId");
-        return uid.getNextUID("shiftId");
+    private String getShiftId(String userId) {
+        UniqueIDGenerator uid = new UniqueIDGenerator("shift");
+        return uid.getNextUID(userId);
     }
 
     @Override
-    public IUserShiftInfo endUserShift(String shiftId) throws AttendenceReportingServiceException {
+    public IUserShiftInfo endUserShift(String shiftId, String shiftEndReason)
+            throws AttendenceReportingServiceException {
         UserShiftEntity userShiftEntity = null;
         try {
             userShiftEntity = databaseManager.get(UserShiftEntity.class, shiftId);
             Date currentTime = new Date();
             userShiftEntity.setDateModified(currentTime);
             userShiftEntity.setShiftEndTime(currentTime);
+            userShiftEntity.setShiftEndReason(shiftEndReason);
             databaseManager.update(userShiftEntity);
             return userShiftEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
@@ -83,7 +84,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
 
     @Override
     public ITeamShiftDetails createTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime,
-            boolean autoExpire) throws AttendenceReportingServiceException {
+            Long shiftBuffer, boolean autoExpire) throws AttendenceReportingServiceException {
 
         TeamShiftDetailsEntity teamShiftDetails = new TeamShiftDetailsEntity();
         Date currentTime = new Date();
@@ -92,6 +93,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         teamShiftDetails.setTeamId(teamId);
         teamShiftDetails.setShiftStartTime(shiftStartTime);
         teamShiftDetails.setShiftEndTime(shiftEndTime);
+        teamShiftDetails.setShiftBuffer(shiftBuffer);
         teamShiftDetails.setAutoExpire(autoExpire);
         try {
             databaseManager.save(teamShiftDetails);
@@ -105,11 +107,10 @@ public class AttendenceReportingService implements IAttendenceReportingService {
 
     @Override
     public ITeamShiftDetails updateTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime,
-            boolean autoExpire) throws AttendenceReportingServiceException {
+            Long shiftBuffer, boolean autoExpire) throws AttendenceReportingServiceException {
 
         try {
             TeamShiftDetailsEntity teamShiftDetails = databaseManager.get(TeamShiftDetailsEntity.class, teamId);
-            //TeamShiftDetailsEntity teamShiftDetails = new TeamShiftDetailsEntity();
             Date currentTime = new Date();
             teamShiftDetails.setDateModified(currentTime);
             teamShiftDetails.setTeamId(teamId);
@@ -161,8 +162,8 @@ public class AttendenceReportingService implements IAttendenceReportingService {
     }
 
     @Override
-    public IUserShiftInfo updateUserShiftInfo(String shiftId, Date shiftStartTime, Date shiftEndTime)
-            throws AttendenceReportingServiceException {
+    public IUserShiftInfo updateUserShiftInfo(String shiftId, Date shiftStartTime, Date shiftEndTime,
+            String updateReason) throws AttendenceReportingServiceException {
         UserShiftEntity userShiftEntity = null;
         try {
             userShiftEntity = databaseManager.get(UserShiftEntity.class, shiftId);
@@ -170,6 +171,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             userShiftEntity.setDateModified(currentTime);
             userShiftEntity.setShiftStartTime(shiftStartTime);
             userShiftEntity.setShiftEndTime(shiftEndTime);
+            userShiftEntity.setShiftEndReason(updateReason);
             databaseManager.update(userShiftEntity);
             return userShiftEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {

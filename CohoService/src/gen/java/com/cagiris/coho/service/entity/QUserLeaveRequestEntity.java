@@ -21,6 +21,8 @@ public class QUserLeaveRequestEntity extends EntityPathBase<UserLeaveRequestEnti
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final StringPath approvingUserComments = createString("approvingUserComments");
+
     public final StringPath approvingUserId = createString("approvingUserId");
 
     //inherited
@@ -33,7 +35,13 @@ public class QUserLeaveRequestEntity extends EntityPathBase<UserLeaveRequestEnti
 
     public final EnumPath<com.cagiris.coho.service.api.LeaveRequestStatus> leaveApplicationStatus = createEnum("leaveApplicationStatus", com.cagiris.coho.service.api.LeaveRequestStatus.class);
 
+    public final DateTimePath<java.util.Date> leaveEndDate = createDateTime("leaveEndDate", java.util.Date.class);
+
+    public final DateTimePath<java.util.Date> leaveStartDate = createDateTime("leaveStartDate", java.util.Date.class);
+
     public final MapPath<com.cagiris.coho.service.api.LeaveType, Integer, NumberPath<Integer>> leaveTypeVsLeaveCount = this.<com.cagiris.coho.service.api.LeaveType, Integer, NumberPath<Integer>>createMap("leaveTypeVsLeaveCount", com.cagiris.coho.service.api.LeaveType.class, Integer.class, NumberPath.class);
+
+    public final StringPath requestDescription = createString("requestDescription");
 
     public final StringPath userId = createString("userId");
 

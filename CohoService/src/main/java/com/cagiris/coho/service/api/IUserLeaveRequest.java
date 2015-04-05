@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.api;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -13,13 +14,21 @@ import java.util.Map;
 
 public interface IUserLeaveRequest {
 
-	String getLeaveApplicationId();
+    String getLeaveApplicationId();
 
-	String getUserId();
+    String getUserId();
 
-	Map<LeaveType, Integer> getLeaveTypeVsLeaveCount();
+    Map<LeaveType, Integer> getLeaveTypeVsLeaveCount();
 
-	LeaveRequestStatus getLeaveApplicationStatus();
+    LeaveRequestStatus getLeaveApplicationStatus();
 
-	String getApprovingUserId();
+    String getApprovingUserId();
+
+    String getRequestDescription();
+
+    String getApprovingUserComments();
+
+    Date getLeaveStartDate();
+
+    Date getLeaveEndDate();
 }
