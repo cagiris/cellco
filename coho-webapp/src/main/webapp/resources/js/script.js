@@ -31,3 +31,24 @@ function toggleform(formstr,chkobstr,obstr) {
 		}
 	}
 }
+
+$("#list-table").on('click','.ajax-delete',function(){
+	var td = $(this).parent().parent();
+	var rowId = td.parent().attr('id');
+	var entityId = rowId.substring(4); // "appended 'row-' in front of entity id to create the <tr> id"
+	
+	$.ajax({
+		url: "delete.html",
+	    data: { 
+	    	"entityId" : entityId
+	    },
+	    cache: false,
+	    type: "GET",
+	    success: function(response) {
+	    	$(td).html("<div class='success-msg'>" + response + "</div>");
+	    },
+	    error: function(xhr) {
+	    	$(td).html("<div class='error-msg'>" + response + "</div>");
+	    }
+	});
+});
