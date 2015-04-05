@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -69,6 +72,11 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     public ModelMap get(Serializable entityId) throws HierarchyServiceException, ResourceNotFoundException {
         ModelMap modelMap = new ModelMap();
 
+        if (entityId == null) {
+        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        	entityId = auth.getName();
+        }
+        
         ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
 
         UserBean userBean = new UserBean();

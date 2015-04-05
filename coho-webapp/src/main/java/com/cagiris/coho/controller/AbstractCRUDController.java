@@ -86,7 +86,7 @@ public abstract class AbstractCRUDController <T extends ICRUDBean> implements IC
 	public abstract ModelMap get(Serializable entityId) throws Exception ;
 
 	@RequestMapping(value = GET_URL_MAPPING )
-	public final  ModelAndView getInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = true) Serializable entityId, 
+	public final  ModelAndView getInternal(@RequestParam(value = REQUEST_PARAM_ENTITYID, required = false) Serializable entityId, 
 											ModelMap modelMap) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
