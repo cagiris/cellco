@@ -32,11 +32,16 @@ function toggleform(formstr,chkobstr,obstr) {
 	}
 }
 
-$("#list-table").on('click','.ajax-delete',function(){
-	var td = $(this).parent().parent();
-	var rowId = td.parent().attr('id');
-	var entityId = rowId.substring(4); // "appended 'row-' in front of entity id to create the <tr> id"
+$('#myModal').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget) 		// Button that triggered the modal
+	  var recipient = button.data('whatever') 	// Extract info from data-* attributes
+	  var modal = $(this)
+	  modal.find('.modal-body input').val(recipient)
+});
 	
+$("#myModal").on('click','.ajax-delete',function(event){
+	var entityId = $('#recipient-name').val();
+    console.log(entityId);
 	$.ajax({
 		url: "delete.html",
 	    data: { 
@@ -45,10 +50,31 @@ $("#list-table").on('click','.ajax-delete',function(){
 	    cache: false,
 	    type: "GET",
 	    success: function(response) {
-	    	$(td).html("<div class='success-msg'>" + response + "</div>");
+	    	$(".modal-body-content").hide();
+	    	$(".modal-body-content-ret").html("<div class='success-msg'>" + response + "</div>");
+	    	// append hidden field
+	    	$(".modal-body-content-ret").append("<input type=\"hidden\" class=\"form-control\" id=\"recipient-name\" value=\"" + entityId + "\"></div>");
+	    	$(".modal-body-content-ret").show();
+	    	// Hide Delete Button on pop-up window
+	    	$("#myModal .ajax-delete").hide();
+	    	// Hide deleted row visible behind pop-up window
+	    	$("#row-"+entityId).hide();
 	    },
 	    error: function(xhr) {
-	    	$(td).html("<div class='error-msg'>" + response + "</div>");
+	    	$(modal-body).html("<div class='error-msg'>" + response + "</div>");
 	    }
 	});
 });
+
+$("#myModal").on('click','.popup-close',function(event){
+   	$(".modal-body-content").show();
+   	$(".modal-body-content-ret").hide();
+});
+
+$('#myModal').on('hide.bs.modal', function (event) {
+   	$(".modal-body-content").show();
+   	$(".modal-body-content-ret").hide();
+});
+
+
+

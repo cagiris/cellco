@@ -37,7 +37,7 @@
 	<div class="form-group">
 		<form:label path="userName" cssClass="control-label col-xs-3">Re-enter Password</form:label>
 		<div class="col-xs-5">
-			<form:input cssClass="form-control" path="reEnterdPassword" required="true" />
+			<form:password cssClass="form-control" path="reEnterdPassword" required="true" />
 		</div>
 		<div class="col-xs-4">
 			<form:errors path="reEnterdPassword" cssClass="form-field-error"/>
