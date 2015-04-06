@@ -49,3 +49,9 @@ $("#list-table").on('click','.ajax-delete',function(){
 	    }
 	});
 });
+
+$('#shiftButton').on('click', function () {
+    var $btn = $(this).button('loading')
+    // business logic...
+    $btn.button('Stop Shift')
+  })

@@ -26,6 +26,23 @@
 			</tbody>
 		</table>
 	</div>
+		<div class="panel panel-primary">
+		<div class="panel-heading">Shift Status</div>
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<td class="text-center">Please start your shift </td>
+				</tr>
+				<tr>
+					<td class="text-center">
+						<button type="button" id="shiftButton"
+							data-loading-text="Loading..." class="btn btn-primary"
+							autocomplete="off">Start shift</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </sec:authorize>
 <sec:authorize access="hasRole('ADMIN')">
 	<div class="panel panel-primary">
