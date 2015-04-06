@@ -42,8 +42,8 @@ public interface ILeaveManagementService {
 
     IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException;
 
-    IUserLeaveQuota updateUserLeaveQuota(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
-            throws LeaveManagementServiceException;
+    IUserLeaveQuota updateUserLeaveQuota(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount,
+            Date lastLeaveAccumulationDate) throws LeaveManagementServiceException;
 
     /**
      * The number of leaves can be configured per user role.
@@ -82,4 +82,5 @@ public interface ILeaveManagementService {
     List<? extends IWeeklyHoliday> getAllWeeklyHolidays(Long organizationId) throws LeaveManagementServiceException;
 
     IUserLeaveRequest getLeaveRequestById(String leaveApplicationId) throws LeaveManagementServiceException;
+
 }

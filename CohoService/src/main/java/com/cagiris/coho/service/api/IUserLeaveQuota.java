@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.api;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -18,4 +19,6 @@ public interface IUserLeaveQuota {
     Map<LeaveType, Integer> getLeaveTypeVsLeaveQuota();
 
     Integer getTotalLeaveCount();
+
+    Date getLastLeaveAccumulationDate();
 }

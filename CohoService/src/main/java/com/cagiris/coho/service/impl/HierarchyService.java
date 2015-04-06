@@ -99,12 +99,12 @@ public class HierarchyService implements IHierarchyService {
                     "Default team");
             addUserToTeam(defaultTeam.getTeamId(), "agent", "agent", "agent", UserRole.AGENT,
                     AuthenicationPolicy.PASSWORD_BASED);
-            addUserToTeam(defaultTeam.getTeamId(), "supervisor", "supervisor", "supervisor", UserRole.SUPERVISOR,
-                    AuthenicationPolicy.PASSWORD_BASED);
+            //            addUserToTeam(defaultTeam.getTeamId(), "supervisor", "supervisor", "supervisor", UserRole.SUPERVISOR,
+            //                    AuthenicationPolicy.PASSWORD_BASED);
             addUserToTeam(defaultTeam.getTeamId(), "admin", "admin", "admin", UserRole.ADMIN,
                     AuthenicationPolicy.PASSWORD_BASED);
-            addUserToTeam(defaultTeam.getTeamId(), "root", "root", "root", UserRole.ROOT,
-                    AuthenicationPolicy.PASSWORD_BASED);
+            //            addUserToTeam(defaultTeam.getTeamId(), "root", "root", "root", UserRole.ROOT,
+            //                    AuthenicationPolicy.PASSWORD_BASED);
         } catch (HierarchyServiceException e) {
             logger.error("Failed to create default hierarchy, error: {}", e.getMessage());
         }

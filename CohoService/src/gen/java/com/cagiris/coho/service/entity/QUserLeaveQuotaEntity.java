@@ -27,6 +27,8 @@ public class QUserLeaveQuotaEntity extends EntityPathBase<UserLeaveQuotaEntity> 
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
+    public final DateTimePath<java.util.Date> lastLeaveAccumulationDate = createDateTime("lastLeaveAccumulationDate", java.util.Date.class);
+
     public final MapPath<com.cagiris.coho.service.api.LeaveType, Integer, NumberPath<Integer>> leaveTypeVsLeaveQuota = this.<com.cagiris.coho.service.api.LeaveType, Integer, NumberPath<Integer>>createMap("leaveTypeVsLeaveQuota", com.cagiris.coho.service.api.LeaveType.class, Integer.class, NumberPath.class);
 
     public final StringPath userId = createString("userId");

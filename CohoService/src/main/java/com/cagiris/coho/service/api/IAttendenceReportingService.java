@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
+import com.cagiris.coho.service.exception.ResourceNotFoundException;
 
 /**
  *
@@ -42,6 +43,9 @@ public interface IAttendenceReportingService {
     ITeamShiftDetails updateTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime, Long shiftBuffer,
             boolean autoExpire) throws AttendenceReportingServiceException;
 
+    ITeamShiftDetails getTeamShiftDetails(Long teamId) throws AttendenceReportingServiceException,
+            ResourceNotFoundException;
+
     /**
      * This will return the shift info of an active shift. i.e. the user is not
      * logged out yet.
@@ -60,5 +64,7 @@ public interface IAttendenceReportingService {
      */
     IUserShiftInfo updateUserShiftInfo(String shiftId, Date shiftStartTime, Date shiftEndTime, String updateReason)
             throws AttendenceReportingServiceException;
+
+    List<? extends IUserShiftInfo> getAllActiveShiftInfos() throws AttendenceReportingServiceException;
 
 }

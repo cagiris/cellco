@@ -62,6 +62,7 @@ public class TeamShiftDetailsEntity extends BaseEntity implements ITeamShiftDeta
         this.autoExpire = autoExpire;
     }
 
+    @Override
     @Transient
     public Long getShiftDuration() {
         if ((shiftStartTime == null) || (shiftEndTime == null)) {

@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.service.impl;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import com.cagiris.coho.service.entity.QUserShiftEntity;
 import com.cagiris.coho.service.entity.TeamShiftDetailsEntity;
 import com.cagiris.coho.service.entity.UserShiftEntity;
 import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
+import com.cagiris.coho.service.exception.ResourceNotFoundException;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 import com.mysema.query.types.CollectionExpression;
@@ -51,12 +53,12 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         userShiftEntity.setTeamId(teamId);
         userShiftEntity.setShiftStartReason("Started_By_User");
         try {
-            databaseManager.save(userShiftEntity);
-        } catch (DatabaseManagerException e) {
+            Serializable id = databaseManager.save(userShiftEntity);
+            return databaseManager.get(UserShiftEntity.class, id);
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("Error while adding user shift:{}", e.getMessage(), e);
             throw new AttendenceReportingServiceException(e);
         }
-        return userShiftEntity;
     }
 
     private String getShiftId(String userId) {
@@ -96,13 +98,13 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         teamShiftDetails.setShiftBuffer(shiftBuffer);
         teamShiftDetails.setAutoExpire(autoExpire);
         try {
-            databaseManager.save(teamShiftDetails);
-        } catch (DatabaseManagerException e) {
+            Serializable id = databaseManager.save(teamShiftDetails);
+            return databaseManager.get(TeamShiftDetailsEntity.class, id);
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("Error while adding teams shift details:{}", e.getMessage(), e);
             throw new AttendenceReportingServiceException(e);
         }
 
-        return null;
     }
 
     @Override
@@ -118,12 +120,12 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             teamShiftDetails.setShiftEndTime(shiftEndTime);
             teamShiftDetails.setAutoExpire(autoExpire);
             databaseManager.update(teamShiftDetails);
+            return teamShiftDetails;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("Error while adding teams shift details:{}", e.getMessage(), e);
             throw new AttendenceReportingServiceException(e);
         }
 
-        return null;
     }
 
     @Override
@@ -180,4 +182,27 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         }
     }
 
+    @Override
+    public ITeamShiftDetails getTeamShiftDetails(Long teamId) throws AttendenceReportingServiceException,
+            ResourceNotFoundException {
+        try {
+            return databaseManager.get(TeamShiftDetailsEntity.class, teamId);
+        } catch (DatabaseManagerException e) {
+            throw new AttendenceReportingServiceException(e);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
+    }
+
+    @Override
+    public List<? extends IUserShiftInfo> getAllActiveShiftInfos() throws AttendenceReportingServiceException {
+        QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity).where(
+                qUserShiftEntity.shiftEndTime.isNull());
+        try {
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qUserShiftEntity);
+        } catch (DatabaseManagerException e) {
+            throw new AttendenceReportingServiceException(e);
+        }
+    }
 }

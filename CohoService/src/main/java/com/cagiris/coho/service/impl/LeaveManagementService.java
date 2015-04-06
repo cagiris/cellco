@@ -135,7 +135,7 @@ public class LeaveManagementService implements ILeaveManagementService {
             Map<LeaveType, Integer> leaveTypeVsLeaveCount = approveLeave(userLeaveRequestEntity);
             databaseManager.saveOrUpdate(userLeaveRequestEntity);
             if (LeaveRequestStatus.APPROVED.equals(leaveStatus)) {
-                updateUserLeaveQuota(userLeaveRequestEntity.getUserId(), leaveTypeVsLeaveCount);
+                updateUserLeaveQuota(userLeaveRequestEntity.getUserId(), leaveTypeVsLeaveCount, null);
             }
             return userLeaveRequestEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
@@ -385,7 +385,10 @@ public class LeaveManagementService implements ILeaveManagementService {
         try {
             IUserRoleLeaveQuota userRoleQuota = getUserRoleQuota(defaultOrganization.getOrganizationId(),
                     user.getUserRole());
-            userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(userRoleQuota.getLeaveTypeVsLeaveCount());
+            Map<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>(
+                    userRoleQuota.getLeaveTypeVsLeaveCount());
+            userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(leaveTypeVsLeaveCount);
+            userLeaveQuotaEntity.setLastLeaveAccumulationDate(new Date());
             Serializable id = databaseManager.save(userLeaveQuotaEntity);
             return databaseManager.get(UserLeaveQuotaEntity.class, id);
         } catch (ResourceNotFoundException e) {
@@ -422,11 +425,14 @@ public class LeaveManagementService implements ILeaveManagementService {
     }
 
     @Override
-    public IUserLeaveQuota updateUserLeaveQuota(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount)
-            throws LeaveManagementServiceException {
+    public IUserLeaveQuota updateUserLeaveQuota(String userId, Map<LeaveType, Integer> leaveTypeVsLeaveCount,
+            Date leaveAccumulationDate) throws LeaveManagementServiceException {
         try {
             UserLeaveQuotaEntity userLeaveQuotaEntity = databaseManager.get(UserLeaveQuotaEntity.class, userId);
             userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(leaveTypeVsLeaveCount);
+            if (leaveAccumulationDate != null) {
+                userLeaveQuotaEntity.setLastLeaveAccumulationDate(leaveAccumulationDate);
+            }
             databaseManager.update(userLeaveQuotaEntity);
             return userLeaveQuotaEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {

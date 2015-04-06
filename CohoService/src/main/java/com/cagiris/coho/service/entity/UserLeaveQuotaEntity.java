@@ -5,6 +5,7 @@
 
 package com.cagiris.coho.service.entity;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
@@ -28,6 +29,8 @@ public class UserLeaveQuotaEntity extends BaseEntity implements IUserLeaveQuota 
 
     private String userId;
     private Map<LeaveType, Integer> leaveTypeVsLeaveQuota;
+
+    private Date lastLeaveAccumulationDate;
 
     @Id
     @Override
@@ -60,6 +63,15 @@ public class UserLeaveQuotaEntity extends BaseEntity implements IUserLeaveQuota 
             totalLeaveCount += entry.getValue();
         }
         return totalLeaveCount;
+    }
+
+    @Override
+    public Date getLastLeaveAccumulationDate() {
+        return lastLeaveAccumulationDate;
+    }
+
+    public void setLastLeaveAccumulationDate(Date lastLeaveAccumulationDate) {
+        this.lastLeaveAccumulationDate = lastLeaveAccumulationDate;
     }
 
 }

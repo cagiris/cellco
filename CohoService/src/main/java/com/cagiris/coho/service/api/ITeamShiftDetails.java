@@ -20,6 +20,8 @@ public interface ITeamShiftDetails {
 
     Date getShiftEndTime();
 
+    Long getShiftDuration();
+
     // the time in minutes after which the user's session should auto expire ..
     Long getShiftBuffer();
 }
