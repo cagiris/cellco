@@ -13,7 +13,7 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="<core:url value = '/dashboard.html' />"> <span class="glyphicon glyphicon-home"
+				<li><a href="<core:url value = '/dashboard' />"> <span class="glyphicon glyphicon-home"
 						aria-hidden="false"></span> Dashboard
 				</a></li>
 				<li role="presentation" class="dropdown"><a
@@ -22,18 +22,18 @@
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<core:url value = '/leave/create.html' />"> <span class="glyphicon glyphicon-pencil"
+						<li><a href="<core:url value = '/leave/create' />"> <span class="glyphicon glyphicon-pencil"
 								aria-hidden="false"></span> Apply Leave
 						</a></li>
-						<li><a href="<core:url value = '/leave/my-leaves-list.html' />"> <span
+						<li><a href="<core:url value = '/leave/my-leaves-list' />"> <span
 								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 								My Leave List
 						</a></li>
-						<li><a href="<core:url value = '/leave/list.html' />"> <span
+						<li><a href="<core:url value = '/leave/list' />"> <span
 								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 								Leaves List
 						</a></li>
-						<li><a href="<core:url value = '/leave/pending.html' />"> <span 
+						<li><a href="<core:url value = '/leave/pending' />"> <span 
 						        class="badge">5</span>
 								Pending Approvals
 						</a></li>
@@ -44,10 +44,10 @@
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<core:url value = '/user/create.html' />"> <span class="glyphicon glyphicon-plus"
+						<li><a href="<core:url value = '/user/create' />"> <span class="glyphicon glyphicon-plus"
 								aria-hidden="false"></span> Add User
 						</a></li>
-						<li><a href="<core:url value = '/user/list.html' />"> <span
+						<li><a href="<core:url value = '/user/list' />"> <span
 								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 								User List
 						</a></li>
@@ -58,11 +58,11 @@
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="user-statistics.html"> <span
+						<li><a href="user-statistics"> <span
 								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 								User Statistics
 						</a></li>
-						<li><a href="overall-statistics.html"> <span class="glyphicon glyphicon-th"
+						<li><a href="overall-statistics"> <span class="glyphicon glyphicon-th"
 								aria-hidden="false"></span> Overall Statistics
 						</a></li>
 					</ul></li>
@@ -72,7 +72,7 @@
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<core:url value = '/user/get.html' />"> <span class="glyphicon glyphicon-user"
+						<li><a href="<core:url value = '/user/get' />"> <span class="glyphicon glyphicon-user"
 								aria-hidden="false"></span> Profile
 						</a></li>
 						<li><a href="<core:url value = '/j_spring_security_logout' />"> <span class="glyphicon glyphicon-off"

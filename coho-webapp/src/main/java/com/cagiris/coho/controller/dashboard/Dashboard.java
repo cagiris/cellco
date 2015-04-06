@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class Dashboard {
 
-	@RequestMapping(value = {"index", "/dashboard"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/", "/dashboard"}, method = RequestMethod.GET)
 	public String showDashboard () {
 		return "dashboard/dashboard";
 	}

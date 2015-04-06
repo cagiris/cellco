@@ -38,10 +38,7 @@ $("#list-table").on('click','.ajax-delete',function(){
 	var entityId = rowId.substring(4); // "appended 'row-' in front of entity id to create the <tr> id"
 	
 	$.ajax({
-		url: "delete.html",
-	    data: { 
-	    	"entityId" : entityId
-	    },
+		url: "delete/"+entityId,
 	    cache: false,
 	    type: "GET",
 	    success: function(response) {
