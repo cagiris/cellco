@@ -127,8 +127,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     @Override
     public ModelMap showFilteredListPage(Map<String, String> filterParams, ModelMap modelMap) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new ForbiddenException();
     }
 
     @Override

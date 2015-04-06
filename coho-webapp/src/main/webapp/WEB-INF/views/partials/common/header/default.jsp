@@ -1,4 +1,5 @@
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -22,50 +23,56 @@
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<core:url value = '/leave/create' />"> <span class="glyphicon glyphicon-pencil"
-								aria-hidden="false"></span> Apply Leave
-						</a></li>
-						<li><a href="<core:url value = '/leave/my-leaves-list' />"> <span
-								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
-								My Leave List
-						</a></li>
-						<li><a href="<core:url value = '/leave/list' />"> <span
-								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
-								Leaves List
-						</a></li>
-						<li><a href="<core:url value = '/leave/pending' />"> <span 
-						        class="badge">5</span>
-								Pending Approvals
-						</a></li>
+						<sec:authorize access="hasRole('AGENT')">
+							<li><a href="<core:url value = '/leave/create' />"> <span class="glyphicon glyphicon-pencil"
+									aria-hidden="false"></span> Apply Leave
+							</a></li>
+							<li><a href="<core:url value = '/leave/list' />"> <span
+									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									My Leave List
+							</a></li>
+						</sec:authorize>
+						<sec:authorize access="hasRole('ADMIN')">
+							<li><a href="<core:url value = '/leave/list' />"> <span
+									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									Leaves List
+							</a></li>
+							<li><a href="<core:url value = '/leave/pending' />"> <span 
+							        class="badge">5</span>
+									Pending Approvals
+							</a></li>
+						</sec:authorize>
 					</ul></li>
-				<li role="presentation" class="dropdown"><a
-					class="dropdown-toggle" data-toggle="dropdown" href="#"
-					role="button" aria-expanded="false"> User Manager <span
-						class="caret"></span>
-				</a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="<core:url value = '/user/create' />"> <span class="glyphicon glyphicon-plus"
-								aria-hidden="false"></span> Add User
-						</a></li>
-						<li><a href="<core:url value = '/user/list' />"> <span
-								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
-								User List
-						</a></li>
-					</ul></li>
-				<li role="presentation" class="dropdown"><a
-					class="dropdown-toggle" data-toggle="dropdown" href="#"
-					role="button" aria-expanded="false"> Reports <span
-						class="caret"></span>
-				</a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="user-statistics"> <span
-								class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
-								User Statistics
-						</a></li>
-						<li><a href="overall-statistics"> <span class="glyphicon glyphicon-th"
-								aria-hidden="false"></span> Overall Statistics
-						</a></li>
-					</ul></li>
+				<sec:authorize access="hasRole('ADMIN')">
+					<li role="presentation" class="dropdown"><a
+						class="dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-expanded="false"> User Manager <span
+							class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="<core:url value = '/user/create' />"> <span class="glyphicon glyphicon-plus"
+									aria-hidden="false"></span> Add User
+							</a></li>
+							<li><a href="<core:url value = '/user/list' />"> <span
+									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									User List
+							</a></li>
+						</ul></li>
+					<li role="presentation" class="dropdown"><a
+						class="dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-expanded="false"> Reports <span
+							class="caret"></span>
+					</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="user-statistics"> <span
+									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									User Statistics
+							</a></li>
+							<li><a href="overall-statistics"> <span class="glyphicon glyphicon-th"
+									aria-hidden="false"></span> Overall Statistics
+							</a></li>
+						</ul></li>
+				</sec:authorize>
 				<li role="presentation" class="dropdown"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
 					role="button" aria-expanded="false"> User name <span

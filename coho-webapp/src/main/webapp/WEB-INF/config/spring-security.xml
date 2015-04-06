@@ -13,7 +13,7 @@
 	<http auto-config="true" use-expressions="true">
         <intercept-url pattern="/login*" access="permitAll"/>
         <intercept-url pattern="/403*" access="permitAll"/>
-        <intercept-url pattern="/**" access="hasRole('AGENT')" />
+        <intercept-url pattern="/**" access="hasAnyRole('AGENT', 'ADMIN')" />
 		<form-login login-page="/login" login-processing-url="/authenticate"
 			default-target-url="/dashboard" authentication-failure-url="/login"
 			username-parameter="userName" password-parameter="password" />

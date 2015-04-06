@@ -26,6 +26,15 @@ public class ExceptionHandlerController implements IController {
 		return modelAndView;
 	}
 
+	@ExceptionHandler(ForbiddenException.class)
+	public ModelAndView handleForbiddenException(ForbiddenException e) {
+		
+		ModelAndView modelAndView = new ModelAndView("error/forbidden");
+		modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
+		
+		return modelAndView;
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAllException (Exception e) {
 		
