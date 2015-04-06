@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cagiris.coho.model.LeaveRequestBean;
 import com.cagiris.coho.service.api.ILeaveManagementService;
 import com.cagiris.coho.service.api.IUserLeaveRequest;
+import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
 
 /**
@@ -58,7 +61,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public void delete(Serializable entityId) {
-        // TODO Auto-generated method stub
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
@@ -85,30 +88,36 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public ModelMap showFilteredListPage(Map<String, String> filterParams, ModelMap modelMap) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
     public ModelMap showListPage(ModelMap modelMap) throws LeaveManagementServiceException {
-        List<? extends IUserLeaveRequest> leaveRequestsByUserId = leaveManagementService
-                .getLeaveRequestsByUserId(getLoggedInUser().getUsername());
-        List<LeaveRequestBean> userLeaveRequestBeans = leaveRequestsByUserId.stream().map(LeaveRequestBean::mapToBean)
-                .collect(Collectors.toList());
-        modelMap.addAttribute(userLeaveRequestBeans);
+    	User user = getLoggedInUser();
+    	
+    	// TODO : Verify this check
+    	if (user.getAuthorities().contains(new SimpleGrantedAuthority(UserRole.AGENT.name()))) {
+            List<? extends IUserLeaveRequest> leaveRequestsByUserId = leaveManagementService
+                    .getLeaveRequestsByUserId(getLoggedInUser().getUsername());
+            List<LeaveRequestBean> userLeaveRequestBeans = leaveRequestsByUserId.stream().map(LeaveRequestBean::mapToBean)
+                    .collect(Collectors.toList());
+            modelMap.addAttribute(userLeaveRequestBeans);
+    	} else {
+
+        	// TODO : Write code to fill the model for leave list for admin.
+    	}
+    	
         return modelMap;
     }
 
     @Override
     public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
     public ModelMap update(Serializable entityId, LeaveRequestBean bean, BindingResult bindingResult, ModelMap modelMap) {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     /**

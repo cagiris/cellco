@@ -11,14 +11,14 @@
 	<http pattern="/resources/**" security="none" />
 	
 	<http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/login.html*" access="permitAll"/>
-        <intercept-url pattern="/403.html*" access="permitAll"/>
-        <intercept-url pattern="/**" access="hasRole('AGENT')" />
-		<form-login login-page="/login.html" login-processing-url="/login"
-			default-target-url="/dashboard.html" authentication-failure-url="/login.html?error=true"
+        <intercept-url pattern="/login*" access="permitAll"/>
+        <intercept-url pattern="/403*" access="permitAll"/>
+        <intercept-url pattern="/**" access="hasAnyRole('AGENT', 'ADMIN')" />
+		<form-login login-page="/login" login-processing-url="/authenticate"
+			default-target-url="/dashboard" authentication-failure-url="/login"
 			username-parameter="userName" password-parameter="password" />
 
-		<logout logout-success-url="/login.html?logout" />
+		<logout logout-success-url="/login" />
 
 	</http>
 

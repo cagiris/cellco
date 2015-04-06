@@ -1,9 +1,13 @@
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="pull-left">
-	<a href="get.html?entityId=${ userId }" class="btn btn-success btn-xs" title="Show details"> <span
+	<a href="get/${ userId }" class="btn btn-success btn-xs" title="Show details"> <span
 		class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
 	</a> 
+	<!--
 	<a href="update.html?entityId=${ userId }" class="btn btn-warning btn-xs" title="Update"> <span
+		class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
+	-->
+	<a href="update/${ userId }" class="btn btn-warning btn-xs" title="Update"> <span
 		class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
 	</a> 
 	<!--

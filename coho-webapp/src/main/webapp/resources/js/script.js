@@ -43,10 +43,7 @@ $("#myModal").on('click','.ajax-delete',function(event){
 	var entityId = $('#recipient-name').val();
     console.log(entityId);
 	$.ajax({
-		url: "delete.html",
-	    data: { 
-	    	"entityId" : entityId
-	    },
+		url: "delete/"+entityId,
 	    cache: false,
 	    type: "GET",
 	    success: function(response) {
@@ -76,5 +73,8 @@ $('#myModal').on('hide.bs.modal', function (event) {
    	$(".modal-body-content-ret").hide();
 });
 
-
-
+$('#shiftButton').on('click', function () {
+    var $btn = $(this).button('loading')
+    // business logic...
+    $btn.button('Stop Shift')
+  })
