@@ -12,13 +12,17 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.service.api.AuthenicationPolicy;
@@ -39,11 +43,12 @@ import com.cagiris.coho.service.exception.ResourceNotFoundException;
 public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     public static final String URL_MAPPING = "user";
-
+    public static final String PROFILE_URL_MAPPING = "/profile";
     @Autowired
     private IHierarchyService hierarchyService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap create(UserBean bean, BindingResult bindingResult, ModelMap modelMap)
             throws HierarchyServiceException {
         ModelMap responseModelMap = new ModelMap();
@@ -65,6 +70,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(Serializable entityId) throws Exception {
         User loggedInUser = getLoggedInUser();
         if (StringUtils.equals((String)entityId, loggedInUser.getUsername())) {
@@ -74,13 +80,9 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap get(Serializable entityId) throws HierarchyServiceException, ResourceNotFoundException {
         ModelMap modelMap = new ModelMap();
-
-        if (entityId == null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            entityId = auth.getName();
-        }
 
         ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
 
@@ -92,6 +94,23 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         return modelMap;
     }
 
+    @RequestMapping(value = PROFILE_URL_MAPPING)
+    public ModelAndView getUserProfile() throws Exception {
+        ModelAndView modelAndView = new ModelAndView();
+        
+        modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
+        
+        User loggedInUser = getLoggedInUser();
+        ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), loggedInUser.getUsername());
+
+        UserBean userBean = new UserBean();
+        prepareUserBean(userBean, user);
+
+        modelAndView.addObject(userBean);
+
+        return modelAndView;
+    }
+    
     private ITeam getDefaultTeam() throws HierarchyServiceException {
         IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
         return hierarchyService.getDefaultTeam(defaultOrganization.getOrganizationId());
@@ -115,6 +134,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap showCreatePage(ModelMap modelMap) throws HierarchyServiceException {
         ModelMap responseModelMap = new ModelMap();
         responseModelMap.addAttribute(new UserBean());
@@ -126,11 +146,13 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap showFilteredListPage(Map<String, String> filterParams, ModelMap modelMap) {
-    	throw new ForbiddenException();
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap showListPage(ModelMap modelMap) throws HierarchyServiceException {
         List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(getDefaultTeam().getTeamId());
         List<UserBean> userBeans = new ArrayList<UserBean>();
@@ -145,6 +167,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) throws HierarchyServiceException,
             ResourceNotFoundException {
         ModelMap responseModelMap = new ModelMap();
@@ -160,6 +183,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelMap update(Serializable entityId, UserBean bean, BindingResult bindingResult, ModelMap modelMap)
             throws HierarchyServiceException {
         ModelMap responseModelMap = new ModelMap();

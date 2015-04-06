@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -59,7 +61,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public void delete(Serializable entityId) {
-    	throw new ForbiddenException();
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public ModelMap showFilteredListPage(Map<String, String> filterParams, ModelMap modelMap) {
-    	throw new ForbiddenException();
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
     	User user = getLoggedInUser();
     	
     	// TODO : Verify this check
-    	if (user.getAuthorities().contains(UserRole.AGENT.name())) {
+    	if (user.getAuthorities().contains(new SimpleGrantedAuthority(UserRole.AGENT.name()))) {
             List<? extends IUserLeaveRequest> leaveRequestsByUserId = leaveManagementService
                     .getLeaveRequestsByUserId(getLoggedInUser().getUsername());
             List<LeaveRequestBean> userLeaveRequestBeans = leaveRequestsByUserId.stream().map(LeaveRequestBean::mapToBean)
@@ -110,12 +112,12 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public ModelMap showUpdatePage(Serializable entityId, ModelMap modelMap) {
-        throw new ForbiddenException();
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
     public ModelMap update(Serializable entityId, LeaveRequestBean bean, BindingResult bindingResult, ModelMap modelMap) {
-    	throw new ForbiddenException();
+    	throw new AccessDeniedException(Constants.ERROR_FORBIDDEN);
     }
 
     /**

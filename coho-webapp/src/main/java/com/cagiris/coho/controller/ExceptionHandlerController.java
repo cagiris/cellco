@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.controller;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,10 +27,10 @@ public class ExceptionHandlerController implements IController {
 		return modelAndView;
 	}
 
-	@ExceptionHandler(ForbiddenException.class)
-	public ModelAndView handleForbiddenException(ForbiddenException e) {
+	@ExceptionHandler(AccessDeniedException.class)
+	public ModelAndView handleAccessDeniedException(AccessDeniedException e) {
 		
-		ModelAndView modelAndView = new ModelAndView("error/forbidden");
+		ModelAndView modelAndView = new ModelAndView("error/access-denied");
 		modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
 		
 		return modelAndView;
