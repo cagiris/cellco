@@ -24,7 +24,6 @@ import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
-import com.mysema.query.types.CollectionExpression;
 
 /**
  *
@@ -151,8 +150,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity).where(
                     qUserShiftEntity.shiftStartTime.gt(startTime).and(
-                            qUserShiftEntity.shiftEndTime.lt(endTime).and(
-                                    qUserShiftEntity.userId.eqAny((CollectionExpression<?, ? super String>)userIds))));
+                            qUserShiftEntity.shiftEndTime.lt(endTime).and(qUserShiftEntity.userId.in(userIds))));
 
             List<UserShiftEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(hibernateQuery,
                     qUserShiftEntity);

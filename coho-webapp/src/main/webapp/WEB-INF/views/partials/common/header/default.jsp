@@ -68,8 +68,8 @@
 									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 									User Statistics
 							</a></li>
-							<li><a href="<core:url value = '/overall-statistics' />"> <span class="glyphicon glyphicon-th"
-									aria-hidden="false"></span> Overall Statistics
+							<li><a href="<core:url value = '/user-runtime-statistics' />"> <span class="glyphicon glyphicon-th"
+									aria-hidden="false"></span> Runtime Statistics
 							</a></li>
 						</ul></li>
 				</sec:authorize>

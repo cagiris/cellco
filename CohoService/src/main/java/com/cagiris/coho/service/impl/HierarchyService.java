@@ -43,6 +43,7 @@ import com.cagiris.coho.service.entity.QOrganizationEntity;
 import com.cagiris.coho.service.entity.QTeamEntity;
 import com.cagiris.coho.service.entity.QTeamUserEntity;
 import com.cagiris.coho.service.entity.QUserEntity;
+import com.cagiris.coho.service.entity.QUserProfileEntity;
 import com.cagiris.coho.service.entity.TeamEntity;
 import com.cagiris.coho.service.entity.TeamUserEntity;
 import com.cagiris.coho.service.entity.UserEntity;
@@ -558,6 +559,22 @@ public class HierarchyService implements IHierarchyService {
             return teamUsers.get(0);
         } else {
             throw new ResourceNotFoundException("User not found");
+        }
+    }
+
+    @Override
+    public List<? extends IUserProfile> getAllUserProfiles(Long organizationId) throws HierarchyServiceException {
+        QUserEntity qUserEntity = QUserEntity.userEntity;
+        HibernateQuery userEntityQuery = new HibernateQuery().from(qUserEntity).where(
+                qUserEntity.organizationEntity.organizationId.eq(organizationId));
+        try {
+            List<UserEntity> userList = databaseManager.executeQueryAndGetResults(userEntityQuery, qUserEntity);
+            QUserProfileEntity qUserProfileEntity = QUserProfileEntity.userProfileEntity;
+            HibernateQuery hibernateQuery = new HibernateQuery().from(qUserProfileEntity).where(
+                    qUserProfileEntity.userEntity.in(userList));
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qUserProfileEntity);
+        } catch (DatabaseManagerException e) {
+            throw new HierarchyServiceException(e);
         }
     }
 }

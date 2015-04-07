@@ -118,6 +118,9 @@ function stopShift(shiftId){
 
 // to be called from page load ..
 function checkForActiveShift(){
+	if($('#shiftButton').length==0){
+		return;
+	}
 	$.ajax({
 		url: "get-shift-status",
 	    cache: false,
@@ -136,6 +139,7 @@ function checkForActiveShift(){
 (function () {
 	initLeaveStatistics();
 	initAdminStatistics();
+	checkForActiveShift();
 } ());
 
 function initLeaveStatistics() {

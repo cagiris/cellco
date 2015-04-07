@@ -81,4 +81,6 @@ public interface IHierarchyService {
 
     ITeamUser getTeamUserByUserId(Long teamId, String userId) throws HierarchyServiceException,
             ResourceNotFoundException;
+
+    List<? extends IUserProfile> getAllUserProfiles(Long organizationId) throws HierarchyServiceException;
 }
