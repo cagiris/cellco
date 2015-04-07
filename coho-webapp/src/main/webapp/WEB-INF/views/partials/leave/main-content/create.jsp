@@ -9,7 +9,9 @@
 		<div class="col-xs-6">
 			<form:input path="requestSubject" type="text" class="form-control" id="leaveSubject" required="true" />
 		</div>
-		<div class="col-xs-4"></div>
+		<div class="col-xs-4">
+			<form:errors path="requestSubject" cssClass="form-field-error"/>
+		</div>
 	</div>
 	<%
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -27,7 +29,9 @@
 					class="glyphicon glyphicon-calendar"></i></span>
 			</div>
 		</div>
-		<div class="col-xs-4"></div>
+		<div class="col-xs-4">
+			<form:errors path="leaveStartDate" cssClass="form-field-error"/>
+		</div>
 	</div>
 	<div class="form-group">
 		<form:label path="leaveEndDate" for="leaveEndDate" class="control-label col-xs-2">End Date</form:label>
@@ -40,14 +44,18 @@
 					class="glyphicon glyphicon-calendar"></i></span>
 			</div>
 		</div>
-		<div class="col-xs-4"></div>
+		<div class="col-xs-4">
+			<form:errors path="leaveEndDate" cssClass="form-field-error"/>
+		</div>
 	</div>
 	<div class="form-group">
 		<form:label path="requestDescription" for="description" class="control-label col-xs-2">Description</form:label>
 		<div class="col-xs-6">
 			<form:textarea path="requestDescription" rows="5" id="description" class="form-control"></form:textarea>
 		</div>
-		<div class="col-xs-4"></div>
+		<div class="col-xs-4">
+			<form:errors path="requestDescription" cssClass="form-field-error"/>
+		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-xs-offset-2 col-xs-10">

@@ -5,6 +5,7 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,13 +52,19 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public ModelMap create(LeaveRequestBean bean, BindingResult bindingResult, ModelMap modelMap)
-            throws LeaveManagementServiceException {
-        User user = getLoggedInUser();
-        IUserLeaveRequest leaveRequest = leaveManagementService.applyForLeave(user.getUsername(), null,
-                bean.getLeaveStartDate(), bean.getLeaveEndDate(), bean.getRequestSubject(),
-                bean.getRequestDescription());
-        bean.setLeaveApplicationId(leaveRequest.getLeaveApplicationId());
-        return null;
+            throws LeaveManagementServiceException, ParseException {
+    	 ModelMap responseModelMap = new ModelMap(); 
+    	if (bindingResult.hasErrors()) {
+             responseModelMap.addAllAttributes(modelMap);
+         } else {
+        	 User user = getLoggedInUser();
+        	 IUserLeaveRequest leaveRequest = leaveManagementService.applyForLeave(user.getUsername(), null,
+                     bean.getLeaveStartDateFormatted(), bean.getLeaveEndDateFormatted(), bean.getRequestSubject(),
+                     bean.getRequestDescription());
+             bean.setLeaveApplicationId(leaveRequest.getLeaveApplicationId());
+         }
+        
+        return responseModelMap;
     }
 
     @Override
