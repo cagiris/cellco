@@ -64,11 +64,11 @@
 							class="caret"></span>
 					</a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="user-statistics"> <span
+							<li><a href="<core:url value = '/user-statistics' />"> <span
 									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 									User Statistics
 							</a></li>
-							<li><a href="overall-statistics"> <span class="glyphicon glyphicon-th"
+							<li><a href="<core:url value = '/overall-statistics' />"> <span class="glyphicon glyphicon-th"
 									aria-hidden="false"></span> Overall Statistics
 							</a></li>
 						</ul></li>

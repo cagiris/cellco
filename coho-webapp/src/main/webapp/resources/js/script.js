@@ -133,4 +133,113 @@ function checkForActiveShift(){
 	});
 }
 
+(function () {
+	initLeaveStatistics();
+	initAdminStatistics();
+} ());
+
+function initLeaveStatistics() {
+	if ($("#leave-statistics-table").length == 0) {
+		return;
+	}
+	
+	var rowCasualLeave = $("#leave-statistics-table")[0].insertRow(-1);
+	rowCasualLeave.insertCell(0).innerHTML = "Casual Leaves";
+	var cellCasualLeave = rowCasualLeave.insertCell(1);
+	cellCasualLeave.innerHTML = "Loading...";
+	getDataAjax("get-leave-count/CASUAL_LEAVE", null, function (response) {
+		cellCasualLeave.innerHTML = response;
+	}, function () {
+		cellCasualLeave.innerHTML = "error";
+	});
+
+	var rowPaidLeave = $("#leave-statistics-table")[0].insertRow(-1);
+	rowPaidLeave.insertCell(0).innerHTML = "Paid Leaves";
+	var cellPaidLeave = rowPaidLeave.insertCell(1);
+	cellPaidLeave.innerHTML = "Loading...";
+
+	getDataAjax("get-leave-count/PAID_LEAVE", null, function (response) {
+		cellPaidLeave.innerHTML = response;
+	}, function () {
+		cellPaidLeave.innerHTML = "error";
+	});
+}
+
+function initAdminStatistics() {
+	if ($("#admin-statistics-table").length == 0) {
+		return;
+	}
+	
+	var rowPendingApprovals = $("#admin-statistics-table")[0].insertRow(-1);
+	rowPendingApprovals.insertCell(0).innerHTML = "Pending Approvals";
+	var cellPendingApprovals = rowPendingApprovals.insertCell(1);
+	cellPendingApprovals.innerHTML = "Loading...";
+	getDataAjax("get-leave-approvals-count/PENDING", null, function (response) {
+		cellPendingApprovals.innerHTML = response;
+	}, function () {
+		cellPendingApprovals.innerHTML = "error";
+	});
+
+	var rowActiveUsers = $("#admin-statistics-table")[0].insertRow(-1);
+	rowActiveUsers.insertCell(0).innerHTML = "Active Users";
+	var cellActiveUsers = rowActiveUsers.insertCell(1);
+	cellActiveUsers.innerHTML = "Loading...";
+	getDataAjax("get-users-active-in-shift-count", null, function (response) {
+		cellActiveUsers.innerHTML = response;
+	}, function () {
+		cellActiveUsers.innerHTML = "error";
+	});
+	
+	var rowTotalUsers = $("#admin-statistics-table")[0].insertRow(-1);
+	rowTotalUsers.insertCell(0).innerHTML = "Total Users";
+	var cellTotalUsers = rowTotalUsers.insertCell(1);
+	cellTotalUsers.innerHTML = "Loading...";
+	getDataAjax("get-users-count", null, function (response) {
+		cellTotalUsers.innerHTML = response;
+	}, function () {
+		cellTotalUsers.innerHTML = "error";
+	});
+}
+
+/**
+ * Utility functions.
+ */
+
+function getDataAjax (urlForData, requestData, callbackSuccess, callbackFail) {
+	$.ajax({
+		url: getRequestURL(urlForData),
+	    cache: false,
+	    data: requestData,
+	    type: "GET",
+	    success: callbackSuccess,
+	    error: callbackFail
+	});
+}
+
+function getRequestURL(requestURL) {
+	return (getBaseURL() + requestURL);
+}
+
+function getBaseURL() {
+    var url = location.href;  // entire url including querystring - also: window.location.href;
+    var baseURL = url.substring(0, url.indexOf('/', 14));
+
+    if (baseURL.indexOf('http://localhost') != -1) {
+        // Base Url for localhost
+        var url = location.href;  // window.location.href;
+        var pathname = location.pathname;  // window.location.pathname;
+        var index1 = url.indexOf(pathname);
+        var index2 = url.indexOf("/", index1 + 1);
+        var baseLocalUrl = url.substr(0, index2);
+
+        return baseLocalUrl + "/";
+    }
+    else {
+        // Root Url for domain name
+        return baseURL + "/";
+    }
+
+}
+
+
 

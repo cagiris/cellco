@@ -110,11 +110,6 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
         return modelAndView;
     }
-    
-    private ITeam getDefaultTeam() throws HierarchyServiceException {
-        IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
-        return hierarchyService.getDefaultTeam(defaultOrganization.getOrganizationId());
-    }
 
     @Override
     public String getURLMapping() {

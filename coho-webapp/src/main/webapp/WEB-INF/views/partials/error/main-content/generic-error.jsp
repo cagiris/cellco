@@ -1,2 +1,2 @@
-<h1>Some shit happened on the server side..</h1>
-<h2>Please try again later!</h2>
+<h1>Some server side error..</h1>
+<h2>Please inform the admin about this!</h2>

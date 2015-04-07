@@ -4,7 +4,7 @@
 <sec:authorize access="hasRole('AGENT')">
 	<div class="panel panel-primary">
 		<div class="panel-heading">Leave Statistics</div>
-		<table class="table table-bordered">
+		<table class="table table-bordered" id="leave-statistics-table">
 			<thead>
 				<tr>
 					<th class="active">Leave Type</th>
@@ -12,18 +12,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>Payed</td>
-					<td>10</td>
-				</tr>
-				<tr>
-					<td>Casual</td>
-					<td>4</td>
-				</tr>
-				<tr>
-					<td>Maternity</td>
-					<td>8</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -49,20 +37,8 @@
 <sec:authorize access="hasRole('ADMIN')">
 	<div class="panel panel-primary">
 		<div class="panel-heading">Quick Statistics</div>
-		<table class="table table-bordered">
+		<table class="table table-bordered" id="admin-statistics-table">
 			<tbody>
-				<tr>
-					<td>Pending Approvals</td>
-					<td>5</td>
-				</tr>
-				<tr class="warning">
-					<td>Active Users</td>
-					<td>4</td>
-				</tr>
-				<tr>
-					<td>Total Users</td>
-					<td>8</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>

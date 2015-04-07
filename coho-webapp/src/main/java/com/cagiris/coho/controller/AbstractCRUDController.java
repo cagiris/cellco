@@ -32,7 +32,7 @@ import com.cagiris.coho.service.api.UserRole;
  *  Ashish Jindal
  *
  */
-public abstract class AbstractCRUDController<T extends ICRUDBean> implements IController {
+public abstract class AbstractCRUDController<T extends ICRUDBean> extends AbstractController implements IController {
 
     public static final String CREATE_URL_MAPPING = "/create";
     public static final String GET_URL_MAPPING = "/get";
@@ -207,18 +207,5 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> implements ICo
 
     private String getRedirectUrl(String mappingUrl) {
         return ("redirect:" + mappingUrl.substring(1));
-    }
-
-    protected User getLoggedInUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        return user;
-    }
-
-    protected Set<UserRole> getUserRolesForLoggedInUser() {
-        User user = getLoggedInUser();
-        Set<UserRole> userRoles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                .map(UserRole::valueOf).collect(Collectors.toSet());
-        return userRoles;
     }
 }
