@@ -57,7 +57,7 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
     	if (bindingResult.hasErrors()) {
              responseModelMap.addAllAttributes(modelMap);
          } else {
-        	 User user = getLoggedInUser();
+        	 User user = ControllerUtils.getLoggedInUser();
         	 IUserLeaveRequest leaveRequest = leaveManagementService.applyForLeave(user.getUsername(), null,
                      bean.getLeaveStartDateFormatted(), bean.getLeaveEndDateFormatted(), bean.getRequestSubject(),
                      bean.getRequestDescription());
@@ -101,8 +101,8 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
 
     @Override
     public ModelMap showListPage(ModelMap modelMap) throws LeaveManagementServiceException {
-        Set<UserRole> authorities = getUserRolesForLoggedInUser();
-        User loggedInUser = getLoggedInUser();
+        Set<UserRole> authorities = ControllerUtils.getUserRolesForLoggedInUser();
+        User loggedInUser = ControllerUtils.getLoggedInUser();
         if (authorities.contains(UserRole.AGENT)) {
             List<? extends IUserLeaveRequest> leaveRequestsByUserId = leaveManagementService
                     .getLeaveRequestsByUserId(loggedInUser.getUsername());

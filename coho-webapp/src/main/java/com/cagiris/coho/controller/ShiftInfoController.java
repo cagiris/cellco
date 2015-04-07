@@ -24,7 +24,7 @@ import com.cagiris.coho.service.exception.HierarchyServiceException;
  *
  */
 @Controller
-public class ShiftInfoController implements IController {
+public class ShiftInfoController extends AbstractController {
 
     public static final String GET_SHIFT_STATUS_URL_MAPPING = "/get-shift-status";
     public static final String START_USER_SHIFT_URL_MAPPING = "/start-shift";

@@ -28,7 +28,7 @@ import com.cagiris.coho.service.exception.LeaveManagementServiceException;
  *
  */
 @Controller
-public class QuickStatisticsController extends AbstractController implements IController {
+public class QuickStatisticsController extends AbstractController {
 
 	public static final String COUNT_PAID_LEAVES_URL_MAPPING = "/get-leave-count";
 	public static final String COUNT_LEAVES_APPROVALS_URL_MAPPING = "/get-leave-approvals-count";
@@ -83,7 +83,7 @@ public class QuickStatisticsController extends AbstractController implements ICo
     @PreAuthorize("hasRole('ADMIN')")
 	public String getUsersCount() {
 		try {
-			Integer countUsers = hierarchyService.getAllUsersForTeam(getDefaultTeam().getTeamId()).size();
+			Integer countUsers = hierarchyService.getAllUsersForTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId()).size();
 			return countUsers.toString();
 		} catch (HierarchyServiceException e) {
 			return "error";

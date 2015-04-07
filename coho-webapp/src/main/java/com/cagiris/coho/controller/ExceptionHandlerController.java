@@ -16,7 +16,7 @@ import com.cagiris.coho.service.exception.HierarchyServiceException;
  *
  */
 @ControllerAdvice
-public class ExceptionHandlerController implements IController {
+public class ExceptionHandlerController extends AbstractController {
 
 	@ExceptionHandler(HierarchyServiceException.class)
 	public ModelAndView handleHierarchyServiceException (HierarchyServiceException e) {

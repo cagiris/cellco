@@ -14,13 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +25,6 @@ import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.service.api.AuthenicationPolicy;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.IOrganization;
-import com.cagiris.coho.service.api.ITeam;
 import com.cagiris.coho.service.api.ITeamUser;
 import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
@@ -56,7 +52,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
             responseModelMap.addAllAttributes(modelMap);
             responseModelMap.addAttribute(getAvailableUserRoles());
         } else {
-            hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
+            hierarchyService.addUserToTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), bean.getUserId(), bean.getUserName(),
                     bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
 
             responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
@@ -66,17 +62,17 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     }
 
     private Set<UserRole> getAvailableUserRoles() throws HierarchyServiceException {
-        return hierarchyService.getAvailableUserRoles(getDefaultTeam().getTeamId());
+        return hierarchyService.getAvailableUserRoles(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId());
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(Serializable entityId) throws Exception {
-        User loggedInUser = getLoggedInUser();
+        User loggedInUser = ControllerUtils.getLoggedInUser();
         if (StringUtils.equals((String)entityId, loggedInUser.getUsername())) {
             throw new Exception("Can not delete your own account");
         }
-        hierarchyService.removeUserFromTeam(getDefaultTeam().getTeamId(), (String)entityId);
+        hierarchyService.removeUserFromTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), (String)entityId);
     }
 
     @Override
@@ -84,7 +80,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     public ModelMap get(Serializable entityId) throws HierarchyServiceException, ResourceNotFoundException {
         ModelMap modelMap = new ModelMap();
 
-        ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
+        ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), (String)entityId);
 
         UserBean userBean = new UserBean();
         prepareUserBean(userBean, user);
@@ -100,8 +96,8 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         
         modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
         
-        User loggedInUser = getLoggedInUser();
-        ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), loggedInUser.getUsername());
+        User loggedInUser = ControllerUtils.getLoggedInUser();
+        ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), loggedInUser.getUsername());
 
         UserBean userBean = new UserBean();
         prepareUserBean(userBean, user);
@@ -149,7 +145,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ModelMap showListPage(ModelMap modelMap) throws HierarchyServiceException {
-        List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(getDefaultTeam().getTeamId());
+        List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId());
         List<UserBean> userBeans = new ArrayList<UserBean>();
         for (ITeamUser teamUser : allUsersForTeam) {
             UserBean userBean = new UserBean();
@@ -167,7 +163,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
             ResourceNotFoundException {
         ModelMap responseModelMap = new ModelMap();
 
-        ITeamUser user = hierarchyService.getTeamUserByUserId(getDefaultTeam().getTeamId(), (String)entityId);
+        ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), (String)entityId);
 
         UserBean userBean = new UserBean();
         prepareUserBean(userBean, user);
@@ -186,7 +182,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
             responseModelMap.addAllAttributes(modelMap);
             responseModelMap.addAttribute(getAvailableUserRoles());
         } else {
-            hierarchyService.addUserToTeam(getDefaultTeam().getTeamId(), bean.getUserId(), bean.getUserName(),
+            hierarchyService.addUserToTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), bean.getUserId(), bean.getUserName(),
                     bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
 
             responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User details successfuly updated.");

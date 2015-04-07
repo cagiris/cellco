@@ -32,7 +32,7 @@ import com.cagiris.coho.service.api.UserRole;
  *  Ashish Jindal
  *
  */
-public abstract class AbstractCRUDController<T extends ICRUDBean> extends AbstractController implements IController {
+public abstract class AbstractCRUDController<T extends ICRUDBean> extends AbstractController {
 
     public static final String CREATE_URL_MAPPING = "/create";
     public static final String GET_URL_MAPPING = "/get";
