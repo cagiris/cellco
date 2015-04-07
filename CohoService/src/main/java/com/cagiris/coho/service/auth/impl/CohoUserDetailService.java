@@ -5,6 +5,7 @@
 package com.cagiris.coho.service.auth.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.cagiris.coho.service.api.IHierarchyService;
+import com.cagiris.coho.service.api.ITeam;
 import com.cagiris.coho.service.api.IUser;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
@@ -36,6 +38,10 @@ public class CohoUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         try {
             IUser user = hierarchyService.getUser(userId);
+            List<? extends ITeam> teamsForUser = hierarchyService.getTeamsForUser(userId);
+            if (teamsForUser.size() == 0) {
+                throw new UsernameNotFoundException("User does not belong to any team");
+            }
             Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
             grantedAuthorities.add(new SimpleGrantedAuthority(user.getUserRole().name()));
             User userDetail = new User(user.getUserId(), user.getAuthToken(), grantedAuthorities);

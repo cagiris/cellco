@@ -27,6 +27,7 @@ public class LeaveRequestBean extends AbstractBean implements ICRUDBean {
     private Date leaveEndDate;
     private LeaveRequestStatus leaveRequestStatus;
     private Integer leaveCount;
+    private String userId;
 
     public LeaveRequestBean() {
     }
@@ -39,6 +40,7 @@ public class LeaveRequestBean extends AbstractBean implements ICRUDBean {
         this.leaveStartDate = userLeaveRequest.getLeaveStartDate();
         this.leaveEndDate = userLeaveRequest.getLeaveEndDate();
         this.leaveRequestStatus = userLeaveRequest.getLeaveApplicationStatus();
+        this.setUserId(userLeaveRequest.getUserId());
     }
 
     public static LeaveRequestBean mapToBean(IUserLeaveRequest userLeaveRequest) {
@@ -105,6 +107,14 @@ public class LeaveRequestBean extends AbstractBean implements ICRUDBean {
 
     public void setLeaveCount(Integer leaveCount) {
         this.leaveCount = leaveCount;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

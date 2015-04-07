@@ -27,7 +27,8 @@ public class UserShiftCleanupJob implements IJob {
         this.attendenceReportingService = attendenceReportingService;
     }
 
-    @Scheduled(fixedDelay = 1 * 1 * 60 * 1000l, initialDelay = 1 * 60 * 1000l)
+    // 30 minutes
+    @Scheduled(fixedDelay = 30 * 60 * 1000l, initialDelay = 1 * 60 * 1000l)
     @Override
     public void executeJob() throws JobExecutionException {
         DateTime currentTime = new DateTime(new Date());

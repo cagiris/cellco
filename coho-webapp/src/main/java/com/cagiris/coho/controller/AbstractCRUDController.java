@@ -6,11 +6,13 @@ package com.cagiris.coho.controller;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.ModelMap;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.ICRUDBean;
+import com.cagiris.coho.service.api.UserRole;
 
 /**
  *  Ashish Jindal
@@ -189,10 +192,8 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> implements ICo
             throws Exception;
 
     @RequestMapping(value = UPDATE_URL_MAPPING + "/{entityId}", method = RequestMethod.POST)
-    public final ModelAndView updateInternal(@PathVariable Serializable entityId,
-            								@Valid @ModelAttribute T bean, 
-            								BindingResult bindingResult, 
-            								ModelMap modelMap) throws Exception {
+    public final ModelAndView updateInternal(@PathVariable Serializable entityId, @Valid @ModelAttribute T bean,
+            BindingResult bindingResult, ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
         modelAndView.addAllObjects(update(entityId, bean, bindingResult, modelMap));
@@ -212,5 +213,12 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> implements ICo
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         return user;
+    }
+
+    protected Set<UserRole> getUserRolesForLoggedInUser() {
+        User user = getLoggedInUser();
+        Set<UserRole> userRoles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .map(UserRole::valueOf).collect(Collectors.toSet());
+        return userRoles;
     }
 }

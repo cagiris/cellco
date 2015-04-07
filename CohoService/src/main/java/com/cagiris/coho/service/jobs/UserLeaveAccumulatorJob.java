@@ -44,8 +44,9 @@ public class UserLeaveAccumulatorJob implements IJob {
         this.leaveManagementService = leaveManagementService;
     }
 
+    // 7 days .. 
     @Override
-    @Scheduled(fixedDelay = 1 * 60 * 1000l, initialDelay = 1 * 60 * 1000l)
+    @Scheduled(fixedDelay = 7 * 24 * 60 * 60 * 1000l, initialDelay = 1 * 60 * 1000l)
     public void executeJob() throws JobExecutionException {
         logger.info("Going to execute job");
         IOrganization defaultOrganization;

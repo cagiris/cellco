@@ -74,7 +74,63 @@ $('#myModal').on('hide.bs.modal', function (event) {
 });
 
 $('#shiftButton').on('click', function () {
-    var $btn = $(this).button('loading')
-    // business logic...
-    $btn.button('Stop Shift')
-  })
+	if($('#shiftId').val()){
+		stopShift($('#shiftId').val());
+	}else{
+		startShift();
+	}
+})
+
+function startShift(){
+	$.ajax({
+		url: "start-shift",
+	    cache: false,
+	    type: "POST",
+	    success: function(response){
+	    	$('#shiftId').val(response);
+	    	$('#shiftButton').html('Stop Shift');
+	    },
+	    error: function(){
+	    	$('#shiftButton').html('Start Shift');
+	    }
+	    	
+	});
+}
+
+function stopShift(shiftId){
+	$.ajax({
+		url: "end-shift",
+	    cache: false,
+	    type: "POST",
+	    success: function(response){
+	    	$('#shiftId').val(null);
+	    	$('#shiftButton').html('Start Shift');
+	    },
+	    data:{
+	    	'shiftId':shiftId
+	    },
+	    error: function(){
+	    	$('#shiftButton').html('Stop Shift');
+	    }
+	    	
+	});
+}
+
+// to be called from page load ..
+function checkForActiveShift(){
+	$.ajax({
+		url: "get-shift-status",
+	    cache: false,
+	    type: "GET",
+	    success: function(response){
+	    	$('#shiftId').val(response);
+	    	$('#shiftButton').html('Stop Shift');
+	    },
+	    error: function(){
+	    	$('#shiftButton').html('Start Shift');
+	    }
+	    	
+	});
+}
+
+

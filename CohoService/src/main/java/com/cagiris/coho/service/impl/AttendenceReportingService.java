@@ -205,4 +205,24 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             throw new AttendenceReportingServiceException(e);
         }
     }
+
+    @Override
+    public IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId)
+            throws AttendenceReportingServiceException {
+        try {
+            QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
+            HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity).where(
+                    qUserShiftEntity.userId.eq(userId).and(qUserShiftEntity.teamId.eq(teamId)));
+            List<UserShiftEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(hibernateQuery,
+                    qUserShiftEntity);
+            if (executeQueryAndGetResults.size() == 0) {
+                throw new AttendenceReportingServiceException("No active shift for user in team");
+            } else {
+                return executeQueryAndGetResults.get(0);
+            }
+        } catch (DatabaseManagerException e) {
+            logger.error("Error while retrieving User Shift List:{}", e.getMessage(), e);
+            throw new AttendenceReportingServiceException(e);
+        }
+    }
 }

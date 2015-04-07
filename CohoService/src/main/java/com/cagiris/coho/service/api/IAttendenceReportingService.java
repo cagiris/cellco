@@ -52,6 +52,8 @@ public interface IAttendenceReportingService {
      */
     List<? extends IUserShiftInfo> getCurrentUserShiftInfo(String userId) throws AttendenceReportingServiceException;
 
+    IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId) throws AttendenceReportingServiceException;
+
     /**
      * This can be used by admin to query shift details for different users.
      */

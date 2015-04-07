@@ -1,4 +1,5 @@
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <sec:authorize access="hasRole('AGENT')">
 	<div class="panel panel-primary">
@@ -26,14 +27,15 @@
 			</tbody>
 		</table>
 	</div>
-		<div class="panel panel-primary">
+	<div class="panel panel-primary">
 		<div class="panel-heading">Shift Status</div>
 		<table class="table table-bordered">
 			<tbody>
 				<tr>
-					<td class="text-center">Please start your shift </td>
+					<td class="text-center">Please start your shift</td>
 				</tr>
 				<tr>
+					<input id="shiftId" type="hidden"/>
 					<td class="text-center">
 						<button type="button" id="shiftButton"
 							data-loading-text="Loading..." class="btn btn-primary"

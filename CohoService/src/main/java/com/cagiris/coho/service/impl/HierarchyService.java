@@ -516,7 +516,7 @@ public class HierarchyService implements IHierarchyService {
                     .getOrganizationId());
             List<UserRole> reportinUserRoles = new ArrayList<UserRole>();
             for (UserRole userRole : organizationMetaConfiguration.getAvailableUserRoles()) {
-                if (user.getUserRole().getLevel() > userRole.getLevel()) {
+                if (user.getUserRole().getLevel() < userRole.getLevel()) {
                     reportinUserRoles.add(userRole);
                 }
             }

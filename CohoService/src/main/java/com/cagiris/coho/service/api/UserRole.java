@@ -10,19 +10,20 @@ package com.cagiris.coho.service.api;
  */
 
 public enum UserRole {
-	ROOT(0), ADMIN(1), SUPERVISOR(2), AGENT(3);
+    ROOT(0), ADMIN(1), SUPERVISOR(2), AGENT(3);
 
-	private int level;
+    private int level;
 
-	private UserRole(int level) {
-	}
+    private UserRole(int level) {
+        this.level = level;
+    }
 
-	public int getLevel() {
-		return level;
-	}
+    public int getLevel() {
+        return level;
+    }
 
-	public void setLevel(int level) {
-		this.level = level;
-	}
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
 }
