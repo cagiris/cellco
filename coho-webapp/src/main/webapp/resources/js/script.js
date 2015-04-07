@@ -143,25 +143,15 @@ function initLeaveStatistics() {
 		return;
 	}
 	
-	var rowCasualLeave = $("#leave-statistics-table")[0].insertRow(-1);
-	rowCasualLeave.insertCell(0).innerHTML = "Casual Leaves";
-	var cellCasualLeave = rowCasualLeave.insertCell(1);
-	cellCasualLeave.innerHTML = "Loading...";
-	getDataAjax("get-leave-count/CASUAL_LEAVE", null, function (response) {
-		cellCasualLeave.innerHTML = response;
-	}, function () {
-		cellCasualLeave.innerHTML = "error";
-	});
-
-	var rowPaidLeave = $("#leave-statistics-table")[0].insertRow(-1);
-	rowPaidLeave.insertCell(0).innerHTML = "Paid Leaves";
-	var cellPaidLeave = rowPaidLeave.insertCell(1);
-	cellPaidLeave.innerHTML = "Loading...";
-
-	getDataAjax("get-leave-count/PAID_LEAVE", null, function (response) {
-		cellPaidLeave.innerHTML = response;
-	}, function () {
-		cellPaidLeave.innerHTML = "error";
+	$.get(getRequestURL("get-agent-quick-statistics"), function(JSONData) {
+		var obj = JSON.parse(JSON.stringify(JSONData));
+		for (var key in obj.data) {
+			if (obj.data.hasOwnProperty(key)) {
+				var row = $("#leave-statistics-table")[0].insertRow(-1);
+				row.insertCell(0).innerHTML = key;
+				row.insertCell(1).innerHTML = obj.data[key];
+			}
+		}
 	});
 }
 
@@ -170,34 +160,15 @@ function initAdminStatistics() {
 		return;
 	}
 	
-	var rowPendingApprovals = $("#admin-statistics-table")[0].insertRow(-1);
-	rowPendingApprovals.insertCell(0).innerHTML = "Pending Approvals";
-	var cellPendingApprovals = rowPendingApprovals.insertCell(1);
-	cellPendingApprovals.innerHTML = "Loading...";
-	getDataAjax("get-leave-approvals-count/NEW", null, function (response) {
-		cellPendingApprovals.innerHTML = response;
-	}, function () {
-		cellPendingApprovals.innerHTML = "error";
-	});
-
-	var rowActiveUsers = $("#admin-statistics-table")[0].insertRow(-1);
-	rowActiveUsers.insertCell(0).innerHTML = "Active Users";
-	var cellActiveUsers = rowActiveUsers.insertCell(1);
-	cellActiveUsers.innerHTML = "Loading...";
-	getDataAjax("get-users-active-in-shift-count", null, function (response) {
-		cellActiveUsers.innerHTML = response;
-	}, function () {
-		cellActiveUsers.innerHTML = "error";
-	});
-	
-	var rowTotalUsers = $("#admin-statistics-table")[0].insertRow(-1);
-	rowTotalUsers.insertCell(0).innerHTML = "Total Users";
-	var cellTotalUsers = rowTotalUsers.insertCell(1);
-	cellTotalUsers.innerHTML = "Loading...";
-	getDataAjax("get-users-count", null, function (response) {
-		cellTotalUsers.innerHTML = response;
-	}, function () {
-		cellTotalUsers.innerHTML = "error";
+	$.get(getRequestURL("get-admin-quick-statistics"), function(JSONData) {
+		var obj = JSON.parse(JSON.stringify(JSONData));
+		for (var key in obj.data) {
+			if (obj.data.hasOwnProperty(key)) {
+				var row = $("#admin-statistics-table")[0].insertRow(-1);
+				row.insertCell(0).innerHTML = key;
+				row.insertCell(1).innerHTML = obj.data[key];
+			}
+		}
 	});
 }
 
