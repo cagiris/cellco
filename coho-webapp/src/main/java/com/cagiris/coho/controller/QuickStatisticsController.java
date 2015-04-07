@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.ILeaveManagementService;
 import com.cagiris.coho.service.api.IUserLeaveQuota;
+import com.cagiris.coho.service.api.LeaveRequestStatus;
 import com.cagiris.coho.service.api.LeaveType;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
@@ -67,8 +68,14 @@ public class QuickStatisticsController extends AbstractController {
 	@RequestMapping(COUNT_LEAVES_APPROVALS_URL_MAPPING + "/{approvalStatus}")
 	@ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-	public String getLeaveApprovalsCount() {
-		return "0";
+	public String getLeaveApprovalsCount(@PathVariable String approvalStatus) {
+		try {
+			Integer count = leaveManagementService.getAllPendingLeaveRequestsByLeaveStatus(ControllerUtils.getLoggedInUser().getUsername(), 
+					LeaveRequestStatus.valueOf(approvalStatus.toUpperCase())).size();
+			return count.toString();
+		} catch (LeaveManagementServiceException e) {
+			return "error";
+		}
 	}
 
 	@RequestMapping(COUNT_USERS_ACTIVE_IN_SHIFT)

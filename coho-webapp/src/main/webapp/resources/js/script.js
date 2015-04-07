@@ -174,7 +174,7 @@ function initAdminStatistics() {
 	rowPendingApprovals.insertCell(0).innerHTML = "Pending Approvals";
 	var cellPendingApprovals = rowPendingApprovals.insertCell(1);
 	cellPendingApprovals.innerHTML = "Loading...";
-	getDataAjax("get-leave-approvals-count/PENDING", null, function (response) {
+	getDataAjax("get-leave-approvals-count/NEW", null, function (response) {
 		cellPendingApprovals.innerHTML = response;
 	}, function () {
 		cellPendingApprovals.innerHTML = "error";
