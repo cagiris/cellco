@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cagiris.coho.service.api.IAttendenceReportingService;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.ILeaveManagementService;
 import com.cagiris.coho.service.api.IUserLeaveQuota;
 import com.cagiris.coho.service.api.LeaveRequestStatus;
 import com.cagiris.coho.service.api.LeaveType;
+import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
 
@@ -41,6 +43,9 @@ public class QuickStatisticsController extends AbstractController {
     
     @Autowired
     private IHierarchyService hierarchyService;
+    
+    @Autowired
+    private IAttendenceReportingService attendenceReportingService;
     
 	@RequestMapping(COUNT_PAID_LEAVES_URL_MAPPING + "/{leaveType}")
 	@ResponseBody
@@ -82,7 +87,13 @@ public class QuickStatisticsController extends AbstractController {
 	@ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
 	public String getActiveShiftUsersCount() {
-		return "0";
+		Integer count;
+		try {
+			count = attendenceReportingService.getAllActiveShiftInfos().size();
+			return count.toString();
+		} catch (AttendenceReportingServiceException e) {
+			return "error";
+		}
 	}
 
 	@RequestMapping(COUNT_USERS)
