@@ -10,7 +10,7 @@ package com.cagiris.coho.service.exception;
  * @author: ssnk
  */
 
-public class HierarchyServiceException extends Exception {
+public class HierarchyServiceException extends CohoException {
 
 	/**
 	 *

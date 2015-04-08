@@ -2,8 +2,11 @@
 <%@page import="java.util.Date"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <h1 class="page-header">Apply for leave</h1>
 <form:form class="form-horizontal form-coho" commandName="leaveRequestBean">
+	<tiles:insertAttribute name="feedback-msg" />
+	
 	<div class="form-group">
 		<form:label path="requestSubject" for="requestSubject" class="control-label col-xs-2">Subject</form:label>
 		<div class="col-xs-6">

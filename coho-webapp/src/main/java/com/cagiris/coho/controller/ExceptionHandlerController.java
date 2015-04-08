@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cagiris.coho.service.exception.CohoException;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
 
 /**
@@ -17,15 +18,6 @@ import com.cagiris.coho.service.exception.HierarchyServiceException;
  */
 @ControllerAdvice
 public class ExceptionHandlerController extends AbstractController {
-
-	@ExceptionHandler(HierarchyServiceException.class)
-	public ModelAndView handleHierarchyServiceException (HierarchyServiceException e) {
-		
-		ModelAndView modelAndView = new ModelAndView("error/generic-error");
-		modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
-		
-		return modelAndView;
-	}
 
 	@ExceptionHandler(AccessDeniedException.class)
 	public ModelAndView handleAccessDeniedException(AccessDeniedException e) {
@@ -40,7 +32,8 @@ public class ExceptionHandlerController extends AbstractController {
 	public ModelAndView handleAllException (Exception e) {
 		
 		ModelAndView modelAndView = new ModelAndView("error/generic-error");
-		modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
+		modelAndView.addObject(ATTR_ERROR_MSG, "Application just ran into some trouble, "
+												+ "please inform the admin if this issue persists");
 		
 		return modelAndView;
 	}

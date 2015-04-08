@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.cagiris.coho.service.api.ILeaveManagementService;
@@ -28,6 +29,7 @@ public class LeaveManagementServiceTest extends AbstractTestCase {
         this.leaveManagementService = applicationContext.getBean(LeaveManagementService.class);
     }
 
+    @Ignore
     @Test
     public void applyLeaveTest() throws LeaveManagementServiceException {
         HashMap<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>();

@@ -9,7 +9,7 @@ package com.cagiris.coho.service.exception;
  * @author: ssnk
  */
 
-public class JobExecutionException extends Exception {
+public class JobExecutionException extends CohoException {
 
     /**
      *

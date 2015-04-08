@@ -5,6 +5,7 @@
 package com.cagiris.coho.service.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.cagiris.coho.service.api.IHierarchyService;
@@ -25,6 +26,7 @@ public class HierarchyServiceTest extends AbstractTestCase {
         this.hierarchyService = applicationContext.getBean(HierarchyService.class);
     }
 
+    @Ignore
     @Test
     public void testAddTeam() throws HierarchyServiceException {
         ITeam defaultTeam = hierarchyService.getDefaultTeam(hierarchyService.getDefaultOrganization()

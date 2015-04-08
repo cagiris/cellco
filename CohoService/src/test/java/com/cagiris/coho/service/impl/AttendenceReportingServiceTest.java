@@ -174,6 +174,7 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
 
     }
 
+    @Ignore
     @Test
     public void testQueryUserShiftInfo() throws AttendenceReportingServiceException {
 

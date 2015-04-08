@@ -3,6 +3,9 @@
 <h1 class="page-header">List of users</h1>
 
 <div class="row">
+
+	<tiles:insertAttribute name="feedback-msg" />
+	
     <div class="table-responsive">
 		<table class="table table-bordered table-results" id="list-table">
             <thead>

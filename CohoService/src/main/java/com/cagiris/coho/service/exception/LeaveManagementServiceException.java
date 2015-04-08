@@ -10,7 +10,7 @@ package com.cagiris.coho.service.exception;
  * @author: ssnk
  */
 
-public class LeaveManagementServiceException extends Exception {
+public class LeaveManagementServiceException extends CohoException {
 
     /**
      *

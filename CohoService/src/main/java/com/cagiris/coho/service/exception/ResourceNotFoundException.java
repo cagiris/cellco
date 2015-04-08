@@ -9,7 +9,7 @@ package com.cagiris.coho.service.exception;
  * @author: ssnk
  */
 
-public class ResourceNotFoundException extends Exception {
+public class ResourceNotFoundException extends CohoException {
 
     /**
      *

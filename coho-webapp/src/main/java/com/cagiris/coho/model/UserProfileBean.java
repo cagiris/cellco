@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.model;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -14,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author Ashish Jindal
  *
  */
-public class UserProfileBean extends AbstractBean {
+public class UserProfileBean extends AbstractBean implements ICRUDBean {
 	
 	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
 	@Size (min = 10, max = 50, message = "Length should be between {min} and {max}", groups = ValidationCheckForLength.class)
@@ -53,4 +55,9 @@ public class UserProfileBean extends AbstractBean {
 	@Pattern (regexp = "^\\d\\d-\\d\\d-\\d\\d\\d\\d$", message = "Please enter a valid date (dd-MM-YYYY)", groups = ValidationCheckForPattern.class)
 	@Size (min = 10, max = 10, message = "Invalid date (dd-MM-YYYY)", groups = ValidationCheckForLength.class)
 	private String endWorkDate;
+	
+
+	public Serializable getEntityId() {
+		return "";
+	}
 }
