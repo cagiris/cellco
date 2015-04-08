@@ -21,6 +21,7 @@ import com.cagiris.coho.service.entity.QUserShiftEntity;
 import com.cagiris.coho.service.entity.TeamShiftDetailsEntity;
 import com.cagiris.coho.service.entity.UserShiftEntity;
 import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
+import com.cagiris.coho.service.exception.NoActiveShiftForUserException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
@@ -206,15 +207,16 @@ public class AttendenceReportingService implements IAttendenceReportingService {
 
     @Override
     public IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId)
-            throws AttendenceReportingServiceException {
+            throws AttendenceReportingServiceException, NoActiveShiftForUserException {
         try {
             QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity).where(
-                    qUserShiftEntity.userId.eq(userId).and(qUserShiftEntity.teamId.eq(teamId)));
+                    qUserShiftEntity.userId.eq(userId).and(
+                            qUserShiftEntity.teamId.eq(teamId).and(qUserShiftEntity.shiftEndTime.isNull())));
             List<UserShiftEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(hibernateQuery,
                     qUserShiftEntity);
             if (executeQueryAndGetResults.size() == 0) {
-                throw new AttendenceReportingServiceException("No active shift for user in team");
+                throw new NoActiveShiftForUserException("No active shift for user in team");
             } else {
                 return executeQueryAndGetResults.get(0);
             }

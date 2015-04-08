@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
+import com.cagiris.coho.service.exception.NoActiveShiftForUserException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
 
 /**
@@ -52,7 +53,7 @@ public interface IAttendenceReportingService {
      */
     List<? extends IUserShiftInfo> getCurrentUserShiftInfo(String userId) throws AttendenceReportingServiceException;
 
-    IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId) throws AttendenceReportingServiceException;
+    IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId) throws AttendenceReportingServiceException,NoActiveShiftForUserException;
 
     /**
      * This can be used by admin to query shift details for different users.
