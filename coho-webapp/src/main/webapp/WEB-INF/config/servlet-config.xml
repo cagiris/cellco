@@ -16,7 +16,6 @@
 	<context:component-scan base-package="com.cagiris" />
 	<security:global-method-security pre-post-annotations="enabled"/>
 	
-	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" p:basename="messages" />
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />

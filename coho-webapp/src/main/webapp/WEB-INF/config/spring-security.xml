@@ -15,7 +15,7 @@
         <intercept-url pattern="/403*" access="permitAll"/>
         <intercept-url pattern="/**" access="hasAnyRole('AGENT', 'ADMIN')" />
 		<form-login login-page="/login" login-processing-url="/authenticate"
-			default-target-url="/dashboard" authentication-failure-url="/login"
+			default-target-url="/dashboard" authentication-failure-url="/login?error=true"
 			username-parameter="userName" password-parameter="password" />
 
 		<logout logout-success-url="/login" />
