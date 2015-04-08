@@ -57,7 +57,8 @@ public class UserProfileBean extends AbstractBean implements ICRUDBean {
 	private String endWorkDate;
 	
 
-	public Serializable getEntityId() {
+	@Override
+    public Serializable getEntityId() {
 		return "";
 	}
 }

@@ -5,7 +5,6 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,66 +36,59 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
     @Autowired
     private ILeaveManagementService leaveManagementService;
 
-	@Override
-	protected String getURLMapping() {
-		return URL_MAPPING;
-	}
+    @Override
+    protected String getURLMapping() {
+        return URL_MAPPING;
+    }
 
-	@Override
-	protected ModelMap getCreateFormModel() throws CohoException {
-		ModelMap modelMap = new ModelMap();
-		modelMap.addAttribute(new LeaveRequestBean());
-		return modelMap;
-	}
+    @Override
+    protected ModelMap getCreateFormModel() throws CohoException {
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute(new LeaveRequestBean());
+        return modelMap;
+    }
 
-	@Override
-	protected ModelMap create(LeaveRequestBean bean, ModelMap modelMap) throws CohoException {
-		ModelMap responseModelMap = new ModelMap(); 
-		
-		try {
-			User user = ControllerUtils.getLoggedInUser();
-			IUserLeaveRequest leaveRequest = leaveManagementService.applyForLeave(user.getUsername(), 
-																					null,
-																					bean.getLeaveStartDateFormatted(), 
-																					bean.getLeaveEndDateFormatted(), 
-																					bean.getRequestSubject(),
-																					bean.getRequestDescription());
+    @Override
+    protected ModelMap create(LeaveRequestBean bean, ModelMap modelMap) throws CohoException {
+        ModelMap responseModelMap = new ModelMap();
 
-			bean.setLeaveApplicationId(leaveRequest.getLeaveApplicationId());
-		} catch (ParseException e) {
-			throw new CohoException("Invalid dadte format!");
-		}
+        User user = ControllerUtils.getLoggedInUser();
+        IUserLeaveRequest leaveRequest = leaveManagementService.applyForLeave(user.getUsername(), null,
+                bean.getLeaveStartDate(), bean.getLeaveEndDate(), bean.getRequestSubject(),
+                bean.getRequestDescription());
+
+        bean.setLeaveApplicationId(leaveRequest.getLeaveApplicationId());
 
         return responseModelMap;
-	}
+    }
 
-	@Override
-	protected void delete(Serializable entityId) throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+    @Override
+    protected void delete(Serializable entityId) throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
 
-	@Override
-	protected ModelMap get(Serializable entityId) throws CohoException {
-		ModelMap modelMap = new ModelMap();
+    @Override
+    protected ModelMap get(Serializable entityId) throws CohoException {
+        ModelMap modelMap = new ModelMap();
         IUserLeaveRequest leaveRequest = leaveManagementService.getLeaveRequestById((String)entityId);
         LeaveRequestBean leaveRequestBean = new LeaveRequestBean(leaveRequest);
         modelMap.addAttribute(leaveRequestBean);
 
         return modelMap;
-	}
+    }
 
-	@Override
-	protected ModelMap getListFormModel() throws CohoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    protected ModelMap getListFormModel() throws CohoException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	protected ModelMap getListData(Map<String, String> params) throws CohoException {
-		
-		ModelMap modelMap = new ModelMap();
-		
-		Set<UserRole> authorities = ControllerUtils.getUserRolesForLoggedInUser();
+    @Override
+    protected ModelMap getListData(Map<String, String> params) throws CohoException {
+
+        ModelMap modelMap = new ModelMap();
+
+        Set<UserRole> authorities = ControllerUtils.getUserRolesForLoggedInUser();
         User loggedInUser = ControllerUtils.getLoggedInUser();
         if (authorities.contains(UserRole.AGENT)) {
             List<? extends IUserLeaveRequest> leaveRequestsByUserId = leaveManagementService
@@ -113,10 +105,10 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
         }
 
         return modelMap;
-	}
+    }
 
-	@Override
-	protected ModelMap update(Serializable entityId, LeaveRequestBean bean, ModelMap modelMap) throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+    @Override
+    protected ModelMap update(Serializable entityId, LeaveRequestBean bean, ModelMap modelMap) throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
 }

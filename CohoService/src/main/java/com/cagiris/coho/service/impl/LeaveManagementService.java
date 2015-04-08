@@ -77,7 +77,7 @@ public class LeaveManagementService implements ILeaveManagementService {
         Integer requiredLeaveCount = getTotalNoOfDays(leaveStartDate, leaveEndDate)
                 - getNoOfHolidays(leaveStartDate, leaveEndDate);
         Date currentTime = new Date();
-        validateLeaveRequest(userId, requiredLeaveCount);
+        //        validateLeaveRequest(userId, requiredLeaveCount);
 
         UserLeaveRequestEntity userLeaveRequestEntity = new UserLeaveRequestEntity();
         userLeaveRequestEntity.setLeaveApplicationId(leaveRequestIdGenerator.getNextUID(userId));
@@ -109,7 +109,8 @@ public class LeaveManagementService implements ILeaveManagementService {
             throws LeaveManagementServiceException {
         IUserLeaveQuota userLeaveQuota = getUserLeaveQuota(userId);
         Map<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>();
-        for (LeaveType leaveType : LeaveType.values()) {
+        LeaveType[] availableLeaveTypes = LeaveType.values();
+        for (LeaveType leaveType : availableLeaveTypes) {
             Integer leaveCount = userLeaveQuota.getLeaveTypeVsLeaveQuota().get(leaveType);
             if (requiredLeaveCount <= leaveCount) {
                 leaveTypeVsLeaveCount.put(leaveType, requiredLeaveCount);
@@ -117,6 +118,10 @@ public class LeaveManagementService implements ILeaveManagementService {
                 leaveTypeVsLeaveCount.put(leaveType, leaveCount);
                 requiredLeaveCount -= leaveCount;
             }
+        }
+        if (requiredLeaveCount > 0 && availableLeaveTypes.length > 0) {
+            leaveTypeVsLeaveCount.put(availableLeaveTypes[0], leaveTypeVsLeaveCount.get(availableLeaveTypes[0])
+                    + requiredLeaveCount);
         }
         return leaveTypeVsLeaveCount;
     }
@@ -152,11 +157,11 @@ public class LeaveManagementService implements ILeaveManagementService {
         for (Map.Entry<LeaveType, Integer> entry : userLeaveRequestEntity.getLeaveTypeVsLeaveCount().entrySet()) {
             LeaveType leaveType = entry.getKey();
             Integer leaveCount = entry.getValue();
-            if (leaveTypeVsLeaveQuota.get(leaveType) - leaveCount < 0) {
-                throw new LeaveManagementServiceException("User does not have enough leaves");
-            } else {
-                leaveTypeVsLeaveQuota.put(leaveType, leaveTypeVsLeaveQuota.get(leaveType) - leaveCount);
-            }
+            //            if (leaveTypeVsLeaveQuota.get(leaveType) - leaveCount < 0) {
+            //                throw new LeaveManagementServiceException("User does not have enough leaves");
+            //            } else {
+            leaveTypeVsLeaveQuota.put(leaveType, leaveTypeVsLeaveQuota.get(leaveType) - leaveCount);
+            //            }
         }
         return leaveTypeVsLeaveQuota;
     }

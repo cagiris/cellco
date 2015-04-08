@@ -45,13 +45,13 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
     private String getRedirectUrl(String mappingUrl) {
         return ("redirect:" + mappingUrl.substring(1));
     }
-    
+
     /**
      * @return - A model map containing the objects to be mapped on create entity form.
      * @throws CohoException
      */
     protected abstract ModelMap getCreateFormModel() throws CohoException;
-    
+
     @RequestMapping(value = CREATE_URL_MAPPING, method = RequestMethod.GET)
     public final ModelAndView showCreatePageInternal(ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
@@ -68,26 +68,26 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      * @return - A model map containing attributes that need to be brought to view.
      */
     protected abstract ModelMap create(T bean, ModelMap modelMap) throws CohoException;
-    
+
     @RequestMapping(value = CREATE_URL_MAPPING, method = RequestMethod.POST)
     public final ModelAndView createInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult,
             ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
 
         try {
-        	if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
                 modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
                 modelAndView.addAllObjects(modelMap);
-        		modelAndView.addAllObjects(getCreateFormModel());
-        	} else {
-        		modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
-    			modelAndView.addAllObjects(create(bean, modelMap));
-        	}
-		} catch (CohoException e) {
+                modelAndView.addAllObjects(getCreateFormModel());
+            } else {
+                modelAndView.addAllObjects(create(bean, modelMap));
+                modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
+            }
+        } catch (CohoException e) {
             modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
-    		modelAndView.addAllObjects(getCreateFormModel());
-			modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
-		}
+            modelAndView.addAllObjects(getCreateFormModel());
+            modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
+        }
 
         return modelAndView;
     }
@@ -103,12 +103,12 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
     @RequestMapping(value = DELETE_URL_MAPPING + "/{entityId}")
     @ResponseBody
     public final String deleteInternal(@PathVariable Serializable entityId) throws Exception {
-    	try {
+        try {
             delete(entityId);
             return ENTITY_DELETE_SUCCESS_MSG;
-    	} catch (CohoException e) {
-    		return e.getMessage();
-    	}
+        } catch (CohoException e) {
+            return e.getMessage();
+        }
     }
 
     /**
@@ -141,29 +141,28 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      * @throws CohoException
      */
     protected abstract ModelMap getListData(Map<String, String> params) throws CohoException;
-    
+
     @RequestMapping(value = LIST_URL_MAPPING)
-    public final ModelAndView showListPageInternal(@RequestParam (required = false) Map<String, String> params, 
-    												ModelMap modelMap)
-    												throws Exception {
+    public final ModelAndView showListPageInternal(@RequestParam(required = false) Map<String, String> params,
+            ModelMap modelMap) throws Exception {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(getURLMapping() + LIST_URL_MAPPING);
-        
+
         try {
             modelAndView.addAllObjects(getListFormModel());
             modelAndView.addAllObjects(getListData(params));
         } catch (CohoException e) {
             modelAndView.addAllObjects(getListFormModel());
-			modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
+            modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
         }
 
         return modelAndView;
     }
-    
+
     @RequestMapping(value = UPDATE_URL_MAPPING + "/{entityId}", method = RequestMethod.GET)
-    public final ModelAndView showUpdatePageInternal(@PathVariable Serializable entityId, 
-    													ModelMap modelMap) throws Exception {
+    public final ModelAndView showUpdatePageInternal(@PathVariable Serializable entityId, ModelMap modelMap)
+            throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
         modelAndView.addAllObjects(getCreateFormModel()); // We use the same model as was used for creating this bean.
@@ -178,28 +177,26 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      * @return - A model map containing attributes that need to be brought to view.
      */
     protected abstract ModelMap update(Serializable entityId, T bean, ModelMap modelMap) throws CohoException;
-    
+
     @RequestMapping(value = UPDATE_URL_MAPPING, method = RequestMethod.POST)
-    public final ModelAndView updateInternal(@PathVariable Serializable entityId, 
-    											@Valid @ModelAttribute T bean,
-    											BindingResult bindingResult, 
-    											ModelMap modelMap) throws Exception {
+    public final ModelAndView updateInternal(@PathVariable Serializable entityId, @Valid @ModelAttribute T bean,
+            BindingResult bindingResult, ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
 
         try {
-        	if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
                 modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
                 modelAndView.addAllObjects(modelMap);
-        		modelAndView.addAllObjects(getCreateFormModel());
-        	} else {
-        		modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
-    			modelAndView.addAllObjects(create(bean, modelMap));
-        	}
-		} catch (CohoException e) {
+                modelAndView.addAllObjects(getCreateFormModel());
+            } else {
+                modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
+                modelAndView.addAllObjects(create(bean, modelMap));
+            }
+        } catch (CohoException e) {
             modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
-    		modelAndView.addAllObjects(getCreateFormModel());
-			modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
-		}
+            modelAndView.addAllObjects(getCreateFormModel());
+            modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
+        }
 
         return modelAndView;
     }

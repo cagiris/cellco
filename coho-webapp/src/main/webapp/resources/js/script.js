@@ -83,7 +83,7 @@ $('#shiftButton').on('click', function () {
 
 function startShift(){
 	$.ajax({
-		url: "start-shift",
+		url: getRequestURL("start-shift"),
 	    cache: false,
 	    type: "POST",
 	    success: function(response){
@@ -99,7 +99,7 @@ function startShift(){
 
 function stopShift(shiftId){
 	$.ajax({
-		url: "end-shift",
+		url: getRequestURL("end-shift"),
 	    cache: false,
 	    type: "POST",
 	    success: function(response){
@@ -122,7 +122,7 @@ function checkForActiveShift(){
 		return;
 	}
 	$.ajax({
-		url: "get-shift-status",
+		url: getRequestURL("get-shift-status"),
 	    cache: false,
 	    type: "GET",
 	    success: function(response){
