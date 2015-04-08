@@ -315,7 +315,7 @@ public class LeaveManagementService implements ILeaveManagementService {
     Integer getTotalNoOfDays(Date startDate, Date endDate) throws LeaveManagementServiceException {
         LocalDate localStartDate = new LocalDate(startDate);
         LocalDate localEndDate = new LocalDate(endDate);
-        if (localStartDate.isAfter(localEndDate) || localStartDate.isEqual(localEndDate)) {
+        if (localStartDate.isAfter(localEndDate)) {
             throw new LeaveManagementServiceException("Leave end date is greater than leave start date");
         }
         return Days.daysBetween(localStartDate, localEndDate).getDays() + 1;

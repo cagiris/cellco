@@ -60,16 +60,19 @@
 						</ul></li>
 					<li role="presentation" class="dropdown"><a
 						class="dropdown-toggle" data-toggle="dropdown" href="#"
-						role="button" aria-expanded="false"> Reports <span
+						role="button" aria-expanded="false"> Shift Details <span
 							class="caret"></span>
 					</a>
 						<ul class="dropdown-menu" role="menu">
+							<li><a href="<core:url value = '/teamShiftDetails/get/1' />"> <span class="glyphicon glyphicon-th"
+									aria-hidden="false"></span> Shift Configuration
+							</a></li>
 							<li><a href="<core:url value = '/user-statistics' />"> <span
 									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
-									User Statistics
+									Shift History
 							</a></li>
 							<li><a href="<core:url value = '/user-runtime-statistics' />"> <span class="glyphicon glyphicon-th"
-									aria-hidden="false"></span> Runtime Statistics
+									aria-hidden="false"></span> Active Shift Details
 							</a></li>
 						</ul></li>
 				</sec:authorize>

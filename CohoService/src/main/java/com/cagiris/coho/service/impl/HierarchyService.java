@@ -141,7 +141,7 @@ public class HierarchyService implements IHierarchyService {
         shiftStart.set(Calendar.MINUTE, 0);
 
         Calendar shiftEnd = new GregorianCalendar();
-        shiftEnd.set(Calendar.HOUR, 6);
+        shiftEnd.set(Calendar.HOUR, 18);
         shiftEnd.set(Calendar.MINUTE, 0);
         long defaultShiftBuffer = 3 * 60;
         try {

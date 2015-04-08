@@ -6,6 +6,7 @@ package com.cagiris.coho.model;
 
 import java.util.Date;
 
+import com.cagiris.coho.controller.ControllerUtils;
 import com.cagiris.coho.service.api.IUserShiftInfo;
 
 /**
@@ -20,8 +21,6 @@ public class UserShiftInfoBean extends AbstractBean {
 
     private Date shiftEndTime;
 
-    private Long shiftDuration;
-
     private Long teamId;
 
     private String userId;
@@ -30,6 +29,8 @@ public class UserShiftInfoBean extends AbstractBean {
 
     private String shiftEndReason;
 
+    private String shiftDuration;
+
     public UserShiftInfoBean() {
     }
 
@@ -37,11 +38,11 @@ public class UserShiftInfoBean extends AbstractBean {
         this.shiftId = userShiftInfo.getShiftId();
         this.shiftStartTime = userShiftInfo.getShiftStartTime();
         this.shiftEndTime = userShiftInfo.getShiftEndTime();
-        this.shiftDuration = userShiftInfo.getShiftDuration();
         this.teamId = userShiftInfo.getTeamId();
         this.userId = userShiftInfo.getUserId();
         this.shiftStartReason = userShiftInfo.getShiftStartReason();
         this.shiftEndReason = userShiftInfo.getShiftEndReason();
+        this.shiftDuration = ControllerUtils.getFormattedTimeForMS(userShiftInfo.getShiftDuration());
     }
 
     public static UserShiftInfoBean mapToBean(IUserShiftInfo userShiftInfo) {
@@ -70,14 +71,6 @@ public class UserShiftInfoBean extends AbstractBean {
 
     public void setShiftEndTime(Date shiftEndTime) {
         this.shiftEndTime = shiftEndTime;
-    }
-
-    public Long getShiftDuration() {
-        return shiftDuration;
-    }
-
-    public void setShiftDuration(Long shiftDuration) {
-        this.shiftDuration = shiftDuration;
     }
 
     public Long getTeamId() {
@@ -110,5 +103,13 @@ public class UserShiftInfoBean extends AbstractBean {
 
     public void setShiftEndReason(String shiftEndReason) {
         this.shiftEndReason = shiftEndReason;
+    }
+
+    public String getShiftDuration() {
+        return this.shiftDuration;
+    }
+
+    public void setShiftDuration(String formattedShiftDuration) {
+        this.shiftDuration = formattedShiftDuration;
     }
 }

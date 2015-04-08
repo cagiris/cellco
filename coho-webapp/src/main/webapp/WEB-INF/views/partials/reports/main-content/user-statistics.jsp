@@ -1,3 +1,4 @@
+<%@page import="com.cagiris.coho.controller.ShiftInfoController"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
 <%@ taglib prefix="sec"
@@ -24,6 +25,7 @@
 					<tr id="row-${shifInfoBean.shiftId}">
 						<td>${shifInfoBean.userId}</td>
 						<td>${shifInfoBean.shiftStartTime}</td>
+						<td>${shifInfoBean.shiftEndTime}</td>
 						<td>${shifInfoBean.shiftDuration}</td>
 						<td>${shifInfoBean.shiftStartReason}</td>
 						<td>${shifInfoBean.shiftEndReason}</td>

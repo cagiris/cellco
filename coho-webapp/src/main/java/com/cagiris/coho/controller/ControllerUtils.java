@@ -5,6 +5,7 @@
 package com.cagiris.coho.controller;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -29,7 +30,7 @@ public class ControllerUtils {
         IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
         return hierarchyService.getDefaultTeam(defaultOrganization.getOrganizationId());
     }
-    
+
     public static User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
@@ -41,6 +42,16 @@ public class ControllerUtils {
         Set<UserRole> userRoles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .map(UserRole::valueOf).collect(Collectors.toSet());
         return userRoles;
+    }
+
+    public static String getFormattedTimeForMS(Long timeInMillis) {
+        TimeUnit timeunit = TimeUnit.MILLISECONDS;
+        long hours = timeunit.toHours(timeInMillis);
+        long minutes = timeunit.toMinutes(timeInMillis) - TimeUnit.HOURS.toMinutes(hours);
+        long seconds = timeunit.toSeconds(timeInMillis) - TimeUnit.HOURS.toSeconds(hours)
+                + TimeUnit.MINUTES.toSeconds(minutes);
+        return ((hours < 10) ? "0" + hours : hours) + ":" + ((minutes < 10) ? "0" + minutes : minutes) + ":"
+                + ((seconds < 10) ? "0" + seconds : seconds);
     }
 
 }

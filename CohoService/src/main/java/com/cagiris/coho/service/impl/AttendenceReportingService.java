@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,14 +111,16 @@ public class AttendenceReportingService implements IAttendenceReportingService {
     @Override
     public ITeamShiftDetails updateTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime,
             Long shiftBuffer, boolean autoExpire) throws AttendenceReportingServiceException {
+        DateTime shiftStartDateTime = new DateTime(shiftStartTime).withDayOfMonth(2).withYear(2015).withMonthOfYear(1);
+        DateTime shiftEndDateTime = new DateTime(shiftEndTime).withDayOfMonth(2).withYear(2015).withMonthOfYear(1);
 
         try {
             TeamShiftDetailsEntity teamShiftDetails = databaseManager.get(TeamShiftDetailsEntity.class, teamId);
             Date currentTime = new Date();
             teamShiftDetails.setDateModified(currentTime);
             teamShiftDetails.setTeamId(teamId);
-            teamShiftDetails.setShiftStartTime(shiftStartTime);
-            teamShiftDetails.setShiftEndTime(shiftEndTime);
+            teamShiftDetails.setShiftStartTime(shiftStartDateTime.toDate());
+            teamShiftDetails.setShiftEndTime(shiftEndDateTime.toDate());
             teamShiftDetails.setAutoExpire(autoExpire);
             databaseManager.update(teamShiftDetails);
             return teamShiftDetails;
