@@ -185,7 +185,7 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      */
     protected abstract ModelMap update(Serializable entityId, T bean, ModelMap modelMap) throws CohoException;
 
-    @RequestMapping(value = UPDATE_URL_MAPPING, method = RequestMethod.POST)
+    @RequestMapping(value = UPDATE_URL_MAPPING + "/{entityId}", method = RequestMethod.POST)
     public final ModelAndView updateInternal(@PathVariable Serializable entityId, @Valid @ModelAttribute T bean,
             BindingResult bindingResult, ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
@@ -197,7 +197,7 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
                 modelAndView.addAllObjects(getUpdateFormModel(entityId));
             } else {
                 modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
-                modelAndView.addAllObjects(create(bean, modelMap));
+                modelAndView.addAllObjects(update(entityId, bean, modelMap));
             }
         } catch (CohoException e) {
             modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);

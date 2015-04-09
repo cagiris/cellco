@@ -52,7 +52,7 @@ public class UserProfileBean extends AbstractBean implements ICRUDBean {
 
 	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
 	@Email(message = "Invalid Email", groups = ValidationCheckForPattern.class)
-	@Size (min = 5, max = 10, message = "Too long (Max ({max}))", groups = ValidationCheckForLength.class)
+	@Size (min = 5, max = 70, message = "Too long (Max ({max}))", groups = ValidationCheckForLength.class)
 	private String emailId;
 
 	@NotBlank (message = "Can't be left empty", groups = ValidationCheckForEmpty.class)

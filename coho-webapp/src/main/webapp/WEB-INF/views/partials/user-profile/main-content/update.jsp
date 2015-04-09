@@ -18,6 +18,9 @@
 	<div class="col-md-7">
 		<fieldset>
           	<legend>Personal Details</legend>
+          	
+          	<form:hidden path="userId"/>
+          	
 			<div class="form-group">
 				<form:label cssClass="col-md-2 control-label" path="firstName">First Name</form:label>
 				<div class="col-md-5 controls">
