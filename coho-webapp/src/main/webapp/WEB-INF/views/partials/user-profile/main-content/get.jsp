@@ -8,7 +8,7 @@
 <h1 class="page-header">
 	User Profile - ${ userProfileBean.userId}
 	<sec:authorize access="hasRole('ADMIN')">
-		<a href="<core:url value = '/user-profile/update/${ userProfileBean.userId}' />" class="btn btn-default btn-lg active" role="button">Update Profile</a>
+		<a href="<core:url value = '/user-profile/update/${ userProfileBean.userId}' />" class="btn btn-primary btn-md active pull-right" role="button">Update Profile</a>
 	</sec:authorize>
 </h1>
 

@@ -1,5 +1,9 @@
+<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<% 
+	String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+%>
 <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -78,7 +82,7 @@
 				</sec:authorize>
 				<li role="presentation" class="dropdown"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
-					role="button" aria-expanded="false"> User name <span
+					role="button" aria-expanded="false"> <%=userName %> <span
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
