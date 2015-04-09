@@ -73,6 +73,35 @@ $('#myModal').on('hide.bs.modal', function (event) {
    	$(".modal-body-content-ret").hide();
 });
 
+
+$('#pending-approve').on('click',function(event){
+	//var entityId = $.trim($('#pending-user').text());
+	var entityId = $.trim($(this).parent().prev().text());
+    console.log("User is #"+ entityId + "#");
+	$.ajax({
+		url: "approve/"+entityId,
+	    cache: false,
+	    type: "GET",
+	    success: function(response) {
+	    	//$(".modal-body-content").hide();
+	    	$(".modal-body-content-ret").html("<div class='success-msg'>" + response + "</div>");
+	    	console.log("SUCCESS RET");
+	    	// append hidden field
+	    	//$(".modal-body-content-ret").append("<input type=\"hidden\" class=\"form-control\" id=\"recipient-name\" value=\"" + entityId + "\"></div>");
+	    	//$(".modal-body-content-ret").show();
+	    	// Hide Delete Button on pop-up window
+	    	//$("#myModal .ajax-approve").hide();
+	    	// Hide deleted row visible behind pop-up window
+	    	//$("#row-"+entityId).hide();
+	    },
+	    error: function(xhr) {
+	    	console.log("ERROR RET" + response);
+	    	$(modal-body).html("<div class='error-msg'>" + response + "</div>");
+	    }
+	});
+});
+
+
 $('#shiftButton').on('click', function () {
 	if($('#shiftId').val()){
 		stopShift($('#shiftId').val());
