@@ -43,7 +43,7 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
     protected abstract String getURLMapping();
 
     private String getRedirectUrl(String mappingUrl) {
-        return ("redirect:" + mappingUrl.substring(1));
+        return ("redirect:/" + getURLMapping() + mappingUrl);
     }
 
     /**
