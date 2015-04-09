@@ -160,13 +160,20 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
         return modelAndView;
     }
 
+    /**
+     * @return - A model map containing the objects to be mapped on update entity form.
+     * @throws CohoException
+     */
+    protected ModelMap getUpdateFormModel(Serializable entityId) throws CohoException {
+    	return get(entityId); //Default implementation is to fill the update form with data fetched by "get" operation.
+    }
+    
     @RequestMapping(value = UPDATE_URL_MAPPING + "/{entityId}", method = RequestMethod.GET)
     public final ModelAndView showUpdatePageInternal(@PathVariable Serializable entityId, ModelMap modelMap)
             throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
-        modelAndView.addAllObjects(getCreateFormModel()); // We use the same model as was used for creating this bean.
-
+        modelAndView.addAllObjects(getUpdateFormModel(entityId));
         return modelAndView;
     }
 
@@ -187,14 +194,14 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
             if (bindingResult.hasErrors()) {
                 modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
                 modelAndView.addAllObjects(modelMap);
-                modelAndView.addAllObjects(getCreateFormModel());
+                modelAndView.addAllObjects(getUpdateFormModel(entityId));
             } else {
                 modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
                 modelAndView.addAllObjects(create(bean, modelMap));
             }
         } catch (CohoException e) {
             modelAndView.setViewName(getURLMapping() + UPDATE_URL_MAPPING);
-            modelAndView.addAllObjects(getCreateFormModel());
+            modelAndView.addAllObjects(getUpdateFormModel(entityId));
             modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
         }
 

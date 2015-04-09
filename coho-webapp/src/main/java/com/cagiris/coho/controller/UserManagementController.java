@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.service.api.AuthenicationPolicy;
@@ -85,8 +84,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 		ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), 
 																(String)entityId);
 
-		UserBean userBean = new UserBean();
-		prepareUserBean(userBean, user);
+		UserBean userBean = new UserBean(user);
 
 		modelMap.addAttribute(userBean);
 
@@ -108,8 +106,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 																						.getTeamId());
 		List<UserBean> userBeans = new ArrayList<UserBean>();
 		for (ITeamUser teamUser : allUsersForTeam) {
-			UserBean userBean = new UserBean();
-			prepareUserBean(userBean, teamUser);
+			UserBean userBean = new UserBean(teamUser);
 			userBeans.add(userBean);
 		}
 
@@ -118,6 +115,19 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 		return modelListData;
 	}
 
+	@Override
+	protected ModelMap getUpdateFormModel(Serializable entityId) throws CohoException {
+
+		ModelMap modelMap = new ModelMap();
+		modelMap.addAllAttributes(super.getUpdateFormModel(entityId));
+
+		// Add the additional data for list box.
+		IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
+		modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
+
+    	return modelMap;
+    }
+	
 	@Override
 	protected ModelMap update(Serializable entityId, UserBean bean, ModelMap modelMap) throws CohoException {
 		ModelMap responseModelMap = new ModelMap();
@@ -135,16 +145,4 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
 		return responseModelMap;
 	}
-
-    /**
-     * Use the entity data to prepare a bean.
-     * 
-     * @param userBean
-     * @param userEntity
-     */
-    private void prepareUserBean(UserBean userBean, ITeamUser user) {
-        userBean.setUserId(user.getUserId());
-        userBean.setUserName(user.getUserName());
-        userBean.setUserRole(user.getUserRole());
-    }
 }

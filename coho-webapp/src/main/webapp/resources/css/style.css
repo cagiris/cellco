@@ -203,7 +203,10 @@ body {
 }
 
 .form-field-error {
-	color: red;
-	font-size: 11px;
-	padding: 3px;
+	font-size: 12px;
+	margin: 3px 0px 0px;
+}
+
+#employee-photo-container {
+	height: 250px;
 }

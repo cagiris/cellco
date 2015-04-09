@@ -82,7 +82,7 @@
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="<core:url value = '/user/profile' />"> <span class="glyphicon glyphicon-user"
+						<li><a href="<core:url value = '/user-profile' />"> <span class="glyphicon glyphicon-user"
 								aria-hidden="false"></span> Profile
 						</a></li>
 						<li><a href="<core:url value = '/j_spring_security_logout' />"> <span class="glyphicon glyphicon-off"
