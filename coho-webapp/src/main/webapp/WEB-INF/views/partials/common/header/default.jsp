@@ -64,14 +64,14 @@
 							class="caret"></span>
 					</a>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="<core:url value = '/teamShiftDetails/get/1' />"> <span class="glyphicon glyphicon-th"
+							<li><a href="<core:url value = '/teamShiftDetails/get/1' />"> <span class="glyphicon glyphicon-cog"
 									aria-hidden="false"></span> Shift Configuration
 							</a></li>
 							<li><a href="<core:url value = '/user-statistics' />"> <span
-									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									class="glyphicon glyphicon-road" aria-hidden="false"></span>
 									Shift History
 							</a></li>
-							<li><a href="<core:url value = '/user-runtime-statistics' />"> <span class="glyphicon glyphicon-th"
+							<li><a href="<core:url value = '/user-runtime-statistics' />"> <span class="glyphicon glyphicon-hourglass"
 									aria-hidden="false"></span> Active Shift Details
 							</a></li>
 						</ul></li>
