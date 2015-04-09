@@ -63,10 +63,13 @@ public interface IHierarchyService {
     IOrganizationMetaConfiguration getOrganizationMetaConfiguration(Long organizationId)
             throws HierarchyServiceException, ResourceNotFoundException;
 
-    IUserProfile updateUserProfile(String userId, String userName, String email, String phone, String address,
-            String city, String postalCode, Date dateOfBirth, Date workStartDate, Date workEndDate)
-            throws HierarchyServiceException;
-
+	IUserProfile updateUserProfile(String userId, String firstName,
+			String lastName, Date dateOfBirth, String gender,
+			String mobileNumber, String emailId, String addressLine1,
+			String addressLine2, String city, String pincode, String state,
+			String country, Date joinedOn, Date leftOn, String designation)
+			throws HierarchyServiceException;
+	
     IUserProfile getUserProfile(String userId) throws HierarchyServiceException, ResourceNotFoundException;
 
     Set<UserRole> getAvailableUserRoles(Long organizationId) throws HierarchyServiceException;

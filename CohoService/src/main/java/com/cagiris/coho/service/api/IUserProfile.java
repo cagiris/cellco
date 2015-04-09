@@ -13,39 +13,35 @@ import java.util.Date;
 
 public interface IUserProfile {
 
-    String getUserId();
+	public abstract String getUserId();
+	
+	public abstract String getFirstName();
 
-    String getAddress();
+	public abstract String getLastName();
 
-    String getCity();
+	public abstract Date getDateOfBirth();
 
-    String getPhone();
+	public abstract String getGender();
 
-    /**
-     * @return Date of birth of the user.
-     */
-    Date getDateOfBirth();
+	public abstract String getMobileNumber();
 
-    /**
-     * @return Contact email of the user.
-     */
-    String getEmail();
+	public abstract String getEmailId();
 
-    String getUserName();
+	public abstract String getAddressLine1();
 
-    /**
-     * @return Postal code.
-     */
-    String getPostalCode();
+	public abstract String getAddressLine2();
 
-    /**
-     * @return The date when user last worked for the organization.
-     */
-    Date getWorkEndDate();
+	public abstract String getCity();
 
-    /**
-     * @return The date when user started working for the organization.
-     */
-    Date getWorkStartDate();
+	public abstract String getPincode();
 
+	public abstract String getState();
+
+	public abstract String getCountry();
+
+	public abstract Date getJoinedOn();
+
+	public abstract Date getLeftOn();
+
+	public abstract String getDesignation();
 }

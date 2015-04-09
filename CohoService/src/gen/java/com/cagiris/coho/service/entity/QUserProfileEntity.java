@@ -22,27 +22,39 @@ public class QUserProfileEntity extends EntityPathBase<UserProfileEntity> {
 
     public static final QUserProfileEntity userProfileEntity = new QUserProfileEntity("userProfileEntity");
 
-    public final StringPath address = createString("address");
+    public final StringPath addressLine1 = createString("addressLine1");
+
+    public final StringPath addressLine2 = createString("addressLine2");
 
     public final StringPath city = createString("city");
 
+    public final StringPath country = createString("country");
+
     public final DateTimePath<java.util.Date> dateOfBirth = createDateTime("dateOfBirth", java.util.Date.class);
 
-    public final StringPath email = createString("email");
+    public final StringPath designation = createString("designation");
 
-    public final StringPath phone = createString("phone");
+    public final StringPath emailId = createString("emailId");
 
-    public final StringPath postalCode = createString("postalCode");
+    public final StringPath firstName = createString("firstName");
+
+    public final StringPath gender = createString("gender");
+
+    public final DateTimePath<java.util.Date> joinedOn = createDateTime("joinedOn", java.util.Date.class);
+
+    public final StringPath lastName = createString("lastName");
+
+    public final DateTimePath<java.util.Date> leftOn = createDateTime("leftOn", java.util.Date.class);
+
+    public final StringPath mobileNumber = createString("mobileNumber");
+
+    public final StringPath pincode = createString("pincode");
+
+    public final StringPath state = createString("state");
 
     public final QUserEntity userEntity;
 
     public final StringPath userId = createString("userId");
-
-    public final StringPath userName = createString("userName");
-
-    public final DateTimePath<java.util.Date> workEndDate = createDateTime("workEndDate", java.util.Date.class);
-
-    public final DateTimePath<java.util.Date> workStartDate = createDateTime("workStartDate", java.util.Date.class);
 
     public QUserProfileEntity(String variable) {
         this(UserProfileEntity.class, forVariable(variable), INITS);
