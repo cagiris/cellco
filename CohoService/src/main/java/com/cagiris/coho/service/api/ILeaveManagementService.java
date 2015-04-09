@@ -68,7 +68,7 @@ public interface ILeaveManagementService {
     List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
             List<LeaveRequestStatus> leaveStatus) throws LeaveManagementServiceException;
 
-    IAnnualHoliday addAnnualHoliday(Long organizationId, Integer year, Integer day, String description)
+    IAnnualHoliday addAnnualHoliday(Long organizationId, UserRole userRole, Date holidayDay, String description)
             throws LeaveManagementServiceException;
 
     // weekday Monday = 1 and Sunday = 7 

@@ -13,6 +13,8 @@ import java.util.Map;
 
 public interface IUserRoleLeaveQuota {
 
+    Long getUserLeaveQuotaId();
+
     UserRole getUserRole();
 
     Long getOrganizationId();

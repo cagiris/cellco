@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.service.api;
 
+import java.util.Date;
+
 /**
  *
  * @author: ssnk
@@ -11,7 +13,5 @@ package com.cagiris.coho.service.api;
 
 public interface IAnnualHoliday extends IHoliday {
 
-    Integer getYear();
-
-    Integer getDay();
+    Date getHolidayDate();
 }

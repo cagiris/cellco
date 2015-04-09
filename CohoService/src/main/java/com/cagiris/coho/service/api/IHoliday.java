@@ -11,6 +11,8 @@ package com.cagiris.coho.service.api;
 
 public interface IHoliday {
 
+    Long getHolidayId();
+
     Long getOrganizationId();
 
     UserRole getUserRole();

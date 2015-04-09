@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -39,15 +40,16 @@ import com.cagiris.coho.service.db.api.IDatabaseManager;
 import com.cagiris.coho.service.entity.AnnualHolidayEntity;
 import com.cagiris.coho.service.entity.QAnnualHolidayEntity;
 import com.cagiris.coho.service.entity.QUserLeaveRequestEntity;
+import com.cagiris.coho.service.entity.QUserRoleLeaveQuotaEntity;
 import com.cagiris.coho.service.entity.QWeeklyHolidayEntity;
 import com.cagiris.coho.service.entity.UserLeaveQuotaEntity;
 import com.cagiris.coho.service.entity.UserLeaveRequestEntity;
 import com.cagiris.coho.service.entity.UserRoleLeaveQuotaEntity;
-import com.cagiris.coho.service.entity.UserRoleLeaveQuotaEntity.UserRoleLeaveQuotaPK;
 import com.cagiris.coho.service.entity.WeeklyHolidayEntity;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
 import com.cagiris.coho.service.exception.LeaveManagementServiceException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
+import com.cagiris.coho.service.utils.DateUtils;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 import com.mysema.query.jpa.hibernate.HibernateQuery;
 
@@ -254,13 +256,14 @@ public class LeaveManagementService implements ILeaveManagementService {
     }
 
     @Override
-    public IAnnualHoliday addAnnualHoliday(Long organizationId, Integer year, Integer day, String description)
+    public IAnnualHoliday addAnnualHoliday(Long organizationId, UserRole userRole, Date holidayDay, String description)
             throws LeaveManagementServiceException {
         AnnualHolidayEntity annualHolidayEntity = new AnnualHolidayEntity();
         annualHolidayEntity.setOrganizationId(organizationId);
-        annualHolidayEntity.setDay(day);
-        annualHolidayEntity.setYear(year);
+        DateTime holidayDateTime = DateUtils.getDateTimeWithDateOnly(holidayDay);
+        annualHolidayEntity.setHolidayDate(holidayDateTime.toDate());
         annualHolidayEntity.setDescription(description);
+        annualHolidayEntity.setUserRole(userRole);
         try {
             Serializable id = databaseManager.save(annualHolidayEntity);
             return databaseManager.get(AnnualHolidayEntity.class, id);
@@ -287,21 +290,29 @@ public class LeaveManagementService implements ILeaveManagementService {
         }
     }
 
-    Integer getNoOfHolidays(Date startDate, Date endDate) throws LeaveManagementServiceException {
+    private Integer getNoOfHolidays(Date startDate, Date endDate) throws LeaveManagementServiceException {
         Integer noOfWorkingDays = 0;
         Integer noOfHolidays = 0;
         List<? extends IWeeklyHoliday> allWeeklyHolidays;
+        List<? extends IAnnualHoliday> allAnnualHolidays;
         try {
-            allWeeklyHolidays = getAllWeeklyHolidays(hierarchyService.getDefaultOrganization().getOrganizationId());
+            Long organizationId = hierarchyService.getDefaultOrganization().getOrganizationId();
+            allWeeklyHolidays = getAllWeeklyHolidays(organizationId);
+            allAnnualHolidays = getAllAnnualHolidays(organizationId);
         } catch (LeaveManagementServiceException | HierarchyServiceException e) {
             throw new LeaveManagementServiceException(e);
         }
         Set<Integer> weeklyHolidays = allWeeklyHolidays.stream().map(IWeeklyHoliday::getWeekDay)
                 .collect(Collectors.toSet());
-        LocalDate localStartDate = new LocalDate(startDate);
-        LocalDate localEndDate = new LocalDate(endDate);
+        Set<DateTime> annualHolidayDateTime = allAnnualHolidays
+                .stream()
+                .map((IAnnualHoliday annualHoliday) -> DateUtils.getDateTimeWithDateOnly(annualHoliday.getHolidayDate()))
+                .collect(Collectors.toSet());
+        DateTime localStartDate = DateUtils.getDateTimeWithDateOnly(startDate);
+        DateTime localEndDate = DateUtils.getDateTimeWithDateOnly(endDate);
         while (localStartDate.isBefore(localEndDate) || localStartDate.isEqual(localEndDate)) {
-            if (weeklyHolidays.contains(localStartDate.getDayOfWeek())) {
+            if (weeklyHolidays.contains(localStartDate.getDayOfWeek())
+                    || annualHolidayDateTime.contains(localStartDate)) {
                 noOfHolidays++;
             } else {
                 noOfWorkingDays++;
@@ -312,7 +323,7 @@ public class LeaveManagementService implements ILeaveManagementService {
         return noOfHolidays;
     }
 
-    Integer getTotalNoOfDays(Date startDate, Date endDate) throws LeaveManagementServiceException {
+    private Integer getTotalNoOfDays(Date startDate, Date endDate) throws LeaveManagementServiceException {
         LocalDate localStartDate = new LocalDate(startDate);
         LocalDate localEndDate = new LocalDate(endDate);
         if (localStartDate.isAfter(localEndDate)) {
@@ -409,14 +420,21 @@ public class LeaveManagementService implements ILeaveManagementService {
     @Override
     public IUserRoleLeaveQuota getUserRoleQuota(Long organizationId, UserRole userRole)
             throws LeaveManagementServiceException, ResourceNotFoundException {
-        UserRoleLeaveQuotaPK userRoleLeaveQuotaPK = new UserRoleLeaveQuotaPK(organizationId, userRole);
+        QUserRoleLeaveQuotaEntity qUserRoleLeaveQuotaEntity = QUserRoleLeaveQuotaEntity.userRoleLeaveQuotaEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qUserRoleLeaveQuotaEntity).where(
+                qUserRoleLeaveQuotaEntity.organizationId.eq(organizationId).and(
+                        qUserRoleLeaveQuotaEntity.userRole.eq(userRole)));
         try {
-            return databaseManager.get(UserRoleLeaveQuotaEntity.class, userRoleLeaveQuotaPK);
+            List<? extends IUserRoleLeaveQuota> userRoleLeaveQuota = databaseManager.executeQueryAndGetResults(
+                    hibernateQuery, qUserRoleLeaveQuotaEntity);
+            if (userRoleLeaveQuota.size() > 0) {
+                return userRoleLeaveQuota.get(0);
+            } else {
+                logger.error("User role quota not found for orgId:{}, userRole:{}", organizationId, userRole);
+                throw new ResourceNotFoundException("User role quota not found");
+            }
         } catch (DatabaseManagerException e) {
             throw new LeaveManagementServiceException(e);
-        } catch (EntityNotFoundException e) {
-            logger.error("User role quota not found for orgId:{}, userRole:{}", organizationId, userRole);
-            throw new ResourceNotFoundException(e);
         }
     }
 

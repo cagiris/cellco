@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.service.entity;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
 import com.cagiris.coho.service.api.IHoliday;
@@ -41,6 +43,7 @@ public abstract class HolidayEntity implements IHoliday {
         this.description = description;
     }
 
+    @Enumerated(EnumType.STRING)
     @Override
     public UserRole getUserRole() {
         return userRole;

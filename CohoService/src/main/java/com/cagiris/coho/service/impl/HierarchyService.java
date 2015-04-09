@@ -438,39 +438,38 @@ public class HierarchyService implements IHierarchyService {
     }
 
     @Override
-    public IUserProfile updateUserProfile(String userId, String firstName, String lastName,
-			Date dateOfBirth, String gender, String mobileNumber,
-			String emailId, String addressLine1, String addressLine2,
-			String city, String pincode, String state, String country,
-			Date joinedOn, Date leftOn, String designation) throws HierarchyServiceException {
-		
-         try {
-        	 UserProfileEntity userProfileEntity;
-             userProfileEntity = databaseManager.get(UserProfileEntity.class, userId);
-             
-             userProfileEntity.setFirstName(firstName);
-             userProfileEntity.setLastName(lastName);
-             userProfileEntity.setDateOfBirth(dateOfBirth);
-             userProfileEntity.setGender(gender);
-             userProfileEntity.setMobileNumber(mobileNumber);
-             userProfileEntity.setEmailId(emailId);
-             userProfileEntity.setAddressLine1(addressLine1);
-             userProfileEntity.setAddressLine2(addressLine2);
-             userProfileEntity.setCity(city);
-             userProfileEntity.setPincode(pincode);
-             userProfileEntity.setState(state);
-             userProfileEntity.setCountry(country);
-             userProfileEntity.setJoinedOn(joinedOn);
-             userProfileEntity.setLeftOn(leftOn);
-             userProfileEntity.setDesignation(designation);
-             
-             databaseManager.saveOrUpdate(userProfileEntity);
-             return userProfileEntity;
-         } catch (DatabaseManagerException | EntityNotFoundException e) {
-             throw new HierarchyServiceException(e);
-         }
-	}
-    
+    public IUserProfile updateUserProfile(String userId, String firstName, String lastName, Date dateOfBirth,
+            String gender, String mobileNumber, String emailId, String addressLine1, String addressLine2, String city,
+            String pincode, String state, String country, Date joinedOn, Date leftOn, String designation)
+            throws HierarchyServiceException {
+
+        try {
+            UserProfileEntity userProfileEntity;
+            userProfileEntity = databaseManager.get(UserProfileEntity.class, userId);
+
+            userProfileEntity.setFirstName(firstName);
+            userProfileEntity.setLastName(lastName);
+            userProfileEntity.setDateOfBirth(dateOfBirth);
+            userProfileEntity.setGender(gender);
+            userProfileEntity.setMobileNumber(mobileNumber);
+            userProfileEntity.setEmailId(emailId);
+            userProfileEntity.setAddressLine1(addressLine1);
+            userProfileEntity.setAddressLine2(addressLine2);
+            userProfileEntity.setCity(city);
+            userProfileEntity.setPincode(pincode);
+            userProfileEntity.setState(state);
+            userProfileEntity.setCountry(country);
+            userProfileEntity.setJoinedOn(joinedOn);
+            userProfileEntity.setLeftOn(leftOn);
+            userProfileEntity.setDesignation(designation);
+
+            databaseManager.saveOrUpdate(userProfileEntity);
+            return userProfileEntity;
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
+            throw new HierarchyServiceException(e);
+        }
+    }
+
     @Override
     public IUserProfile getUserProfile(String userId) throws HierarchyServiceException, ResourceNotFoundException {
         try {
