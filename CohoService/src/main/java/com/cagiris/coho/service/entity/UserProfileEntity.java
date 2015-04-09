@@ -33,36 +33,36 @@ public class UserProfileEntity implements IUserProfile {
                                                                                                value = "userEntity"))
     @Column(unique = true, nullable = false)
     private String userId;
-    
-	private String firstName;
 
-	private String lastName;
+    private String firstName;
 
-	private Date dateOfBirth;
+    private String lastName;
 
-	private String gender;
+    private Date dateOfBirth;
 
-	private String mobileNumber;
+    private String gender;
 
-	private String emailId;
+    private String mobileNumber;
 
-	private String addressLine1;
+    private String emailId;
 
-	private String addressLine2;
+    private String addressLine1;
 
-	private String city;
+    private String addressLine2;
 
-	private String pincode;
+    private String city;
 
-	private String state;
-	
-	private String country;
+    private String pincode;
 
-	private Date joinedOn;
+    private String state;
 
-	private Date leftOn;
+    private String country;
 
-	private String designation;
+    private Date joinedOn;
+
+    private Date leftOn;
+
+    private String designation;
 
     @PrimaryKeyJoinColumn
     @OneToOne(fetch = FetchType.EAGER)
@@ -70,223 +70,222 @@ public class UserProfileEntity implements IUserProfile {
 
     public UserProfileEntity() {
     }
-    
-    public UserProfileEntity(String userId, String firstName, String lastName,
-			Date dateOfBirth, String gender, String mobileNumber,
-			String emailId, String addressLine1, String addressLine2,
-			String city, String pincode, String state, String country,
-			Date joinedOn, Date leftOn, String designation) {
-		this.userId = userId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.dateOfBirth = dateOfBirth;
-		this.gender = gender;
-		this.mobileNumber = mobileNumber;
-		this.emailId = emailId;
-		this.addressLine1 = addressLine1;
-		this.addressLine2 = addressLine2;
-		this.city = city;
-		this.pincode = pincode;
-		this.state = state;
-		this.country = country;
-		this.joinedOn = joinedOn;
-		this.leftOn = leftOn;
-		this.designation = designation;
-	}
 
-	public String getUserId() {
-		return userId;
-	}
+    public UserProfileEntity(String userId, String firstName, String lastName, Date dateOfBirth, String gender,
+            String mobileNumber, String emailId, String addressLine1, String addressLine2, String city, String pincode,
+            String state, String country, Date joinedOn, Date leftOn, String designation) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.emailId = emailId;
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
+        this.city = city;
+        this.pincode = pincode;
+        this.state = state;
+        this.country = country;
+        this.joinedOn = joinedOn;
+        this.leftOn = leftOn;
+        this.designation = designation;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    @Override
+    public String getUserId() {
+        return userId;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getFirstName()
-	 */
-	@Override
-	public String getFirstName() {
-		return firstName;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getFirstName()
+     */
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getLastName()
-	 */
-	@Override
-	public String getLastName() {
-		return lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getLastName()
+     */
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getDateOfBirth()
-	 */
-	@Override
-	public Date getDateOfBirth() {
-		return dateOfBirth;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getDateOfBirth()
+     */
+    @Override
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getGender()
-	 */
-	@Override
-	public String getGender() {
-		return gender;
-	}
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getGender()
+     */
+    @Override
+    public String getGender() {
+        return gender;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getMobileNumber()
-	 */
-	@Override
-	public String getMobileNumber() {
-		return mobileNumber;
-	}
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-	public void setMobileNumber(String mobileNumber) {
-		this.mobileNumber = mobileNumber;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getMobileNumber()
+     */
+    @Override
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getEmailId()
-	 */
-	@Override
-	public String getEmailId() {
-		return emailId;
-	}
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
 
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getEmailId()
+     */
+    @Override
+    public String getEmailId() {
+        return emailId;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getAddressLine1()
-	 */
-	@Override
-	public String getAddressLine1() {
-		return addressLine1;
-	}
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getAddressLine1()
+     */
+    @Override
+    public String getAddressLine1() {
+        return addressLine1;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getAddressLine2()
-	 */
-	@Override
-	public String getAddressLine2() {
-		return addressLine2;
-	}
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
 
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getAddressLine2()
+     */
+    @Override
+    public String getAddressLine2() {
+        return addressLine2;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getCity()
-	 */
-	@Override
-	public String getCity() {
-		return city;
-	}
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getCity()
+     */
+    @Override
+    public String getCity() {
+        return city;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getPincode()
-	 */
-	@Override
-	public String getPincode() {
-		return pincode;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public void setPincode(String pincode) {
-		this.pincode = pincode;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getPincode()
+     */
+    @Override
+    public String getPincode() {
+        return pincode;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getState()
-	 */
-	@Override
-	public String getState() {
-		return state;
-	}
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getState()
+     */
+    @Override
+    public String getState() {
+        return state;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getCountry()
-	 */
-	@Override
-	public String getCountry() {
-		return country;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getCountry()
+     */
+    @Override
+    public String getCountry() {
+        return country;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getJoinedOn()
-	 */
-	@Override
-	public Date getJoinedOn() {
-		return joinedOn;
-	}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-	public void setJoinedOn(Date joinedOn) {
-		this.joinedOn = joinedOn;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getJoinedOn()
+     */
+    @Override
+    public Date getJoinedOn() {
+        return joinedOn;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getLeftOn()
-	 */
-	@Override
-	public Date getLeftOn() {
-		return leftOn;
-	}
+    public void setJoinedOn(Date joinedOn) {
+        this.joinedOn = joinedOn;
+    }
 
-	public void setLeftOn(Date leftOn) {
-		this.leftOn = leftOn;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getLeftOn()
+     */
+    @Override
+    public Date getLeftOn() {
+        return leftOn;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.cagiris.coho.service.entity.IUserProfile1#getDesignation()
-	 */
-	@Override
-	public String getDesignation() {
-		return designation;
-	}
+    public void setLeftOn(Date leftOn) {
+        this.leftOn = leftOn;
+    }
 
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
+    /* (non-Javadoc)
+     * @see com.cagiris.coho.service.entity.IUserProfile1#getDesignation()
+     */
+    @Override
+    public String getDesignation() {
+        return designation;
+    }
 
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 
-	public void setUserEntity(UserEntity userEntity) {
-		this.userEntity = userEntity;
-	}
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 }

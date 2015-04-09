@@ -4,7 +4,6 @@
  */
 package com.cagiris.coho.service.exception;
 
-
 /**
  *
  * @author: ssnk
@@ -12,23 +11,24 @@ package com.cagiris.coho.service.exception;
 
 public class HierarchyServiceException extends CohoException {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public HierarchyServiceException() {
-	}
+    public HierarchyServiceException() {
+    }
 
-	public HierarchyServiceException(String message) {
-		super(message);
-	}
+    public HierarchyServiceException(String message) {
+        super(message);
+    }
 
-	public HierarchyServiceException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public HierarchyServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public HierarchyServiceException(Throwable e) {
-		super(e);
-	}
+    public HierarchyServiceException(Throwable e) {
+        super(e);
+    }
+
 }

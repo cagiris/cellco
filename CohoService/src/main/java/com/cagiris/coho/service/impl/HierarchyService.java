@@ -215,6 +215,13 @@ public class HierarchyService implements IHierarchyService {
     @Override
     public ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
             AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException {
+        try {
+            IUser user = getUser(userId);
+            if (user != null) {
+                throw new HierarchyServiceException("User with Id: " + userId + " already exists");
+            }
+        } catch (ResourceNotFoundException e1) {
+        }
         UserEntity userEntity = new UserEntity();
         userEntity.setAuthPolicy(authenicationPolicy);
         userEntity.setUserId(userId);
@@ -579,6 +586,26 @@ public class HierarchyService implements IHierarchyService {
                     qUserProfileEntity.userEntity.in(userList));
             return databaseManager.executeQueryAndGetResults(hibernateQuery, qUserProfileEntity);
         } catch (DatabaseManagerException e) {
+            throw new HierarchyServiceException(e);
+        }
+    }
+
+    @Override
+    public IUser updateUser(String userId, String userName, String authToken, UserRole userRole)
+            throws HierarchyServiceException {
+        try {
+            IUser user = getUser(userId);
+            if (user == null) {
+                throw new HierarchyServiceException("User with Id: " + userId + " does not exists");
+            }
+            UserEntity userEntity = databaseManager.get(UserEntity.class, userId);
+            userEntity.setUserName(userName);
+            userEntity.setAuthToken(authToken);
+            userEntity.setUserRole(userRole);
+            databaseManager.saveOrUpdate(userEntity);
+            return userEntity;
+        } catch (ResourceNotFoundException | DatabaseManagerException | EntityNotFoundException e) {
+            logger.error("Not able to update user", e.getMessage(), e);
             throw new HierarchyServiceException(e);
         }
     }

@@ -46,6 +46,9 @@ public interface IHierarchyService {
     ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
             AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException;
 
+    IUser updateUser(String userId, String userName, String authToken, UserRole userRole)
+            throws HierarchyServiceException;
+
     ITeamUser assignUserToTeam(Long teamId, String userId) throws HierarchyServiceException;
 
     void removeUserFromTeam(Long teamId, String userId) throws HierarchyServiceException;
@@ -63,13 +66,11 @@ public interface IHierarchyService {
     IOrganizationMetaConfiguration getOrganizationMetaConfiguration(Long organizationId)
             throws HierarchyServiceException, ResourceNotFoundException;
 
-	IUserProfile updateUserProfile(String userId, String firstName,
-			String lastName, Date dateOfBirth, String gender,
-			String mobileNumber, String emailId, String addressLine1,
-			String addressLine2, String city, String pincode, String state,
-			String country, Date joinedOn, Date leftOn, String designation)
-			throws HierarchyServiceException;
-	
+    IUserProfile updateUserProfile(String userId, String firstName, String lastName, Date dateOfBirth, String gender,
+            String mobileNumber, String emailId, String addressLine1, String addressLine2, String city, String pincode,
+            String state, String country, Date joinedOn, Date leftOn, String designation)
+            throws HierarchyServiceException;
+
     IUserProfile getUserProfile(String userId) throws HierarchyServiceException, ResourceNotFoundException;
 
     Set<UserRole> getAvailableUserRoles(Long organizationId) throws HierarchyServiceException;
