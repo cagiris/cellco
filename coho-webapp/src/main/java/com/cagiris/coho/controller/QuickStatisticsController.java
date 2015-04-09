@@ -4,6 +4,8 @@
  */
 package com.cagiris.coho.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -35,87 +37,84 @@ import com.cagiris.coho.service.exception.LeaveManagementServiceException;
 @Controller
 public class QuickStatisticsController extends AbstractController {
 
-	public static final String GET_AGENT_QUICK_STATISTICS = "get-agent-quick-statistics";
-	public static final String GET_ADMIN_QUICK_STATISTICS = "get-admin-quick-statistics";
+    public static final String GET_AGENT_QUICK_STATISTICS = "get-agent-quick-statistics";
+    public static final String GET_ADMIN_QUICK_STATISTICS = "get-admin-quick-statistics";
 
     private static final Logger logger = LoggerFactory.getLogger(QuickStatisticsController.class);
 
     @Autowired
     private ILeaveManagementService leaveManagementService;
-    
+
     @Autowired
     private IHierarchyService hierarchyService;
-    
+
     @Autowired
     private IAttendenceReportingService attendenceReportingService;
 
-	@RequestMapping(GET_AGENT_QUICK_STATISTICS)
+    @RequestMapping(GET_AGENT_QUICK_STATISTICS)
     @PreAuthorize("hasRole('AGENT')")
-	public @ResponseBody QuickStatsBean getAgentQuickStats() {
-		
-		Integer casualLeaveCount = 0;
-		Integer paidLeaveCount = 0;
-		
-		try {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	        User user = (User)authentication.getPrincipal();
-			IUserLeaveQuota userLeaveQuota;
-			
-			userLeaveQuota = leaveManagementService.getUserLeaveQuota(user.getUsername());
-			Map<LeaveType, Integer> userLeaveQuotaMap = userLeaveQuota.getLeaveTypeVsLeaveQuota();
-			
-			casualLeaveCount = userLeaveQuotaMap.get(LeaveType.CASUAL_LEAVE);
-			paidLeaveCount = userLeaveQuotaMap.get(LeaveType.PAID_LEAVE);
-		} catch (LeaveManagementServiceException e) {
-			logger.error("Unable to fetch agent statistics");
-			logger.error(e.getMessage());
-		}
-		
-		if (casualLeaveCount == null) {
-			casualLeaveCount = 0;
-		}
-		
-		if (paidLeaveCount == null) {
-			paidLeaveCount = 0;
-		}
+    public @ResponseBody QuickStatsBean getAgentQuickStats() {
 
-		QuickStatsBean quickStatsBean = new QuickStatsBean();
-		quickStatsBean.getData().put("Casual Leaves", casualLeaveCount.toString());
-		quickStatsBean.getData().put("Paid Leaves", paidLeaveCount.toString());
-		
-		return quickStatsBean;
-	}
-	
-	@RequestMapping(GET_ADMIN_QUICK_STATISTICS)
+        Integer casualLeaveCount = 0;
+        Integer paidLeaveCount = 0;
+
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User)authentication.getPrincipal();
+            IUserLeaveQuota userLeaveQuota;
+
+            userLeaveQuota = leaveManagementService.getUserLeaveQuota(user.getUsername());
+            Map<LeaveType, Integer> userLeaveQuotaMap = userLeaveQuota.getLeaveTypeVsLeaveQuota();
+
+            casualLeaveCount = userLeaveQuotaMap.get(LeaveType.CASUAL_LEAVE);
+            paidLeaveCount = userLeaveQuotaMap.get(LeaveType.PAID_LEAVE);
+        } catch (LeaveManagementServiceException e) {
+            logger.error("Unable to fetch agent statistics");
+            logger.error(e.getMessage());
+        }
+
+        if (casualLeaveCount == null) {
+            casualLeaveCount = 0;
+        }
+
+        if (paidLeaveCount == null) {
+            paidLeaveCount = 0;
+        }
+
+        QuickStatsBean quickStatsBean = new QuickStatsBean();
+        quickStatsBean.getData().put("Casual Leaves", casualLeaveCount.toString());
+        quickStatsBean.getData().put("Paid Leaves", paidLeaveCount.toString());
+
+        return quickStatsBean;
+    }
+
+    @RequestMapping(GET_ADMIN_QUICK_STATISTICS)
     @PreAuthorize("hasRole('ADMIN')")
-	public @ResponseBody QuickStatsBean getAdminQuickStats() {
-		
-		Integer countPendingLeaveApprovals = 0;
-		Integer countActiveUsers = 0;
-		Integer countTotalUsers = 0;
-		
-		try {
-			countPendingLeaveApprovals = leaveManagementService.getAllPendingLeaveRequestsByLeaveStatus(ControllerUtils.
-																										getLoggedInUser().getUsername(), 
-																										LeaveRequestStatus.NEW).size();
-			countPendingLeaveApprovals += leaveManagementService.getAllPendingLeaveRequestsByLeaveStatus(ControllerUtils.
-																										getLoggedInUser().getUsername(), 
-																										LeaveRequestStatus.PENDING).size();
-			
-			countActiveUsers = attendenceReportingService.getAllActiveShiftInfos().size();
-			
-			countTotalUsers = hierarchyService.getAllUsersForTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId()).size();
-			
-		} catch (LeaveManagementServiceException | AttendenceReportingServiceException | HierarchyServiceException e) {
-			logger.error("Unable to fetch admin statistics");
-			logger.error(e.getMessage());
-		}
+    public @ResponseBody QuickStatsBean getAdminQuickStats() {
 
-		QuickStatsBean quickStatsBean = new QuickStatsBean();
-		quickStatsBean.getData().put("Pending Approvals", countPendingLeaveApprovals.toString());
-		quickStatsBean.getData().put("Active Users", countActiveUsers.toString());
-		quickStatsBean.getData().put("Total Users", countTotalUsers.toString());
-		
-		return quickStatsBean;
-	}
+        Integer countPendingLeaveApprovals = 0;
+        Integer countActiveUsers = 0;
+        Integer countTotalUsers = 0;
+
+        try {
+            List<LeaveRequestStatus> leaveStatuses = Arrays.asList(LeaveRequestStatus.NEW, LeaveRequestStatus.PENDING);
+            countPendingLeaveApprovals = leaveManagementService.getAllPendingLeaveRequestsByLeaveStatus(
+                    ControllerUtils.getLoggedInUser().getUsername(), leaveStatuses).size();
+            countActiveUsers = attendenceReportingService.getAllActiveShiftInfos().size();
+
+            countTotalUsers = hierarchyService.getAllUsersForTeam(
+                    ControllerUtils.getDefaultTeam(hierarchyService).getTeamId()).size();
+
+        } catch (LeaveManagementServiceException | AttendenceReportingServiceException | HierarchyServiceException e) {
+            logger.error("Unable to fetch admin statistics");
+            logger.error(e.getMessage());
+        }
+
+        QuickStatsBean quickStatsBean = new QuickStatsBean();
+        quickStatsBean.getData().put("Pending Approvals", countPendingLeaveApprovals.toString());
+        quickStatsBean.getData().put("Active Users", countActiveUsers.toString());
+        quickStatsBean.getData().put("Total Users", countTotalUsers.toString());
+
+        return quickStatsBean;
+    }
 }

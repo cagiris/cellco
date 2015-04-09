@@ -66,7 +66,7 @@ public interface ILeaveManagementService {
      * by leave status.
      */
     List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
-            LeaveRequestStatus leaveStatus) throws LeaveManagementServiceException;
+            List<LeaveRequestStatus> leaveStatus) throws LeaveManagementServiceException;
 
     IAnnualHoliday addAnnualHoliday(Long organizationId, Integer year, Integer day, String description)
             throws LeaveManagementServiceException;

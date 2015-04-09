@@ -5,6 +5,7 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,7 +99,8 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
             modelMap.addAttribute(userLeaveRequestBeans);
         } else if (authorities.contains(UserRole.ADMIN)) {
             List<? extends IUserLeaveRequest> newLeaveRequests = leaveManagementService
-                    .getAllPendingLeaveRequestsByLeaveStatus(loggedInUser.getUsername(), LeaveRequestStatus.NEW);
+                    .getAllPendingLeaveRequestsByLeaveStatus(loggedInUser.getUsername(),
+                            Arrays.asList(LeaveRequestStatus.NEW));
             List<LeaveRequestBean> userLeaveRequestBeans = newLeaveRequests.stream().map(LeaveRequestBean::mapToBean)
                     .collect(Collectors.toList());
             modelMap.addAttribute(userLeaveRequestBeans);

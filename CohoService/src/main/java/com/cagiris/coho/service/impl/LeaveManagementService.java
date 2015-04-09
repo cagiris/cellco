@@ -225,7 +225,7 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     @Override
     public List<? extends IUserLeaveRequest> getAllPendingLeaveRequestsByLeaveStatus(String approvingUserId,
-            LeaveRequestStatus leaveStatus) throws LeaveManagementServiceException {
+            List<LeaveRequestStatus> leaveStatus) throws LeaveManagementServiceException {
 
         List<String> reportingUserIds;
         try {
@@ -238,7 +238,7 @@ public class LeaveManagementService implements ILeaveManagementService {
         try {
             QUserLeaveRequestEntity qUserLeaveRequestEntity = QUserLeaveRequestEntity.userLeaveRequestEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserLeaveRequestEntity).where(
-                    qUserLeaveRequestEntity.leaveApplicationStatus.eq(leaveStatus).and(
+                    qUserLeaveRequestEntity.leaveApplicationStatus.in(leaveStatus).and(
                             qUserLeaveRequestEntity.userId.in(reportingUserIds)));
             List<UserLeaveRequestEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(
                     hibernateQuery, qUserLeaveRequestEntity);

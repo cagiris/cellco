@@ -49,7 +49,7 @@ public class ControllerUtils {
         long hours = timeunit.toHours(timeInMillis);
         long minutes = timeunit.toMinutes(timeInMillis) - TimeUnit.HOURS.toMinutes(hours);
         long seconds = timeunit.toSeconds(timeInMillis) - TimeUnit.HOURS.toSeconds(hours)
-                + TimeUnit.MINUTES.toSeconds(minutes);
+                - TimeUnit.MINUTES.toSeconds(minutes);
         return ((hours < 10) ? "0" + hours : hours) + ":" + ((minutes < 10) ? "0" + minutes : minutes) + ":"
                 + ((seconds < 10) ? "0" + seconds : seconds);
     }
