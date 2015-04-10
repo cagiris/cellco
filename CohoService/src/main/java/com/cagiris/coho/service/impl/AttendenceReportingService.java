@@ -87,7 +87,8 @@ public class AttendenceReportingService implements IAttendenceReportingService {
 
     @Override
     public ITeamShiftDetails createTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime,
-            Long shiftBuffer, boolean autoExpire) throws AttendenceReportingServiceException {
+            Long shiftBuffer, Long minimumGapBetweenShifts, boolean autoExpire)
+            throws AttendenceReportingServiceException {
 
         TeamShiftDetailsEntity teamShiftDetails = new TeamShiftDetailsEntity();
         Date currentTime = new Date();
@@ -98,6 +99,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
         teamShiftDetails.setShiftEndTime(shiftEndTime);
         teamShiftDetails.setShiftBuffer(shiftBuffer);
         teamShiftDetails.setAutoExpire(autoExpire);
+        teamShiftDetails.setMinimumGapBetweenShifts(minimumGapBetweenShifts);
         try {
             Serializable id = databaseManager.save(teamShiftDetails);
             return databaseManager.get(TeamShiftDetailsEntity.class, id);
@@ -110,7 +112,8 @@ public class AttendenceReportingService implements IAttendenceReportingService {
 
     @Override
     public ITeamShiftDetails updateTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime,
-            Long shiftBuffer, boolean autoExpire) throws AttendenceReportingServiceException {
+            Long shiftBuffer, Long minimumGapBetweenShifts, boolean autoExpire)
+            throws AttendenceReportingServiceException {
         DateTime shiftStartDateTime = new DateTime(shiftStartTime).withDayOfMonth(2).withYear(2015).withMonthOfYear(1);
         DateTime shiftEndDateTime = new DateTime(shiftEndTime).withDayOfMonth(2).withYear(2015).withMonthOfYear(1);
 
@@ -123,6 +126,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             teamShiftDetails.setShiftEndTime(shiftEndDateTime.toDate());
             teamShiftDetails.setAutoExpire(autoExpire);
             teamShiftDetails.setShiftBuffer(shiftBuffer);
+            teamShiftDetails.setMinimumGapBetweenShifts(minimumGapBetweenShifts);
             databaseManager.update(teamShiftDetails);
             return teamShiftDetails;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
@@ -137,8 +141,8 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             throws AttendenceReportingServiceException {
         try {
             QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
-            HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity).where(
-                    qUserShiftEntity.userId.eq(userId));
+            HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity)
+                    .where(qUserShiftEntity.userId.eq(userId)).orderBy(qUserShiftEntity.dateAdded.desc());
             List<UserShiftEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(hibernateQuery,
                     qUserShiftEntity);
             return executeQueryAndGetResults;
@@ -228,5 +232,24 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             logger.error("Error while retrieving User Shift List:{}", e.getMessage(), e);
             throw new AttendenceReportingServiceException(e);
         }
+    }
+
+    @Override
+    public IUserShiftInfo getLastShiftDetailsForUser(Long teamId, String userId)
+            throws AttendenceReportingServiceException {
+        QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity)
+                .where(qUserShiftEntity.userId.eq(userId).and(qUserShiftEntity.teamId.eq(teamId)))
+                .orderBy(qUserShiftEntity.dateAdded.desc()).limit(1);
+        try {
+            List<UserShiftEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(hibernateQuery,
+                    qUserShiftEntity);
+            if (executeQueryAndGetResults.size() > 0) {
+                return executeQueryAndGetResults.get(0);
+            }
+        } catch (DatabaseManagerException e) {
+            throw new AttendenceReportingServiceException(e);
+        }
+        return null;
     }
 }

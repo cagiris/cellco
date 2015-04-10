@@ -56,6 +56,17 @@
 			<form:errors path="shiftBuffer" cssClass="form-field-error"/>
 		</div>
 	</div>
+	
+	<div class="form-group">
+		<form:label path="minimumGapBetweenShifts" for="minimumGapBetweenShifts" class="control-label col-xs-2">Minimum Gap Between Shifts</form:label>
+		<div class="col-xs-6">
+			<form:input path="minimumGapBetweenShifts" type="text" class="form-control" id="shiftBuffer" required="true" />
+		</div>
+		<div class="col-xs-4">
+			<form:errors path="minimumGapBetweenShifts" cssClass="form-field-error"/>
+		</div>
+	</div>
+	
 	<div class="form-group">
 		<div class="col-xs-offset-2 col-xs-10">
 			<form:button type="submit" class="btn btn-primary">Update</form:button>

@@ -34,7 +34,7 @@ public interface IAttendenceReportingService {
      * before shiftEndTime and autoExpire is true.
      */
     ITeamShiftDetails createTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime, Long shiftBuffer,
-            boolean autoExpire) throws AttendenceReportingServiceException;
+            Long minimumGapBetweenShifts, boolean autoExpire) throws AttendenceReportingServiceException;
 
     /**
      * This can be used to update the shift timings for a particular team. All
@@ -42,7 +42,7 @@ public interface IAttendenceReportingService {
      * before shiftEndTime and autoExpire is true.
      */
     ITeamShiftDetails updateTeamShiftDetails(Long teamId, Date shiftStartTime, Date shiftEndTime, Long shiftBuffer,
-            boolean autoExpire) throws AttendenceReportingServiceException;
+            Long minimumGapBetweenShifts, boolean autoExpire) throws AttendenceReportingServiceException;
 
     ITeamShiftDetails getTeamShiftDetails(Long teamId) throws AttendenceReportingServiceException,
             ResourceNotFoundException;
@@ -53,7 +53,8 @@ public interface IAttendenceReportingService {
      */
     List<? extends IUserShiftInfo> getCurrentUserShiftInfo(String userId) throws AttendenceReportingServiceException;
 
-    IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId) throws AttendenceReportingServiceException,NoActiveShiftForUserException;
+    IUserShiftInfo getCurrentUserShiftInTeam(Long teamId, String userId) throws AttendenceReportingServiceException,
+            NoActiveShiftForUserException;
 
     /**
      * This can be used by admin to query shift details for different users.
@@ -69,5 +70,7 @@ public interface IAttendenceReportingService {
             throws AttendenceReportingServiceException;
 
     List<? extends IUserShiftInfo> getAllActiveShiftInfos() throws AttendenceReportingServiceException;
+
+    IUserShiftInfo getLastShiftDetailsForUser(Long teamId, String userId) throws AttendenceReportingServiceException;
 
 }

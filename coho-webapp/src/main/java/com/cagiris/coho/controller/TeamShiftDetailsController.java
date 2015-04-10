@@ -49,7 +49,8 @@ public class TeamShiftDetailsController extends AbstractCRUDController<TeamShift
     protected ModelMap create(TeamShiftDetailsBean bean, ModelMap modelMap) throws CohoException {
         ITeam defaultTeam = ControllerUtils.getDefaultTeam(hierarchyService);
         ITeamShiftDetails updateTeamShiftDetails = attendenceReportingService.updateTeamShiftDetails(
-                defaultTeam.getTeamId(), bean.getShiftStartTime(), bean.getShiftEndTime(), bean.getShiftBuffer(), true);
+                defaultTeam.getTeamId(), bean.getShiftStartTime(), bean.getShiftEndTime(), bean.getShiftBuffer(),
+                bean.getMinimumGapBetweenShifts(), true);
         ModelMap responseModelMap = new ModelMap();
         responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Team shift details successfuly updated.");
         responseModelMap.addAttribute(new TeamShiftDetailsBean(updateTeamShiftDetails));

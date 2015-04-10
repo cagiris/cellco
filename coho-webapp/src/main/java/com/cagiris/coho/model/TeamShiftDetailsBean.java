@@ -31,6 +31,7 @@ public class TeamShiftDetailsBean extends AbstractBean implements ICRUDBean {
     private Date shiftEndTime;
     private String shiftDuration;
     private Long shiftBuffer;
+    private Long minimumGapBetweenShifts;
 
     public TeamShiftDetailsBean() {
     }
@@ -41,6 +42,7 @@ public class TeamShiftDetailsBean extends AbstractBean implements ICRUDBean {
         this.shiftEndTime = teamShiftDetails.getShiftEndTime();
         this.shiftBuffer = teamShiftDetails.getShiftBuffer();
         this.shiftDuration = ControllerUtils.getFormattedTimeForMS(teamShiftDetails.getShiftDuration());
+        this.minimumGapBetweenShifts = teamShiftDetails.getMinimumGapBetweenShifts();
     }
 
     public static TeamShiftDetailsBean mapToBean(ITeamShiftDetails teamShiftDetails) {
@@ -82,6 +84,14 @@ public class TeamShiftDetailsBean extends AbstractBean implements ICRUDBean {
 
     public void setShiftDuration(String shiftDuration) {
         this.shiftDuration = shiftDuration;
+    }
+
+    public Long getMinimumGapBetweenShifts() {
+        return minimumGapBetweenShifts;
+    }
+
+    public void setMinimumGapBetweenShifts(Long minimumGapBetweenShifts) {
+        this.minimumGapBetweenShifts = minimumGapBetweenShifts;
     }
 
 }

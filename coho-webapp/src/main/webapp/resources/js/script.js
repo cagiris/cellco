@@ -146,11 +146,13 @@ function startShift(){
 	    cache: false,
 	    type: "POST",
 	    success: function(response){
-	    	$('#shiftId').val(response);
+	    	var userShiftInfo = JSON.parse(response);
+	    	$('#shiftId').val(userShiftInfo.shiftId);
 	    	$('#shiftButton').html('Stop Shift');
+	    	$("#shiftStartTime").val(userShiftInfo.shiftStartTime);
+	    	updateShiftDuration();
 	    },
 	    error: function(){
-	    	$('#shiftButton').html('Start Shift');
 	    }
 	    	
 	});
@@ -164,12 +166,13 @@ function stopShift(shiftId){
 	    success: function(response){
 	    	$('#shiftId').val(null);
 	    	$('#shiftButton').html('Start Shift');
+	    	$('#shiftDuration').html("00:00:00");
+	    	$("#shiftStartTime").val(null);
 	    },
 	    data:{
 	    	'shiftId':shiftId
 	    },
 	    error: function(){
-	    	$('#shiftButton').html('Stop Shift');
 	    }
 	    	
 	});
@@ -185,14 +188,30 @@ function checkForActiveShift(){
 	    cache: false,
 	    type: "GET",
 	    success: function(response){
-	    	$('#shiftId').val(response);
+	    	var userShiftInfo = JSON.parse(response);
+	    	$('#shiftId').val(userShiftInfo.shiftId);
+	    	$("#shiftStartTime").val(userShiftInfo.shiftStartTime);
 	    	$('#shiftButton').html('Stop Shift');
+	    	updateShiftDuration();
 	    },
 	    error: function(){
 	    	$('#shiftButton').html('Start Shift');
+	    	$('#shiftDuration').html("00:00:00");
 	    }
 	    	
 	});
+}
+
+function updateShiftDuration(){
+	if(!$('#shiftId').val()){
+		return;
+	}	
+	var currentTime=new Date();
+	var shiftStartTime = $('#shiftStartTime').val();
+	var duration = currentTime - shiftStartTime;
+	var timeStr=getHHMMSS(duration);
+	$("#shiftDuration").html(timeStr);
+	setTimeout(function(){updateShiftDuration()},500)
 }
 
 (function () {
@@ -200,6 +219,19 @@ function checkForActiveShift(){
 	initAdminStatistics();
 	checkForActiveShift();
 } ());
+
+function getHHMMSS(timeElapsed){
+	timeElapsed=Math.floor(timeElapsed/1000);
+    var hours   = Math.floor(timeElapsed / 3600);
+    var minutes = Math.floor((timeElapsed - (hours * 3600)) / 60);
+    var seconds = timeElapsed - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    var timeStr    = hours+':'+minutes+':'+seconds;
+    return timeStr;
+}
 
 function initLeaveStatistics() {
 	if ($("#leave-statistics-table").length == 0) {
@@ -242,10 +274,10 @@ function initAdminStatistics() {
 
 
 /**
- * Utility functions.
+ * return the json response object
  */
 
-function getDataAjax (urlForData, requestData, callbackSuccess, callbackFail) {
+function getDataAjax (urlForData, requestDataJsonObject, callbackSuccess, callbackFail) {
 	$.ajax({
 		url: getRequestURL(urlForData),
 	    cache: false,

@@ -20,7 +20,11 @@
 		<table class="table table-bordered">
 			<tbody>
 				<tr>
-					<td class="text-center">Please start your shift</td>
+					<td class="text-center">
+					<input id="shiftStartTime" type="hidden"/>
+					<label>Shift Duration - </label>
+					<label id="shiftDuration">00:00:00</label>
+					</td>
 				</tr>
 				<tr>
 					<input id="shiftId" type="hidden"/>

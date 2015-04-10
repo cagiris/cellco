@@ -25,6 +25,7 @@ public class TeamShiftDetailsEntity extends BaseEntity implements ITeamShiftDeta
     private Date shiftEndTime;
     private boolean autoExpire;
     private Long shiftBuffer;
+    private Long minimumGapBetweenShifts;
 
     @Id
     @Override
@@ -78,6 +79,15 @@ public class TeamShiftDetailsEntity extends BaseEntity implements ITeamShiftDeta
 
     public void setShiftBuffer(Long shiftBuffer) {
         this.shiftBuffer = shiftBuffer;
+    }
+
+    @Override
+    public Long getMinimumGapBetweenShifts() {
+        return minimumGapBetweenShifts;
+    }
+
+    public void setMinimumGapBetweenShifts(Long minimumGapBetweenShifts) {
+        this.minimumGapBetweenShifts = minimumGapBetweenShifts;
     }
 
 }

@@ -50,6 +50,9 @@
 		<constructor-arg>
 			<ref bean="hierarchyService" />
 		</constructor-arg>
+			<constructor-arg>
+			<ref bean="attendenceReportingService" />
+		</constructor-arg>
 	</bean>
 
 
