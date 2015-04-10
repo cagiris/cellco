@@ -12,12 +12,16 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.cagiris.coho.model.validator.FieldMatch;
 import com.cagiris.coho.service.api.ITeamUser;
 
 /**
  * @author Ashish Jindal
  *
  */
+
+@FieldMatch(first = "password", second = "reEnterdPassword", errorMessage = "The password fields must match",
+            groups = {ValidationCheckForPattern.class})
 @GroupSequence({ValidationCheckForEmpty.class, ValidationCheckForLength.class, ValidationCheckForPattern.class,
         UserBean.class})
 public class UserBean extends AbstractBean implements ICRUDBean {
