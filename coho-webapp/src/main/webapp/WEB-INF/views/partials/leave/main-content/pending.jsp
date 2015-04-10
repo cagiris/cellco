@@ -7,28 +7,27 @@
 <c:forEach items="${leaveRequestBeanList}" var="leaveRequestBean">
 	<div class="panel panel-danger" id="pending-${leaveRequestBean.leaveApplicationId}">
 		<div class="panel-heading clearfix">
-			<div id="pending-user">${leaveRequestBean.userId}</div>
+			${leaveRequestBean.userId}
 			<!--
 		<input type="hidden" name=${leaveRequestBean.leaveApplicationId}>
 			-->
-		</div>
-		<div class="pull-right">
-			<a href="#" class="pending-approve "
-				class="btn btn-success btn-xs ajax-approve" title="Approve"" > <span
-				class="glyphicon glyphicon-thumbs-up" aria-hidden="true"> <input
-					type="hidden" value="${leaveRequestBean.leaveApplicationId}">
-			</span>
-			</a> <a href="#" class="pending-hold"
-				class="btn btn-warning btn-xs ajax-hold" title="On Hold"> <span
-				class="glyphicon glyphicon-info-sign" aria-hidden="true"> <input
-					type="hidden" value="${leaveRequestBean.leaveApplicationId}">
-			</span>
-			</a> <a href="#" class="pending-cancel"
-				class="btn btn-danger btn-xs ajax-cancel" title="Cancel"> <span
-				class="glyphicon glyphicon-thumbs-down" aria-hidden="true"> <input
-					type="hidden" value="${leaveRequestBean.leaveApplicationId}">
-			</span>
-			</a>
+			<div class="pull-right">
+				<a href="#" class="pending-approve btn btn-success btn-xs ajax-approve" title="Approve" >
+					<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">
+						<input type="hidden"
+						value="${leaveRequestBean.leaveApplicationId}">
+				</span>
+				</a> <a href="#" class="pending-hold btn btn-warning btn-xs ajax-hold" title="On Hold"> <span
+					class="glyphicon glyphicon-info-sign" aria-hidden="true"> <input
+						type="hidden" value="${leaveRequestBean.leaveApplicationId}">
+				</span>
+				</a> <a href="#" class="pending-cancel btn btn-danger btn-xs ajax-cancel" title="Cancel"> <span
+					class="glyphicon glyphicon-thumbs-down" aria-hidden="true">
+						<input type="hidden"
+						value="${leaveRequestBean.leaveApplicationId}">
+				</span>
+				</a>
+			</div>
 		</div>
 
 		<div class="panel-body">
