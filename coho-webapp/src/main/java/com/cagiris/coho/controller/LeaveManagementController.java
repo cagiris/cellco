@@ -99,8 +99,9 @@ public class LeaveManagementController extends AbstractCRUDController<LeaveReque
             modelMap.addAttribute(userLeaveRequestBeans);
         } else if (authorities.contains(UserRole.ADMIN)) {
             List<? extends IUserLeaveRequest> newLeaveRequests = leaveManagementService
-                    .getAllPendingLeaveRequestsByLeaveStatus(loggedInUser.getUsername(),
-                            Arrays.asList(LeaveRequestStatus.NEW));
+                    .getAllPendingLeaveRequestsByLeaveStatus(loggedInUser.getUsername(), Arrays.asList(
+                            LeaveRequestStatus.NEW, LeaveRequestStatus.PENDING, LeaveRequestStatus.APPROVED,
+                            LeaveRequestStatus.CANCELED));
             List<LeaveRequestBean> userLeaveRequestBeans = newLeaveRequests.stream().map(LeaveRequestBean::mapToBean)
                     .collect(Collectors.toList());
             modelMap.addAttribute(userLeaveRequestBeans);
