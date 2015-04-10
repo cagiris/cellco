@@ -53,7 +53,7 @@
 		<fieldset>
           	<legend>User authorization details</legend>
 			
-			<form:hidden path="userId"/>
+			<input id="userId" type="hidden" value="${ userProfileBean.userId}" />
 			
 			<div class="form-group">
 				<form:label cssClass="col-md-2 control-label" path="state">Password:</form:label>
