@@ -21,6 +21,21 @@
 				<li><a href="<core:url value = '/dashboard' />"> <span class="glyphicon glyphicon-home"
 						aria-hidden="false"></span> Dashboard
 				</a></li>
+			<sec:authorize access="hasRole('ADMIN')">
+				<li role="presentation" class="dropdown"><a
+					class="dropdown-toggle" data-toggle="dropdown" href="#"
+					role="button" aria-expanded="false"> Holiday Manager <span
+						class="caret"></span>
+				</a>
+				<ul class="dropdown-menu" role="menu">
+						<sec:authorize access="hasRole('ADMIN')">
+							<li><a href="<core:url value = '/holiday/list' />"> <span 
+							        class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									Holiday List
+							</a></li>
+						</sec:authorize>
+					</ul></li>
+			</sec:authorize>
 				<li role="presentation" class="dropdown"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
 					role="button" aria-expanded="false"> Leave Manager <span
