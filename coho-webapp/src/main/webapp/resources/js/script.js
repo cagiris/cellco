@@ -74,25 +74,54 @@ $('#myModal').on('hide.bs.modal', function (event) {
 });
 
 
-$('#pending-approve').on('click',function(event){
-	//var entityId = $.trim($('#pending-user').text());
-	var entityId = $.trim($(this).parent().prev().text());
-    console.log("User is #"+ entityId + "#");
+$('.pending-approve').on('click',function(event){
+	var leaveApplicationId = $(this).find("input[type=hidden]").val();
+    console.log("User is #"+ leaveApplicationId + "#");
 	$.ajax({
-		url: "approve/"+entityId,
+		url: getRequestURL("leave/pending/approve/"+leaveApplicationId),
 	    cache: false,
 	    type: "GET",
 	    success: function(response) {
-	    	//$(".modal-body-content").hide();
-	    	$(".modal-body-content-ret").html("<div class='success-msg'>" + response + "</div>");
 	    	console.log("SUCCESS RET");
-	    	// append hidden field
-	    	//$(".modal-body-content-ret").append("<input type=\"hidden\" class=\"form-control\" id=\"recipient-name\" value=\"" + entityId + "\"></div>");
-	    	//$(".modal-body-content-ret").show();
-	    	// Hide Delete Button on pop-up window
-	    	//$("#myModal .ajax-approve").hide();
-	    	// Hide deleted row visible behind pop-up window
-	    	//$("#row-"+entityId).hide();
+	    },
+	    error: function(xhr) {
+	    	console.log("ERROR RET" + response);
+	    	//$(modal-body).html("<div class='error-msg'>" + response + "</div>");
+	    }
+	});
+});
+
+$('.pending-hold').on('click',function(event){
+	var leaveApplicationId = $(this).find("input[type=hidden]").val();
+	var pendingLeaveApplicationId = "pending-" + leaveApplicationId;
+    console.log("User is #"+ leaveApplicationId + "#");
+    console.log("User is #"+ pendingLeaveApplicationId + "#");
+	$.ajax({
+		url: getRequestURL("leave/pending/hold/"+leaveApplicationId),
+	    cache: false,
+	    type: "GET",
+	    success: function(response) {
+	    	console.log("SUCCESS Returned");
+	    	//$('#' + this.pendingLeaveApplicationId).remove();
+	    },
+	    error: function(xhr) {
+	    	console.log("ERROR Returned" + response);
+	    	//console.log("ERROR RET" + response);
+	    	//$('pending-a4e3edaf66c22452-leave-agent-14c9ffc52b8').hide();
+	    	//$('#' + this.pendingleaveApplicationId).remove();
+	    }
+	});
+});
+
+$('.pending-cancel').on('click',function(event){
+	var leaveApplicationId = $(this).find("input[type=hidden]").val();
+    console.log("User is #"+ leaveApplicationId + "#");
+	$.ajax({
+		url: getRequestURL("leave/pending/cancel/"+leaveApplicationId),
+	    cache: false,
+	    type: "GET",
+	    success: function(response) {
+	    	console.log("SUCCESS RET");
 	    },
 	    error: function(xhr) {
 	    	console.log("ERROR RET" + response);
@@ -100,6 +129,8 @@ $('#pending-approve').on('click',function(event){
 	    }
 	});
 });
+
+
 
 
 $('#shiftButton').on('click', function () {

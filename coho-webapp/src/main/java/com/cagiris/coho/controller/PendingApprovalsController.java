@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,7 +59,7 @@ public class PendingApprovalsController extends AbstractController {
             try {
                 // NEW , TODO PENDING
                 allPendingLeaveRequestsByLeaveStatus = leaveManagementService.getAllPendingLeaveRequestsByLeaveStatus(
-                        loggedInUser.getUsername(), LeaveRequestStatus.NEW);
+                        loggedInUser.getUsername(), Arrays.asList(LeaveRequestStatus.NEW, LeaveRequestStatus.PENDING));
                 List<LeaveRequestBean> userLeaveRequestBeans = allPendingLeaveRequestsByLeaveStatus.stream()
                         .map(LeaveRequestBean::mapToBean).collect(Collectors.toList());
                 modelMap.addAttribute(userLeaveRequestBeans);
@@ -72,28 +74,31 @@ public class PendingApprovalsController extends AbstractController {
         return modelAndView;
     }
 
-    /*
-     * @RequestMapping(value = PENDING_APPROVALS_APPROVE_URL_MAPPING, method =
-     * RequestMethod.GET)
-     * 
-     * @PreAuthorize("hasRole('ADMIN')") public final String
-     * pendingApprovalsApproveRequest(ModelMap modelMap) { //ModelAndView
-     * modelAndView = new ModelAndView();
-     * //modelAndView.setViewName(LeaveManagementController.URL_MAPPING +
-     * PENDING_APPROVALS_URL_MAPPING); //return modelAndView;
-     * 
-     * return "SUCCESS retured :)"; }
-     */
+    @RequestMapping(value = "/pending/approve/{leaveApplicationId}")
+    public final void pendingApprovalsApproveRequest(@PathVariable String leaveApplicationId, ModelMap modelMap)
+            throws LeaveManagementServiceException {
+        User loggedInUser = ControllerUtils.getLoggedInUser();
+        leaveManagementService.updateLeaveRequestStatus(loggedInUser.getUsername(), leaveApplicationId,
+                LeaveRequestStatus.APPROVED, "APPROVED");
+        //return "SUCCESS";
+    }
 
-    @RequestMapping(value = "pending/approve")
-    // @PreAuthorize("hasRole('ADMIN')")
-    public final String pendingApprovalsApproveRequest(ModelMap modelMap) {
-        // ModelAndView modelAndView = new ModelAndView();
-        // modelAndView.setViewName(LeaveManagementController.URL_MAPPING +
-        // PENDING_APPROVALS_URL_MAPPING);
-        // return modelAndView;
+    @RequestMapping(value = "/pending/hold/{leaveApplicationId}")
+    public final String pendingApprovalsHoldRequest(@PathVariable String leaveApplicationId, ModelMap modelMap)
+            throws LeaveManagementServiceException {
+        User loggedInUser = ControllerUtils.getLoggedInUser();
+        leaveManagementService.updateLeaveRequestStatus(loggedInUser.getUsername(), leaveApplicationId,
+                LeaveRequestStatus.PENDING, "HOLD");
+        return "SUCCESS";
+    }
 
-        return "SUCCESS retured :)";
+    @RequestMapping(value = "/pending/cancel/{leaveApplicationId}")
+    public final String pendingApprovalsCancelRequest(@PathVariable String leaveApplicationId, ModelMap modelMap)
+            throws LeaveManagementServiceException {
+        User loggedInUser = ControllerUtils.getLoggedInUser();
+        leaveManagementService.updateLeaveRequestStatus(loggedInUser.getUsername(), leaveApplicationId,
+                LeaveRequestStatus.CANCELED, "CANCELED");
+        return "SUCCESS";
     }
 
 }
