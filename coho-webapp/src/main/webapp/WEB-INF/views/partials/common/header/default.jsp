@@ -42,7 +42,7 @@
 									Leaves List
 							</a></li>
 							<li><a href="<core:url value = '/leave/pending' />"> <span 
-							        class="badge">5</span>
+							        class="badge" id="leave-pending-approvals-badge">5</span>
 									Pending Approvals
 							</a></li>
 						</sec:authorize>

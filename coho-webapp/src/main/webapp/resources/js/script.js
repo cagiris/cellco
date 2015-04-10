@@ -64,11 +64,13 @@ $("#myModal").on('click','.ajax-delete',function(event){
 });
 
 $("#myModal").on('click','.popup-close',function(event){
+	$("#myModal .ajax-delete").show();
    	$(".modal-body-content").show();
    	$(".modal-body-content-ret").hide();
 });
 
 $('#myModal').on('hide.bs.modal', function (event) {
+	$("#myModal .ajax-delete").show();
    	$(".modal-body-content").show();
    	$(".modal-body-content-ret").hide();
 });
@@ -100,12 +102,15 @@ $('.pending-hold').on('click',function(event){
 		url: getRequestURL("leave/pending/hold/"+leaveApplicationId),
 	    cache: false,
 	    type: "GET",
+	    datatype: "script",
 	    success: function(response) {
 	    	console.log("SUCCESS Returned");
+	    	console.log("Response is: " + response);
 	    	//$('#' + this.pendingLeaveApplicationId).remove();
 	    },
 	    error: function(xhr) {
-	    	console.log("ERROR Returned" + response);
+	    	console.log("ERROR Returned");
+	    	console.log("Response is: " + xhr);
 	    	//console.log("ERROR RET" + response);
 	    	//$('pending-a4e3edaf66c22452-leave-agent-14c9ffc52b8').hide();
 	    	//$('#' + this.pendingleaveApplicationId).remove();
@@ -231,10 +236,16 @@ function initAdminStatistics() {
 				var row = $("#admin-statistics-table")[0].insertRow(-1);
 				row.insertCell(0).innerHTML = key;
 				row.insertCell(1).innerHTML = obj.data[key];
+
 			}
 		}
+		// Update Top Navbar Pending Approvals Badge
+		$("#leave-pending-approvals-badge").html(obj.data["Pending Approvals"]);
 	});
 }
+
+
+
 
 /**
  * Utility functions.
