@@ -16,19 +16,31 @@
 					<th>Shift Duration</th>
 					<th>Shift Start Reason</th>
 					<th>Shift End Reason</th>
+					<th>Edit</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${shifInfoBeans}" var="shifInfoBean">
-					<c:set var="userShiftId" value="${shifInfoBean.shiftId}" scope="request" />
+					<c:set var="userShiftId" value="${shifInfoBean.shiftId}"
+						scope="request" />
 
 					<tr id="row-${shifInfoBean.shiftId}">
 						<td>${shifInfoBean.userId}</td>
-						<td>${shifInfoBean.shiftStartTime}</td>
-						<td>${shifInfoBean.shiftEndTime}</td>
+
+						<td class="shiftStartTime"><input type="text" value="${shifInfoBean.shiftStartTime}" /></td>
+						<td class="shiftEndTime"><input type="text" value="${shifInfoBean.shiftEndTime}" /></td>
 						<td>${shifInfoBean.shiftDuration}</td>
 						<td>${shifInfoBean.shiftStartReason}</td>
 						<td>${shifInfoBean.shiftEndReason}</td>
+						<td>
+							<div class="pull-right">
+								<a id="modifyUserShiftButton" href="#"
+									class="btn btn-success btn-xs" title="Edit"> <span
+									class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+									<input value="${shifInfoBean.shiftId}" type="hidden" />
+								</a>
+							</div>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>

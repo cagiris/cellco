@@ -320,3 +320,26 @@ $('#update-user-role-button').click(function() {
 });
 
 
+$('#modifyUserShiftButton').on('click', function () {
+   var shiftId = $('#modifyUserShiftButton').children("input").val();
+   var shiftStartTime = $('#modifyUserShiftButton').parent().parent().siblings(".shiftStartTime").children("input").val();
+   var shiftEndTime = $('#modifyUserShiftButton').parent().parent().siblings(".shiftEndTime").children("input").val();
+	$.ajax({
+		url: getRequestURL("modifyUserShift"),
+	    cache: false,
+	    type: "POST",
+	    success: function(response){
+	    	$('#shiftId').val(null);
+	    	$('#shiftButton').html('Start Shift');
+	    },
+	    data:{
+	    	'shiftId':shiftId,
+	    	'shiftStartTime':shiftStartTime,
+	    	'shiftEndTime':shiftEndTime
+	    },
+	    error: function(){
+	    	$('#shiftButton').html('Stop Shift');
+	    }
+	    	
+	}); 
+})

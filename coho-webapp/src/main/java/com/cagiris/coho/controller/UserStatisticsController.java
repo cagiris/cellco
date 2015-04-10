@@ -4,6 +4,7 @@
  */
 package com.cagiris.coho.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,9 +12,13 @@ import java.util.stream.Collectors;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.UserShiftInfoBean;
@@ -24,6 +29,7 @@ import com.cagiris.coho.service.api.ITeamUser;
 import com.cagiris.coho.service.api.IUserShiftInfo;
 import com.cagiris.coho.service.exception.AttendenceReportingServiceException;
 import com.cagiris.coho.service.exception.HierarchyServiceException;
+import com.cagiris.coho.service.utils.DateUtils;
 
 /**
  * @author Ashish Jindal
@@ -69,5 +75,22 @@ public class UserStatisticsController {
         modelAndView.addObject("shifInfoBeans", allActiveShifInfoBeans);
         modelAndView.setViewName("reports" + ALL_USER_SHIFT_MAPPING);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/modifyUserShift", method = RequestMethod.POST)
+    public @ResponseBody String updateUserShiftDetails(@RequestParam String shiftId,
+            @RequestParam String shiftStartTime, @RequestParam String shiftEndTime) throws Exception {
+        User loggedInUser = ControllerUtils.getLoggedInUser();
+        DateTime shiftStartDateTime;
+        DateTime shiftEndDateTime;
+        try {
+            shiftStartDateTime = new DateTime(DateUtils.parseDate(shiftStartTime));
+            shiftEndDateTime = new DateTime(DateUtils.parseDate(shiftEndTime));
+        } catch (ParseException e) {
+            throw new Exception("worng date format");
+        }
+        attendenceReportingService.updateUserShiftInfo(shiftId, shiftStartDateTime.toDate(), shiftEndDateTime.toDate(),
+                "updated by " + loggedInUser.getUsername());
+        return "Success";
     }
 }

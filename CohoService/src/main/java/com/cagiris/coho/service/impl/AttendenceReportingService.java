@@ -122,6 +122,7 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             teamShiftDetails.setShiftStartTime(shiftStartDateTime.toDate());
             teamShiftDetails.setShiftEndTime(shiftEndDateTime.toDate());
             teamShiftDetails.setAutoExpire(autoExpire);
+            teamShiftDetails.setShiftBuffer(shiftBuffer);
             databaseManager.update(teamShiftDetails);
             return teamShiftDetails;
         } catch (DatabaseManagerException | EntityNotFoundException e) {

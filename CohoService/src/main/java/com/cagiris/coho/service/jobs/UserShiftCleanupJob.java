@@ -28,7 +28,7 @@ public class UserShiftCleanupJob implements IJob {
     }
 
     // 30 minutes
-    @Scheduled(fixedDelay = 30 * 60 * 1000l, initialDelay = 1 * 60 * 1000l)
+    @Scheduled(fixedDelay = 10 * 60 * 1000l, initialDelay = 1 * 60 * 1000l)
     @Override
     public void executeJob() throws JobExecutionException {
         DateTime currentTime = new DateTime(new Date());
