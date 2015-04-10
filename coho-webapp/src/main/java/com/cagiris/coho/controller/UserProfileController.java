@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.UpdatePasswordBean;
-import com.cagiris.coho.model.UpdateUserRoleBean;
 import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.model.UserProfileBean;
 import com.cagiris.coho.service.api.IHierarchyService;
@@ -39,7 +38,6 @@ public class UserProfileController extends AbstractCRUDController<UserProfileBea
 
     public static final String URL_MAPPING = "user-profile";
     public static final String UPDATE_PASSWORD_MAPPING = "update-user-password";
-    public static final String UPDATE_USER_ROLE_MAPPING = "update-user-role";
 
     @Autowired
     private IHierarchyService hierarchyService;
@@ -77,9 +75,6 @@ public class UserProfileController extends AbstractCRUDController<UserProfileBea
         UserBean userBean = new UserBean(user);
 
         modelMap.addAttribute(userBean);
-
-        modelMap.addAttribute(hierarchyService.getAvailableUserRoles(hierarchyService.getDefaultOrganization()
-                .getOrganizationId()));
 
         return modelMap;
     }
@@ -148,24 +143,6 @@ public class UserProfileController extends AbstractCRUDController<UserProfileBea
             } else {
                 return "Passwords don't match!";
             }
-        } catch (CohoException e) {
-            return "Some server side error, Please try again later";
-        }
-    }
-
-    @RequestMapping(value = {UPDATE_USER_ROLE_MAPPING}, method = RequestMethod.POST,
-                    consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public final String updateUserRole(@RequestBody final UpdateUserRoleBean bean) {
-
-        try {
-            ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
-                    .getTeamId(), bean.getUserId());
-
-            //TODO: write a service to update role of user.
-            hierarchyService.updateUser(user.getUserId(), "", UserRole.valueOf(bean.getUserRole()));
-
-            return "Password updated successfuly";
         } catch (CohoException e) {
             return "Some server side error, Please try again later";
         }

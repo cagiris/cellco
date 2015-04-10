@@ -303,28 +303,6 @@ $('#update-password-button').click(function() {
 	});
 });
 
-$('#update-user-role-button').click(function() {
-	$.ajax({
-		url: getRequestURL("user-profile/update-user-role"),
-	    cache: false,
-	    dataType: 'json',
-	    contentType: 'application/json',
-	    mimeType: 'application/json',
-	    data: JSON.stringify({
-	    	userId: $('#userId').val(),
-	    	userRole: $('#userRoleList :selected').text(),
-	    }),
-	    type: "POST",
-	    success: function(data) {
-	    	$('#update-user-role-success').html(data);
-	    },
-	    error: function(data) {
-	    	$('#update-user-role-error').html("Operation failed");
-	    }
-	});
-});
-
-
 $('#modifyUserShiftButton').on('click', function () {
    var shiftId = $('#modifyUserShiftButton').children("input").val();
    var shiftStartTime = $('#modifyUserShiftButton').parent().parent().siblings(".shiftStartTime").children("input").val();
