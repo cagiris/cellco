@@ -16,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.LeaveRequestBean;
@@ -75,30 +76,30 @@ public class PendingApprovalsController extends AbstractController {
     }
 
     @RequestMapping(value = "/pending/approve/{leaveApplicationId}")
-    public final void pendingApprovalsApproveRequest(@PathVariable String leaveApplicationId, ModelMap modelMap)
-            throws LeaveManagementServiceException {
+    public final @ResponseBody String pendingApprovalsApproveRequest(@PathVariable String leaveApplicationId,
+            ModelMap modelMap) throws LeaveManagementServiceException {
         User loggedInUser = ControllerUtils.getLoggedInUser();
         leaveManagementService.updateLeaveRequestStatus(loggedInUser.getUsername(), leaveApplicationId,
                 LeaveRequestStatus.APPROVED, "APPROVED");
-        //return "SUCCESS";
+        return "Pending Leave Request Approved";
     }
 
     @RequestMapping(value = "/pending/hold/{leaveApplicationId}")
-    public final String pendingApprovalsHoldRequest(@PathVariable String leaveApplicationId, ModelMap modelMap)
-            throws LeaveManagementServiceException {
+    public final @ResponseBody String pendingApprovalsHoldRequest(@PathVariable String leaveApplicationId,
+            ModelMap modelMap) throws LeaveManagementServiceException {
         User loggedInUser = ControllerUtils.getLoggedInUser();
         leaveManagementService.updateLeaveRequestStatus(loggedInUser.getUsername(), leaveApplicationId,
                 LeaveRequestStatus.PENDING, "HOLD");
-        return "SUCCESS";
+        return "Pending Leave Request put on Hold";
     }
 
     @RequestMapping(value = "/pending/cancel/{leaveApplicationId}")
-    public final String pendingApprovalsCancelRequest(@PathVariable String leaveApplicationId, ModelMap modelMap)
-            throws LeaveManagementServiceException {
+    public final @ResponseBody String pendingApprovalsCancelRequest(@PathVariable String leaveApplicationId,
+            ModelMap modelMap) throws LeaveManagementServiceException {
         User loggedInUser = ControllerUtils.getLoggedInUser();
         leaveManagementService.updateLeaveRequestStatus(loggedInUser.getUsername(), leaveApplicationId,
                 LeaveRequestStatus.CANCELED, "CANCELED");
-        return "SUCCESS";
+        return "Pending Leave Request Cancelled";
     }
 
 }

@@ -78,17 +78,18 @@ $('#myModal').on('hide.bs.modal', function (event) {
 
 $('.pending-approve').on('click',function(event){
 	var leaveApplicationId = $(this).find("input[type=hidden]").val();
+	var pendingLeaveApplicationId = "pending-" + leaveApplicationId;
     console.log("User is #"+ leaveApplicationId + "#");
 	$.ajax({
 		url: getRequestURL("leave/pending/approve/"+leaveApplicationId),
 	    cache: false,
 	    type: "GET",
 	    success: function(response) {
-	    	console.log("SUCCESS RET");
+	    	console.log("AJAX Response is: " + response);
+	    	$('#' + pendingLeaveApplicationId).hide();
 	    },
 	    error: function(xhr) {
-	    	console.log("ERROR RET" + response);
-	    	//$(modal-body).html("<div class='error-msg'>" + response + "</div>");
+	    	console.log("AJAX Error response is: " + xhr);
 	    }
 	});
 });
@@ -96,46 +97,39 @@ $('.pending-approve').on('click',function(event){
 $('.pending-hold').on('click',function(event){
 	var leaveApplicationId = $(this).find("input[type=hidden]").val();
 	var pendingLeaveApplicationId = "pending-" + leaveApplicationId;
-    console.log("User is #"+ leaveApplicationId + "#");
-    console.log("User is #"+ pendingLeaveApplicationId + "#");
 	$.ajax({
 		url: getRequestURL("leave/pending/hold/"+leaveApplicationId),
 	    cache: false,
 	    type: "GET",
-	    datatype: "script",
 	    success: function(response) {
-	    	console.log("SUCCESS Returned");
-	    	console.log("Response is: " + response);
-	    	//$('#' + this.pendingLeaveApplicationId).remove();
+	    	console.log("AJAX Response is: " + response);
+	    	console.log('#pending-status-' + leaveApplicationId);
+	    	$('#pending-status-' + leaveApplicationId + " :nth-child(2)").html("PENDING");
+	    	//$('#abc').html("<div class='error-msg'>" + response + "</div>");
 	    },
 	    error: function(xhr) {
-	    	console.log("ERROR Returned");
-	    	console.log("Response is: " + xhr);
-	    	//console.log("ERROR RET" + response);
-	    	//$('pending-a4e3edaf66c22452-leave-agent-14c9ffc52b8').hide();
-	    	//$('#' + this.pendingleaveApplicationId).remove();
+	    	console.log("AJAX Error response is: " + xhr);
 	    }
 	});
 });
 
 $('.pending-cancel').on('click',function(event){
 	var leaveApplicationId = $(this).find("input[type=hidden]").val();
+	var pendingLeaveApplicationId = "pending-" + leaveApplicationId;
     console.log("User is #"+ leaveApplicationId + "#");
 	$.ajax({
 		url: getRequestURL("leave/pending/cancel/"+leaveApplicationId),
 	    cache: false,
 	    type: "GET",
 	    success: function(response) {
-	    	console.log("SUCCESS RET");
+	    	console.log("AJAX Response is: " + response);
+	    	$('#' + pendingLeaveApplicationId).hide();
 	    },
 	    error: function(xhr) {
-	    	console.log("ERROR RET" + response);
-	    	$(modal-body).html("<div class='error-msg'>" + response + "</div>");
+	    	console.log("AJAX Error response is: " + xhr);
 	    }
 	});
 });
-
-
 
 
 $('#shiftButton').on('click', function () {

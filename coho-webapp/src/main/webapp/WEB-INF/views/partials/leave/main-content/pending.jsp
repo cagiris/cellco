@@ -53,7 +53,7 @@
 				<dt>Detailed Description :</dt>
 				<dd>${leaveRequestBean.requestDescription}</dd>
 			</dl>
-			<dl class="dl-horizontal">
+			<dl class="dl-horizontal" id="pending-status-${leaveRequestBean.leaveApplicationId}">
 				<dt>Status :</dt>
 				<dd>${leaveRequestBean.leaveRequestStatus}</dd>
 			</dl>
