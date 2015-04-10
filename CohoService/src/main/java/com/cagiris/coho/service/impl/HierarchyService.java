@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.joda.time.DateTimeConstants;
 import org.slf4j.Logger;
@@ -578,9 +579,10 @@ public class HierarchyService implements IHierarchyService {
                 qUserEntity.organizationEntity.organizationId.eq(organizationId));
         try {
             List<UserEntity> userList = databaseManager.executeQueryAndGetResults(userEntityQuery, qUserEntity);
+            Set<String> userIds = userList.stream().map(UserEntity::getUserId).collect(Collectors.toSet());
             QUserProfileEntity qUserProfileEntity = QUserProfileEntity.userProfileEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserProfileEntity).where(
-                    qUserProfileEntity.userEntity.in(userList));
+                    qUserProfileEntity.userId.in(userIds));
             return databaseManager.executeQueryAndGetResults(hibernateQuery, qUserProfileEntity);
         } catch (DatabaseManagerException e) {
             throw new HierarchyServiceException(e);

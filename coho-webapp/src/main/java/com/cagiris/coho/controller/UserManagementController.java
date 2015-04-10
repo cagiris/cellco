@@ -5,8 +5,6 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -104,19 +102,7 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     @Override
     protected ModelMap getListData(Map<String, String> params) throws CohoException {
-        ModelMap modelListData = new ModelMap();
-
-        List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(ControllerUtils.getDefaultTeam(
-                hierarchyService).getTeamId());
-        List<UserBean> userBeans = new ArrayList<UserBean>();
-        for (ITeamUser teamUser : allUsersForTeam) {
-            UserBean userBean = new UserBean(teamUser);
-            userBeans.add(userBean);
-        }
-
-        modelListData.addAttribute(userBeans);
-
-        return modelListData;
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override

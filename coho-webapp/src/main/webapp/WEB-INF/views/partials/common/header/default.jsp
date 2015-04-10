@@ -57,7 +57,7 @@
 							<li><a href="<core:url value = '/user/create' />"> <span class="glyphicon glyphicon-plus"
 									aria-hidden="false"></span> Add User
 							</a></li>
-							<li><a href="<core:url value = '/user/list' />"> <span
+							<li><a href="<core:url value = '/user-profile/list' />"> <span
 									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 									User List
 							</a></li>

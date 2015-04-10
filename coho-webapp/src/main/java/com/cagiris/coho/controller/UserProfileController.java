@@ -5,6 +5,8 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.model.UserProfileBean;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.ITeamUser;
+import com.cagiris.coho.service.api.IUserProfile;
 import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.exception.CohoException;
 
@@ -83,12 +86,24 @@ public class UserProfileController extends AbstractCRUDController<UserProfileBea
 
     @Override
     protected ModelMap getListFormModel() throws CohoException {
-        throw new CohoException(Constants.ERROR_FORBIDDEN);
+        return null;
     }
 
     @Override
     protected ModelMap getListData(Map<String, String> params) throws CohoException {
-        throw new CohoException(Constants.ERROR_FORBIDDEN);
+        ModelMap modelListData = new ModelMap();
+
+        List<? extends IUserProfile> allUsers = hierarchyService.getAllUserProfiles(hierarchyService
+                .getDefaultOrganization().getOrganizationId());
+
+        List<UserProfileBean> userProfiles = new ArrayList<>();
+        for (IUserProfile userProfile : allUsers) {
+            userProfiles.add(new UserProfileBean(userProfile));
+        }
+
+        modelListData.addAttribute(userProfiles);
+
+        return modelListData;
     }
 
     @Override

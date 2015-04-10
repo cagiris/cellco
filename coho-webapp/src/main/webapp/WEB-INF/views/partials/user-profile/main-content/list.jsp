@@ -12,18 +12,20 @@
                 <tr>
                     <th>User Id</th>
                     <th>User Name</th>
-                    <th>User Role</th>
+                    <th>Contact Number</th>
+                    <th>Email-ID</th>
                     <th>Operation</th>
                 </tr>
             </thead>
 			<tbody>
-				<c:forEach items="${userBeanList}" var="userBean">
-					<c:set var="userId" value="${userBean.userId}" scope="request"/>
+				<c:forEach items="${userProfileBeanList}" var="userProfileBean">
+					<c:set var="userId" value="${userProfileBean.userId}" scope="request"/>
 					
-				    <tr id="row-${userBean.userId}">      
-				        <td>${userBean.userId}</td>
-				        <td>${userBean.userName}</td>
-				        <td>${userBean.userRole}</td>
+				    <tr id="row-${userProfileBean.userId}">      
+				        <td>${userProfileBean.userId}</td>
+				        <td>${userProfileBean.firstName}</td>
+				        <td>${userProfileBean.mobileNumber}</td>
+				        <td>${userProfileBean.emailId}</td>
 				        <td><tiles:insertAttribute name="user-management-panel" /></td>
 				    </tr>
 				</c:forEach>
