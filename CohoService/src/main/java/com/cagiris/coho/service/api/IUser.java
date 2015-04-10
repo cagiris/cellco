@@ -13,8 +13,6 @@ public interface IUser extends IBaseEntity {
 
     String getUserId();
 
-    String getUserName();
-
     String getAuthToken();
 
     AuthenicationPolicy getAuthPolicy();

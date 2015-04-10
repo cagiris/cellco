@@ -1,64 +1,64 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <h1 class="page-header">Add a new user</h1>
-<form:form commandName="userBean" cssClass="form-horizontal form-coho" id="createUserForm">
+
+<jsp:useBean id="errorMap" class="java.util.HashMap" />
+<spring:hasBindErrors name="userBean">
+	<core:forEach var="error" items="${errors.fieldErrors}">
+		<core:set target="${errorMap}" property="${ error.field }" value="has-error"/>
+	</core:forEach>
+</spring:hasBindErrors>
+
+<form:form commandName="userBean" cssClass="form-horizontal" id="createUserForm">
 	
 	<tiles:insertAttribute name="feedback-msg" />
 	
-	<div class="form-group">
-		<form:label path="userId" cssClass="control-label col-xs-3">User Id</form:label>
-		<div class="col-xs-5">
-			<form:input cssClass="form-control" path="userId" required="true" />
-		</div>
-		<div class="col-xs-4">
-			<form:errors path="userId" cssClass="form-field-error"/>
-		</div>
+	<div class="col-md-8">
+		<fieldset>
+          	<legend>User authorization details</legend>
+          	
+          	<div class="form-group <core:out value='${errorMap["userId"]}'/>">
+				<form:label cssClass="col-md-3 control-label" path="userId">User ID</form:label>
+				<div class="col-md-5 controls">
+					<form:input path="userId" placeholder="User ID" cssClass="form-control" />
+					<p class="help-block form-field-error"><form:errors path="userId" /></p>
+				</div>
+			</div>
+			<div class="form-group <core:out value='${errorMap["password"]}'/>">
+				<form:label cssClass="col-md-3 control-label" path="password">Password</form:label>
+				<div class="col-md-5 controls">
+					<form:password path="password" placeholder="Password" cssClass="form-control" />
+					<p class="help-block form-field-error"><form:errors path="password" /></p>
+				</div>
+			</div>
+			<div class="form-group <core:out value='${errorMap["reEnterdPassword"]}'/>">
+				<form:label cssClass="col-md-3 control-label" path="reEnterdPassword">Re-enter Password</form:label>
+				<div class="col-md-5 controls">
+					<form:password path="reEnterdPassword" placeholder="Password" cssClass="form-control" />
+					<p class="help-block form-field-error"><form:errors path="reEnterdPassword" /></p>
+				</div>
+			</div>
+			<div class="form-group <core:out value='${errorMap["userRole"]}'/>">
+				<form:label cssClass="col-md-3 control-label" path="userRole">Privileges</form:label>
+				<div class="col-md-5 controls">
+					<form:select path="userRole" cssClass="form-control">
+						<core:forEach var="role" items="${userRoleList}">
+							<option>${role}</option>
+						</core:forEach>
+					</form:select>
+					<p class="help-block form-field-error">
+						<form:errors path="userRole" />
+					</p>
+				</div>
+			</div>
+		    <div class="form-group">
+		        <div class="col-md-4 col-md-offset-3">
+		            <button type="submit" class="btn btn-primary">Submit</button>
+		        </div>
+		    </div>
+		</fieldset>
 	</div>
-	<div class="form-group">
-		<form:label path="userName" cssClass="control-label col-xs-3">Full name of user</form:label>
-		<div class="col-xs-5">
-			<form:input cssClass="form-control" path="userName" required="true" />
-		</div>
-		<div class="col-xs-4">
-			<form:errors path="userName" cssClass="form-field-error"/>
-		</div>
-	</div>
-	<div class="form-group">
-		<form:label path="password" cssClass="control-label col-xs-3">Password</form:label>
-		<div class="col-xs-5">
-			<form:password cssClass="form-control" path="password" required="true" />
-		</div>
-		<div class="col-xs-4">
-			<form:errors path="password" cssClass="form-field-error"/>
-		</div>
-	</div>
-	<div class="form-group">
-		<form:label path="userName" cssClass="control-label col-xs-3">Re-enter Password</form:label>
-		<div class="col-xs-5">
-			<form:password cssClass="form-control" path="reEnterdPassword" required="true" />
-		</div>
-		<div class="col-xs-4">
-			<form:errors path="reEnterdPassword" cssClass="form-field-error"/>
-		</div>
-	</div>
-	<div class="form-group">
-        <form:label path="userRole" cssClass="control-label col-xs-3">User Role</form:label>
-        <div class="col-xs-5">
-        	<form:select path="userRole" cssClass="form-control">
-        		<core:forEach var="role" items="${userRoleList}">
-        			<option>${role}</option>
-        		</core:forEach>
-        	</form:select>
-        </div>
-        <div class="col-xs-4">
-			<form:errors path="userRole" cssClass="form-field-error"/>
-		</div>
-    </div>
-    <div class="form-group">
-        <div class="col-xs-offset-3 col-xs-8">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </div>
 </form:form>

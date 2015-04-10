@@ -33,7 +33,7 @@ import com.cagiris.coho.service.exception.CohoException;
 public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     public static final String URL_MAPPING = "user";
-    
+
     @Autowired
     private IHierarchyService hierarchyService;
 
@@ -42,107 +42,105 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
         return URL_MAPPING;
     }
 
-	@Override
-	protected ModelMap getCreateFormModel() throws CohoException {
-		ModelMap modelMap = new ModelMap();
-		modelMap.addAttribute(new UserBean());
+    @Override
+    protected ModelMap getCreateFormModel() throws CohoException {
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute(new UserBean());
 
         IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
         modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
 
         return modelMap;
-	}
+    }
 
-	@Override
-	protected ModelMap create(UserBean bean, ModelMap modelMap)
-			throws CohoException {
-		
-		ModelMap responseModelMap = new ModelMap();
+    @Override
+    protected String getCreateSuccessRedirectView(Serializable entityId) {
+        return ("redirect:/" + UserProfileController.URL_MAPPING + UPDATE_URL_MAPPING + "/" + entityId);
+    }
 
-		 hierarchyService.addUserToTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), bean.getUserId(), bean.getUserName(),
-                 bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
+    @Override
+    protected ModelMap create(UserBean bean, ModelMap modelMap) throws CohoException {
 
-         responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
+        ModelMap responseModelMap = new ModelMap();
+
+        hierarchyService.addUserToTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), bean.getUserId(),
+                bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
+
+        responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
 
         return responseModelMap;
-	}
+    }
 
-	@Override
-	protected void delete(Serializable entityId) throws CohoException {
-		User loggedInUser = ControllerUtils.getLoggedInUser();
+    @Override
+    protected void delete(Serializable entityId) throws CohoException {
+        User loggedInUser = ControllerUtils.getLoggedInUser();
         if (StringUtils.equals((String)entityId, loggedInUser.getUsername())) {
             throw new CohoException("Can not delete your own account");
         }
-        
-        hierarchyService.removeUserFromTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), (String)entityId);
-	}
 
-	@Override
-	protected ModelMap get(Serializable entityId) throws CohoException {
-		ModelMap modelMap = new ModelMap();
-
-		ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), 
-																(String)entityId);
-
-		UserBean userBean = new UserBean(user);
-
-		modelMap.addAttribute(userBean);
-
-		return modelMap;
-	}
-
-	@Override
-	protected ModelMap getListFormModel() throws CohoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected ModelMap getListData(Map<String, String> params) throws CohoException {
-		ModelMap modelListData = new ModelMap();
-
-		List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(ControllerUtils
-																						.getDefaultTeam(hierarchyService)
-																						.getTeamId());
-		List<UserBean> userBeans = new ArrayList<UserBean>();
-		for (ITeamUser teamUser : allUsersForTeam) {
-			UserBean userBean = new UserBean(teamUser);
-			userBeans.add(userBean);
-		}
-
-		modelListData.addAttribute(userBeans);
-
-		return modelListData;
-	}
-
-	@Override
-	protected ModelMap getUpdateFormModel(Serializable entityId) throws CohoException {
-
-		ModelMap modelMap = new ModelMap();
-		modelMap.addAllAttributes(super.getUpdateFormModel(entityId));
-
-		// Add the additional data for list box.
-		IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
-		modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
-
-    	return modelMap;
+        hierarchyService.removeUserFromTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(),
+                (String)entityId);
     }
-	
-	@Override
-	protected ModelMap update(Serializable entityId, UserBean bean, ModelMap modelMap) throws CohoException {
-		ModelMap responseModelMap = new ModelMap();
 
-		hierarchyService.addUserToTeam(ControllerUtils
-										.getDefaultTeam(hierarchyService)
-										.getTeamId(), 
-										bean.getUserId(), 
-										bean.getUserName(),
-										bean.getPassword(), 
-										UserRole.valueOf(bean.getUserRole()), 
-										AuthenicationPolicy.PASSWORD_BASED);
+    @Override
+    protected ModelMap get(Serializable entityId) throws CohoException {
+        ModelMap modelMap = new ModelMap();
 
-		responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User details successfuly updated.");
+        ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
+                .getTeamId(), (String)entityId);
 
-		return responseModelMap;
-	}
+        UserBean userBean = new UserBean(user);
+
+        modelMap.addAttribute(userBean);
+
+        return modelMap;
+    }
+
+    @Override
+    protected ModelMap getListFormModel() throws CohoException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected ModelMap getListData(Map<String, String> params) throws CohoException {
+        ModelMap modelListData = new ModelMap();
+
+        List<? extends ITeamUser> allUsersForTeam = hierarchyService.getAllUsersForTeam(ControllerUtils.getDefaultTeam(
+                hierarchyService).getTeamId());
+        List<UserBean> userBeans = new ArrayList<UserBean>();
+        for (ITeamUser teamUser : allUsersForTeam) {
+            UserBean userBean = new UserBean(teamUser);
+            userBeans.add(userBean);
+        }
+
+        modelListData.addAttribute(userBeans);
+
+        return modelListData;
+    }
+
+    @Override
+    protected ModelMap getUpdateFormModel(Serializable entityId) throws CohoException {
+
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAllAttributes(super.getUpdateFormModel(entityId));
+
+        // Add the additional data for list box.
+        IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
+        modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
+
+        return modelMap;
+    }
+
+    @Override
+    protected ModelMap update(Serializable entityId, UserBean bean, ModelMap modelMap) throws CohoException {
+        ModelMap responseModelMap = new ModelMap();
+
+        hierarchyService.addUserToTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), bean.getUserId(),
+                bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
+
+        responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User details successfuly updated.");
+
+        return responseModelMap;
+    }
 }

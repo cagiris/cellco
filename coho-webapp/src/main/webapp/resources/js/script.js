@@ -276,5 +276,47 @@ function getBaseURL() {
 
 }
 
+$('#update-password-button').click(function() {
+	$.ajax({
+		url: getRequestURL("user-profile/update-user-password"),
+	    cache: false,
+	    dataType: 'json',
+	    contentType: 'application/json',
+	    mimeType: 'application/json',
+	    data: JSON.stringify({
+	    	userId: $('#userId').val(),
+	    	newPassword: $('#new-password').val(),
+	    	reEnteredPassword: $('#re-entered-password').val()
+	    }),
+	    type: "POST",
+	    success: function(data) {
+	    	$('#update-password-success').html(data);
+	    },
+	    error: function(data) {
+	    	$('#update-password-error').html("Operation failed");
+	    }
+	});
+});
+
+$('#update-user-role-button').click(function() {
+	$.ajax({
+		url: getRequestURL("user-profile/update-user-role"),
+	    cache: false,
+	    dataType: 'json',
+	    contentType: 'application/json',
+	    mimeType: 'application/json',
+	    data: JSON.stringify({
+	    	userId: $('#userId').val(),
+	    	userRole: $('#userRoleList :selected').text(),
+	    }),
+	    type: "POST",
+	    success: function(data) {
+	    	$('#update-user-role-success').html(data);
+	    },
+	    error: function(data) {
+	    	$('#update-user-role-error').html("Operation failed");
+	    }
+	});
+});
 
 

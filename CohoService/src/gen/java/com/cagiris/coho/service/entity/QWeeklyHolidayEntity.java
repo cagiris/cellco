@@ -24,9 +24,13 @@ public class QWeeklyHolidayEntity extends EntityPathBase<WeeklyHolidayEntity> {
     //inherited
     public final StringPath description = _super.description;
 
-    public final NumberPath<Long> organizationId = createNumber("organizationId", Long.class);
+    public final NumberPath<Long> holidayId = createNumber("holidayId", Long.class);
 
-    public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = createEnum("userRole", com.cagiris.coho.service.api.UserRole.class);
+    //inherited
+    public final NumberPath<Long> organizationId = _super.organizationId;
+
+    //inherited
+    public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = _super.userRole;
 
     public final NumberPath<Integer> weekDay = createNumber("weekDay", Integer.class);
 

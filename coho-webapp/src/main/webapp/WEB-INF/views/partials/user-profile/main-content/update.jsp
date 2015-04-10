@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 
@@ -10,6 +11,13 @@
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	String currentDate = simpleDateFormat.format(new Date());
 %>
+
+<jsp:useBean id="errorMap" class="java.util.HashMap" />
+<spring:hasBindErrors name="userProfileBean">
+	<core:forEach var="error" items="${errors.fieldErrors}">
+		<core:set target="${errorMap}" property="${ error.field }" value="has-error"/>
+	</core:forEach>
+</spring:hasBindErrors>
 
 <form:form commandName="userProfileBean" cssClass="form-horizontal" role="form">
 
@@ -21,7 +29,7 @@
           	
           	<form:hidden path="userId"/>
           	
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["firstName"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="firstName">First Name</form:label>
 				<div class="col-md-5 controls">
 					<form:input path="firstName" placeholder="First Name" cssClass="form-control" />
@@ -29,7 +37,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["lastName"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="lastName">Last Name</form:label>
 				<div class="col-md-5">
 					<form:input placeholder="Last Name" cssClass="form-control" path="lastName"/>
@@ -37,7 +45,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["dateOfBirth"]}'/>">
 				<form:label path="dateOfBirth" cssClass="col-md-2 control-label">Date of birth</form:label>
 				<div class="col-md-5">
 					<div class="input-group date form-datepicker"
@@ -51,7 +59,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["gender"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="gender">Gender</form:label>
 				<div class="col-md-5 control-group">
 					<form:label cssClass="radio inline col-md-5" path="gender"> 
@@ -68,7 +76,7 @@
 		</fieldset>
 		<fieldset>
 			<legend>Contact Details</legend>
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["mobileNumber"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="mobileNumber">Mobile</form:label>
 				<div class="col-md-6">
 					<form:input placeholder="Mobile Number" 
@@ -77,7 +85,7 @@
 					<p class="help-block form-field-error"><form:errors path="mobileNumber" /></p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["emailId"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="emailId">E-mail ID</form:label>
 				<div class="col-md-6">
 					<form:input placeholder="E-mail ID"
@@ -89,7 +97,7 @@
 		</fieldset>
 		<fieldset>
           <legend>Address Details</legend>
-          <div class="form-group">
+          <div class="form-group <core:out value='${errorMap["addressLine1"]}'/>">
             <form:label cssClass="col-md-2 control-label" path="addressLine1">Line 1</form:label>
             <div class="col-md-8">
               <form:input path="addressLine1" placeholder="Address Line 1" cssClass="form-control" />
@@ -97,7 +105,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group <core:out value='${errorMap["addressLine2"]}'/>">
             <form:label cssClass="col-md-2 control-label" path="addressLine2">Line 2</form:label>
             <div class="col-md-8">
               <form:input placeholder="Address Line 2" cssClass="form-control" path="addressLine2" />
@@ -105,7 +113,7 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group <core:out value='${errorMap["city"]}'/>">
             <form:label cssClass="col-md-2 control-label" path="city">City</form:label>
             <div class="col-md-8">
               <form:input placeholder="City" cssClass="form-control" path="city" />
@@ -115,19 +123,19 @@
 
           <div class="form-group">
             <form:label cssClass="col-md-2 control-label" path="state">State</form:label>
-            <div class="col-sm-3">
+            <div class="col-sm-3 <core:out value='${errorMap["state"]}'/>">
               <form:input path="state" placeholder="State" cssClass="form-control" />
               <p class="help-block form-field-error"><form:errors path="state" /></p>
             </div>
 
             <form:label cssClass="col-md-2 control-label" path="pincode">Pin Code</form:label>
-            <div class="col-sm-3">
+            <div class="col-sm-3 <core:out value='${errorMap["pincode"]}'/>">
               <form:input path="pincode" placeholder="Pin Code" cssClass="form-control" />
               <p class="help-block form-field-error"><form:errors path="pincode" /></p>
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group <core:out value='${errorMap["country"]}'/>">
             <form:label cssClass="col-md-2 control-label" path="country">Country</form:label>
             <div class="col-md-8">
               <form:input path="country" placeholder="Country" cssClass="form-control" />
@@ -137,7 +145,7 @@
 		</fieldset>
 		<fieldset>
 			<legend>Employment Details</legend>
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["joinedOn"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="joinedOn">Joined on</form:label>
 				<div class="col-md-5">
 					<div class="input-group date form-datepicker"
@@ -149,7 +157,7 @@
 					<p class="help-block form-field-error"><form:errors path="joinedOn" /></p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["leftOn"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="leftOn">Left on</form:label>
 				<div class="col-md-5">
 					<div class="input-group date form-datepicker"
@@ -162,7 +170,7 @@
 					<p class="help-block form-field-error"><form:errors path="leftOn" /></p>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group <core:out value='${errorMap["designation"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="designation">Designation</form:label>
 				<div class="col-md-8">
 					<form:input path="designation" placeholder="Designation"

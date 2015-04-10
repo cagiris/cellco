@@ -38,8 +38,6 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public final StringPath userId = createString("userId");
 
-    public final StringPath userName = createString("userName");
-
     public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = createEnum("userRole", com.cagiris.coho.service.api.UserRole.class);
 
     public QUserEntity(String variable) {

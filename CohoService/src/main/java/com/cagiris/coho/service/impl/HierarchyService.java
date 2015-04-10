@@ -98,12 +98,10 @@ public class HierarchyService implements IHierarchyService {
             IOrganization defaultOrganization = addOrganization(DEFAULT_ORG_NAME, "Default Organization");
             ITeam defaultTeam = addTeam(defaultOrganization.getOrganizationId(), null, DEFAULT_TEAM_NAME,
                     "Default team");
-            addUserToTeam(defaultTeam.getTeamId(), "agent", "agent", "agent", UserRole.AGENT,
-                    AuthenicationPolicy.PASSWORD_BASED);
+            addUserToTeam(defaultTeam.getTeamId(), "agent", "agent", UserRole.AGENT, AuthenicationPolicy.PASSWORD_BASED);
             //            addUserToTeam(defaultTeam.getTeamId(), "supervisor", "supervisor", "supervisor", UserRole.SUPERVISOR,
             //                    AuthenicationPolicy.PASSWORD_BASED);
-            addUserToTeam(defaultTeam.getTeamId(), "admin", "admin", "admin", UserRole.ADMIN,
-                    AuthenicationPolicy.PASSWORD_BASED);
+            addUserToTeam(defaultTeam.getTeamId(), "admin", "admin", UserRole.ADMIN, AuthenicationPolicy.PASSWORD_BASED);
             //            addUserToTeam(defaultTeam.getTeamId(), "root", "root", "root", UserRole.ROOT,
             //                    AuthenicationPolicy.PASSWORD_BASED);
         } catch (HierarchyServiceException e) {
@@ -213,7 +211,7 @@ public class HierarchyService implements IHierarchyService {
     }
 
     @Override
-    public ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
+    public ITeamUser addUserToTeam(Long teamId, String userId, String authToken, UserRole userRole,
             AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException {
         try {
             IUser user = getUser(userId);
@@ -227,7 +225,6 @@ public class HierarchyService implements IHierarchyService {
         userEntity.setUserId(userId);
         userEntity.setAuthToken(authToken);
         userEntity.setUserRole(userRole);
-        userEntity.setUserName(userName);
         TeamUserEntity teamUserEntity = new TeamUserEntity();
         teamUserEntity.setUserEntity(userEntity);
         try {
@@ -591,15 +588,13 @@ public class HierarchyService implements IHierarchyService {
     }
 
     @Override
-    public IUser updateUser(String userId, String userName, String authToken, UserRole userRole)
-            throws HierarchyServiceException {
+    public IUser updateUser(String userId, String authToken, UserRole userRole) throws HierarchyServiceException {
         try {
             IUser user = getUser(userId);
             if (user == null) {
                 throw new HierarchyServiceException("User with Id: " + userId + " does not exists");
             }
             UserEntity userEntity = databaseManager.get(UserEntity.class, userId);
-            userEntity.setUserName(userName);
             userEntity.setAuthToken(authToken);
             userEntity.setUserRole(userRole);
             databaseManager.saveOrUpdate(userEntity);

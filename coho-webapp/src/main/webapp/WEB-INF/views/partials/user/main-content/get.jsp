@@ -15,14 +15,6 @@
 		</div>
 		<div class="col-xs-4"></div>
 	</div>
-	
-	<div class="form-group">
-		<label class="control-label col-xs-3">Full name of user :</label>
-		<div class="col-xs-5">
-			<p class="form-control-static">${ userBean.userName }</p>
-		</div>
-		<div class="col-xs-4"></div>
-	</div>
 	<div class="form-group">
         <label class="control-label col-xs-3">Role :</label>
         <div class="col-xs-5">

@@ -33,6 +33,8 @@ public class QUserRoleLeaveQuotaEntity extends EntityPathBase<UserRoleLeaveQuota
 
     public final NumberPath<Long> organizationId = createNumber("organizationId", Long.class);
 
+    public final NumberPath<Long> userLeaveQuotaId = createNumber("userLeaveQuotaId", Long.class);
+
     public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = createEnum("userRole", com.cagiris.coho.service.api.UserRole.class);
 
     public QUserRoleLeaveQuotaEntity(String variable) {

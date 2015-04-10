@@ -8,13 +8,22 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cagiris.coho.model.UpdatePasswordBean;
+import com.cagiris.coho.model.UpdateUserRoleBean;
+import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.model.UserProfileBean;
 import com.cagiris.coho.service.api.IHierarchyService;
+import com.cagiris.coho.service.api.ITeamUser;
+import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.exception.CohoException;
 
 /**
@@ -26,87 +35,124 @@ import com.cagiris.coho.service.exception.CohoException;
 public class UserProfileController extends AbstractCRUDController<UserProfileBean> {
 
     public static final String URL_MAPPING = "user-profile";
+    public static final String UPDATE_PASSWORD_MAPPING = "update-user-password";
+    public static final String UPDATE_USER_ROLE_MAPPING = "update-user-role";
 
     @Autowired
     private IHierarchyService hierarchyService;
-    
-	@Override
-	protected String getURLMapping() {
-		return URL_MAPPING;
-	}
 
-	@Override
-	protected ModelMap getCreateFormModel() throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+    @Override
+    protected String getURLMapping() {
+        return URL_MAPPING;
+    }
 
-	@Override
-	protected ModelMap create(UserProfileBean bean, ModelMap modelMap)
-			throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+    @Override
+    protected ModelMap getCreateFormModel() throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
 
-	@Override
-	protected void delete(Serializable entityId) throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+    @Override
+    protected ModelMap create(UserProfileBean bean, ModelMap modelMap) throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
 
-	@Override
-	protected ModelMap get(Serializable entityId) throws CohoException {
-		ModelMap modelMap = new ModelMap();
+    @Override
+    protected void delete(Serializable entityId) throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
 
-		UserProfileBean userProfile = new UserProfileBean(hierarchyService.getUserProfile((String) entityId));
-		modelMap.addAttribute(userProfile);
+    @Override
+    protected ModelMap get(Serializable entityId) throws CohoException {
+        ModelMap modelMap = new ModelMap();
 
-		return modelMap;
-	}
+        UserProfileBean userProfile = new UserProfileBean(hierarchyService.getUserProfile((String)entityId));
+        modelMap.addAttribute(userProfile);
 
-	@Override
-	protected ModelMap getListFormModel() throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+        ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
+                .getTeamId(), (String)entityId);
 
-	@Override
-	protected ModelMap getListData(Map<String, String> params)
-			throws CohoException {
-		throw new CohoException(Constants.ERROR_FORBIDDEN);
-	}
+        UserBean userBean = new UserBean(user);
 
-	@Override
-	protected ModelMap update(Serializable entityId, UserProfileBean bean,
-			ModelMap modelMap) throws CohoException {
-		ModelMap responseModelMap = new ModelMap();
+        modelMap.addAttribute(userBean);
 
-		hierarchyService.updateUserProfile(bean.getUserId(), 
-											bean.getFirstName(), 
-											bean.getLastName(), 
-											bean.getDateOfBirth(), 
-											bean.getGender(), 
-											bean.getMobileNumber(), 
-											bean.getEmailId(), 
-											bean.getAddressLine1(), 
-											bean.getAddressLine2(), 
-											bean.getCity(), 
-											bean.getPincode(), 
-											bean.getState(), 
-											bean.getCountry(), 
-											bean.getJoinedOn(), 
-											bean.getLeftOn(), 
-											bean.getDesignation());
+        modelMap.addAttribute(hierarchyService.getAvailableUserRoles(hierarchyService.getDefaultOrganization()
+                .getOrganizationId()));
 
-		responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User profile successfuly updated.");
+        return modelMap;
+    }
 
-		return responseModelMap;
-	}
-	
-	@RequestMapping(value = {"", "/"})
+    @Override
+    protected ModelMap getListFormModel() throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
+
+    @Override
+    protected ModelMap getListData(Map<String, String> params) throws CohoException {
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
+    }
+
+    @Override
+    protected ModelMap update(Serializable entityId, UserProfileBean bean, ModelMap modelMap) throws CohoException {
+        ModelMap responseModelMap = new ModelMap();
+
+        hierarchyService.updateUserProfile(bean.getUserId(), bean.getFirstName(), bean.getLastName(),
+                bean.getDateOfBirth(), bean.getGender(), bean.getMobileNumber(), bean.getEmailId(),
+                bean.getAddressLine1(), bean.getAddressLine2(), bean.getCity(), bean.getPincode(), bean.getState(),
+                bean.getCountry(), bean.getJoinedOn(), bean.getLeftOn(), bean.getDesignation());
+
+        responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User profile successfuly updated.");
+
+        return responseModelMap;
+    }
+
+    @RequestMapping(value = {"", "/"})
     public final ModelAndView showProfile() throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
 
-		String entityId = ControllerUtils.getLoggedInUser().getUsername();
+        String entityId = ControllerUtils.getLoggedInUser().getUsername();
         modelAndView.addAllObjects(get(entityId));
 
         return modelAndView;
+    }
+
+    @RequestMapping(value = {UPDATE_PASSWORD_MAPPING}, method = RequestMethod.POST,
+                    consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public final String updatePassword(@RequestBody final UpdatePasswordBean bean) {
+
+        try {
+            ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
+                    .getTeamId(), bean.getUserId());
+
+            if (bean.getNewPassword().equals(bean.getReEnteredPassword())) {
+                hierarchyService.updateUser(bean.getUserId(), bean.getNewPassword(),
+                        UserRole.valueOf(user.getUserRole()));
+
+                return "Password updated successfuly";
+            } else {
+                return "Passwords don't match!";
+            }
+        } catch (CohoException e) {
+            return "Some server side error, Please try again later";
+        }
+    }
+
+    @RequestMapping(value = {UPDATE_USER_ROLE_MAPPING}, method = RequestMethod.POST,
+                    consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public final String updateUserRole(@RequestBody final UpdateUserRoleBean bean) {
+
+        try {
+            ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
+                    .getTeamId(), bean.getUserId());
+
+            //TODO: write a service to update role of user.
+            hierarchyService.updateUser(user.getUserId(), "", UserRole.valueOf(bean.getUserRole()));
+
+            return "Password updated successfuly";
+        } catch (CohoException e) {
+            return "Some server side error, Please try again later";
+        }
     }
 }

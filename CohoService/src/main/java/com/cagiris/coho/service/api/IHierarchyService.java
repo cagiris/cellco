@@ -43,11 +43,10 @@ public interface IHierarchyService {
 
     List<? extends IOrganization> getAllOrganizationInfo() throws HierarchyServiceException;
 
-    ITeamUser addUserToTeam(Long teamId, String userId, String userName, String authToken, UserRole userRole,
+    ITeamUser addUserToTeam(Long teamId, String userId, String authToken, UserRole userRole,
             AuthenicationPolicy authenicationPolicy) throws HierarchyServiceException;
 
-    IUser updateUser(String userId, String userName, String authToken, UserRole userRole)
-            throws HierarchyServiceException;
+    IUser updateUser(String userId, String authToken, UserRole userRole) throws HierarchyServiceException;
 
     ITeamUser assignUserToTeam(Long teamId, String userId) throws HierarchyServiceException;
 

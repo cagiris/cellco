@@ -21,16 +21,18 @@ public class QAnnualHolidayEntity extends EntityPathBase<AnnualHolidayEntity> {
 
     public final QHolidayEntity _super = new QHolidayEntity(this);
 
-    public final NumberPath<Integer> day = createNumber("day", Integer.class);
-
     //inherited
     public final StringPath description = _super.description;
 
-    public final NumberPath<Long> organizationId = createNumber("organizationId", Long.class);
+    public final DateTimePath<java.util.Date> holidayDate = createDateTime("holidayDate", java.util.Date.class);
 
-    public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = createEnum("userRole", com.cagiris.coho.service.api.UserRole.class);
+    public final NumberPath<Long> holidayId = createNumber("holidayId", Long.class);
 
-    public final NumberPath<Integer> year = createNumber("year", Integer.class);
+    //inherited
+    public final NumberPath<Long> organizationId = _super.organizationId;
+
+    //inherited
+    public final EnumPath<com.cagiris.coho.service.api.UserRole> userRole = _super.userRole;
 
     public QAnnualHolidayEntity(String variable) {
         super(AnnualHolidayEntity.class, forVariable(variable));

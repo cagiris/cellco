@@ -17,16 +17,6 @@
 			<form:errors path="userId" cssClass="form-field-error"/>
 		</div>
 	</div>
-	
-	<div class="form-group">
-		<form:label path="userName" cssClass="control-label col-xs-3">Full name of user</form:label>
-		<div class="col-xs-5">
-			<form:input cssClass="form-control" path="userName" required="true" />
-		</div>
-		<div class="col-xs-4">
-			<form:errors path="userName" cssClass="form-field-error"/>
-		</div>
-	</div>
 	<div class="form-group">
 		<form:label path="password" cssClass="control-label col-xs-3">Password</form:label>
 		<div class="col-xs-5">

@@ -79,15 +79,6 @@ public class TeamUserEntity implements ITeamUser {
 
     @Transient
     @Override
-    public String getUserName() {
-        if (userEntity != null) {
-            return userEntity.getUserName();
-        }
-        return null;
-    }
-
-    @Transient
-    @Override
     public String getUserRole() {
         if (userEntity != null && userEntity.getUserRole() != null) {
             return userEntity.getUserRole().toString();

@@ -42,7 +42,7 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      */
     protected abstract String getURLMapping();
 
-    private String getRedirectUrl(String mappingUrl) {
+    protected String getRedirectUrl(String mappingUrl) {
         return ("redirect:/" + getURLMapping() + mappingUrl);
     }
 
@@ -69,11 +69,14 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      */
     protected abstract ModelMap create(T bean, ModelMap modelMap) throws CohoException;
 
+    protected String getCreateSuccessRedirectView(Serializable entityId) {
+        return (getRedirectUrl(GET_URL_MAPPING) + "/" + entityId);
+    }
+
     @RequestMapping(value = CREATE_URL_MAPPING, method = RequestMethod.POST)
     public final ModelAndView createInternal(@Valid @ModelAttribute T bean, BindingResult bindingResult,
             ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
-
         try {
             if (bindingResult.hasErrors()) {
                 modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
@@ -81,7 +84,7 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
                 modelAndView.addAllObjects(getCreateFormModel());
             } else {
                 modelAndView.addAllObjects(create(bean, modelMap));
-                modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
+                modelAndView.setViewName(getCreateSuccessRedirectView(bean.getEntityId()));
             }
         } catch (CohoException e) {
             modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
@@ -165,9 +168,9 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      * @throws CohoException
      */
     protected ModelMap getUpdateFormModel(Serializable entityId) throws CohoException {
-    	return get(entityId); //Default implementation is to fill the update form with data fetched by "get" operation.
+        return get(entityId); //Default implementation is to fill the update form with data fetched by "get" operation.
     }
-    
+
     @RequestMapping(value = UPDATE_URL_MAPPING + "/{entityId}", method = RequestMethod.GET)
     public final ModelAndView showUpdatePageInternal(@PathVariable Serializable entityId, ModelMap modelMap)
             throws Exception {
@@ -185,6 +188,10 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
      */
     protected abstract ModelMap update(Serializable entityId, T bean, ModelMap modelMap) throws CohoException;
 
+    protected String getUpdateSuccessRedirectView(Serializable entityId) {
+        return (getRedirectUrl(GET_URL_MAPPING) + "/" + entityId);
+    }
+
     @RequestMapping(value = UPDATE_URL_MAPPING + "/{entityId}", method = RequestMethod.POST)
     public final ModelAndView updateInternal(@PathVariable Serializable entityId, @Valid @ModelAttribute T bean,
             BindingResult bindingResult, ModelMap modelMap) throws Exception {
@@ -196,7 +203,7 @@ public abstract class AbstractCRUDController<T extends ICRUDBean> extends Abstra
                 modelAndView.addAllObjects(modelMap);
                 modelAndView.addAllObjects(getUpdateFormModel(entityId));
             } else {
-                modelAndView.setViewName(getRedirectUrl(GET_URL_MAPPING) + "/" + bean.getEntityId());
+                modelAndView.setViewName(getUpdateSuccessRedirectView(bean.getEntityId()));
                 modelAndView.addAllObjects(update(entityId, bean, modelMap));
             }
         } catch (CohoException e) {

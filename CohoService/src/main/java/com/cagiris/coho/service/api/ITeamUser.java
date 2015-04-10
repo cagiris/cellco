@@ -11,14 +11,11 @@ package com.cagiris.coho.service.api;
 
 public interface ITeamUser {
 
-	Long getTeamUserId();
+    Long getTeamUserId();
 
-	Long getTeamId();
+    Long getTeamId();
 
-	String getUserId();
-	
-	String getUserName();
-	
-	String getUserRole();
+    String getUserId();
 
+    String getUserRole();
 }

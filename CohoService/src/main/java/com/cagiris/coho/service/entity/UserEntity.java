@@ -26,8 +26,6 @@ public class UserEntity extends BaseEntity implements IUser {
 
     private String userId;
 
-    private String userName;
-
     private String authToken;
 
     private AuthenicationPolicy authPolicy;
@@ -54,11 +52,6 @@ public class UserEntity extends BaseEntity implements IUser {
         return this.userId;
     }
 
-    @Override
-    public String getUserName() {
-        return this.userName;
-    }
-
     public void setAuthPolicy(AuthenicationPolicy authPolicy) {
         this.authPolicy = authPolicy;
     }
@@ -69,10 +62,6 @@ public class UserEntity extends BaseEntity implements IUser {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     @Enumerated(EnumType.STRING)
