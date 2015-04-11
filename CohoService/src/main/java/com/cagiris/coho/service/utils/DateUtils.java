@@ -16,7 +16,7 @@ import org.joda.time.DateTime;
 
 public class DateUtils {
 
-    private static String[] dateFormatters = {"yyyy-MM-dd hh:mm:ss.SSS"};
+    private static String[] dateFormatters = {"yyyy-MM-dd hh:mm:ss.SSS", "yyyy-MM-dd hh:mm aaa", "MM/dd/yyyy hh:mm aaa"};
 
     public static DateTime getDateTimeWithDateOnly(Date date) {
         return getDateTimeWithDateOnly(new DateTime(date));

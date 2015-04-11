@@ -6,7 +6,9 @@
 }());
 
 $(function() {
-	$('.datetimepicker').datetimepicker();
+	$('.datetimepicker').datetimepicker({
+	format: 'YYYY-MM-DD hh:mm a'
+	});
 });
 
 $(function() {
@@ -380,10 +382,8 @@ $('#modifyUserShiftButton').on(
 		'click',
 		function() {
 			var shiftId = $('#modifyUserShiftButton').children("input").val();
-			var shiftStartTime = $('#modifyUserShiftButton').parent().parent()
-					.siblings(".shiftStartTime").children("input").val();
-			var shiftEndTime = $('#modifyUserShiftButton').parent().parent()
-					.siblings(".shiftEndTime").children("input").val();
+			var shiftStartTime = $('#modifyUserShiftButton').parent().parent().siblings(".shiftStartTime").children("div").children("div").children("input").val();
+			var shiftEndTime = $('#modifyUserShiftButton').parent().parent().siblings(".shiftEndTime").children("div").children("div").children("input").val()
 			$.ajax({
 				url : getRequestURL("modifyUserShift"),
 				cache : false,
@@ -403,3 +403,7 @@ $('#modifyUserShiftButton').on(
 
 			});
 		})
+
+		
+		
+

@@ -23,11 +23,11 @@ public class TeamShiftDetailsBean extends AbstractBean implements ICRUDBean {
     private Long teamId;
 
     @Nonnull
-    @DateTimeFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "HH:mm aaa")
     private Date shiftStartTime;
 
     @Nonnull
-    @DateTimeFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "HH:mm aaa")
     private Date shiftEndTime;
     private String shiftDuration;
     private Long shiftBuffer;

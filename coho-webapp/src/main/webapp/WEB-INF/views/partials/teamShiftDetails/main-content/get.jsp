@@ -9,10 +9,10 @@
 
 	<div class="form-group">
 		<form:label path="shiftStartTime" for="shiftStartTime" class="control-label col-xs-2">Start
-			Date</form:label>
+			Time</form:label>
 		<div class="col-xs-6">
-			<div class="input-group date datetimepicker-time">
-				<form:input path="shiftStartTime" type="text" class="form-control" id="startDate"
+			<div class="input-group date datetimepicker-time" >
+				<form:input path="shiftStartTime" type="text" class="form-control" id="shiftStartTime"
 					placeholder="Shift Start Time" required="true" /> <span
 					class="input-group-addon add-on"><i
 					class="glyphicon glyphicon-calendar"></i></span>
@@ -23,10 +23,10 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<form:label path="shiftEndTime" for="shiftEndTime" class="control-label col-xs-2">End Date</form:label>
+		<form:label path="shiftEndTime" for="shiftEndTime" class="control-label col-xs-2">End Time</form:label>
 		<div class="col-xs-6">
 			<div class="input-group date datetimepicker-time">
-				<form:input path="shiftEndTime" type="text" class="form-control" id="endDate"
+				<form:input path="shiftEndTime" type="text" class="form-control" id="shiftEndTime"
 					placeholder="Shift End Date" required="true" /> <span
 					class="input-group-addon add-on"><i
 					class="glyphicon glyphicon-calendar"></i></span>

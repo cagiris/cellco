@@ -30,8 +30,8 @@
 						<td class="shiftStartTime">
 							<div class="form-group">
 								<div class='input-group date datetimepicker'>
-									<input type='text' class="form-control" /> <span
-										class="input-group-addon"> <span
+									<input type='text' value="${shifInfoBean.shiftStartTime}" class="form-control" /> <span
+										class="input-group-addon"><span
 										class="glyphicon glyphicon-calendar"></span>
 									</span>
 								</div>
@@ -43,7 +43,7 @@
 						<td class="shiftEndTime">
 							<div class="form-group">
 								<div class='input-group date datetimepicker'>
-									<input type='text' class="form-control"/> <span
+									<input type='text' value="${shifInfoBean.shiftEndTime}" class="form-control"/> <span
 										class="input-group-addon"> <span
 										class="glyphicon glyphicon-calendar"></span>
 									</span>

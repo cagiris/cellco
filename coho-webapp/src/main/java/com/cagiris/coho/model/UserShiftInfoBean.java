@@ -6,6 +6,8 @@ package com.cagiris.coho.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.cagiris.coho.controller.ControllerUtils;
 import com.cagiris.coho.service.api.IUserShiftInfo;
 
@@ -17,8 +19,10 @@ import com.cagiris.coho.service.api.IUserShiftInfo;
 public class UserShiftInfoBean extends AbstractBean {
     private String shiftId;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm aaa")
     private Date shiftStartTime;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm aaa")
     private Date shiftEndTime;
 
     private Long teamId;
