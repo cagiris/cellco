@@ -27,8 +27,33 @@
 					<tr id="row-${shifInfoBean.shiftId}">
 						<td>${shifInfoBean.userId}</td>
 
-						<td class="shiftStartTime"><input type="text" value="${shifInfoBean.shiftStartTime}" /></td>
-						<td class="shiftEndTime"><input type="text" value="${shifInfoBean.shiftEndTime}" /></td>
+						<td class="shiftStartTime">
+							<div class="form-group">
+								<div class='input-group date datetimepicker'>
+									<input type='text' class="form-control" /> <span
+										class="input-group-addon"> <span
+										class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+							</div> <!--
+						<input type="text" value="${shifInfoBean.shiftStartTime}" />
+						-->
+						</td>
+
+						<td class="shiftEndTime">
+							<div class="form-group">
+								<div class='input-group date datetimepicker'>
+									<input type='text' class="form-control"/> <span
+										class="input-group-addon"> <span
+										class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+							</div>
+						<!--  
+						<input type="text" value="${shifInfoBean.shiftEndTime}" />
+						-->
+						</td>
+
 						<td>${shifInfoBean.shiftDuration}</td>
 						<td>${shifInfoBean.shiftStartReason}</td>
 						<td>${shifInfoBean.shiftEndReason}</td>
@@ -45,5 +70,11 @@
 				</c:forEach>
 			</tbody>
 		</table>
+
+	<!-- To show calender dropdown -->
+	<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+
 	</div>
+	
 </div>
+

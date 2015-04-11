@@ -22,7 +22,8 @@
 <link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/bootstrap.min.css' />">
 <link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/bootstrap-theme.min.css' />">
 <!-- Bootstrap Calendar CSS -->
-<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/datepicker.css' />">
+<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/bootstrap-datepicker.css' />">
+<link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/bootstrap-datetimepicker.css' />">
 <!-- Custom CSS -->
 <link rel="stylesheet" type="text/css" href="<core:url value = '/resources/css/style.css' />">
 
@@ -41,14 +42,19 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    
-    <script src="<core:url value = '/resources/js/jquery.min.js' />"></script>
+ 
+ 	<script src="<core:url value = '/resources/js/jquery.min.js' />"></script>
+    <script src="<core:url value = '/resources/js/moment.min.js' />"></script>
+    <script src="<core:url value = '/resources/js/transition.js' />"></script>
+    <script src="<core:url value = '/resources/js/collapse.js' />"></script>
     <script src="<core:url value = '/resources/js/bootstrap.min.js' />"></script>
     <script src="<core:url value = '/resources/js/bootstrap-datepicker.js' />"></script>
+    <script src="<core:url value = '/resources/js/bootstrap-datetimepicker.js' />"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="<core:url value = '/resources/js/ie10-viewport-bug-workaround.js' />"></script>
     
     <!-- Custom Javascript -->
     <script src="<core:url value = '/resources/js/script.js' />"></script>
+   
 </body>
 </html>
