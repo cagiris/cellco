@@ -17,6 +17,13 @@ $(function() {
 	});
 });
 
+$(function() {
+	$('.datetimepicker-date').datetimepicker({
+		format : 'L'
+	});
+});
+
+
 function enableob(o) {
 	eval(o + ".disabled = false");
 }

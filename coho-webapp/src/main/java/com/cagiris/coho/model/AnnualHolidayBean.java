@@ -48,4 +48,8 @@ public class AnnualHolidayBean extends HolidayBean {
         this.holidayDate = holidayDate;
     }
 
+    public static AnnualHolidayBean mapToBean(IAnnualHoliday annualHoliday) {
+        AnnualHolidayBean annualHolidayBean = new AnnualHolidayBean(annualHoliday);
+        return annualHolidayBean;
+    }
 }

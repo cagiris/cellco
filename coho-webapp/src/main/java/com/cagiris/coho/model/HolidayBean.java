@@ -6,6 +6,8 @@ package com.cagiris.coho.model;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.cagiris.coho.service.api.IHoliday;
 import com.cagiris.coho.service.api.UserRole;
 
@@ -16,6 +18,7 @@ import com.cagiris.coho.service.api.UserRole;
 
 public class HolidayBean extends AbstractBean implements ICRUDBean {
 
+    @NotBlank
     private String description;
 
     private UserRole userRole;

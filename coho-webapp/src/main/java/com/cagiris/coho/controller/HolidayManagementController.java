@@ -22,9 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.AnnualHolidayBean;
 import com.cagiris.coho.model.WeeklyHolidayBean;
+import com.cagiris.coho.service.api.IAnnualHoliday;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.ILeaveManagementService;
-import com.cagiris.coho.service.api.IWeeklyHoliday;
+import com.cagiris.coho.service.api.IOrganization;
 
 /**
  *
@@ -49,8 +50,12 @@ public class HolidayManagementController extends AbstractController {
     public final ModelAndView showCreateAnnualHolidayPage(ModelMap modelMap) throws Exception {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(URL_MAPPING + CREATE_ANNUAL_HOLIDAY_URL_MAPPING);
+
+        IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
+        modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
         modelMap.addAttribute(new AnnualHolidayBean());
         modelAndView.addAllObjects(modelMap);
+
         return modelAndView;
     }
 
@@ -100,12 +105,22 @@ public class HolidayManagementController extends AbstractController {
         ModelMap responseMap = new ModelMap();
         //        responseMap.addAllAttributes(leaveManagementService.getAllAnnualHolidays(hierarchyService
         //                .getDefaultOrganization().getOrganizationId()));
-        List<? extends IWeeklyHoliday> allWeeklyHolidays = leaveManagementService.getAllWeeklyHolidays(hierarchyService
+
+        /* 
+         List<? extends IWeeklyHoliday> allWeeklyHolidays = leaveManagementService.getAllWeeklyHolidays(hierarchyService
+                 .getDefaultOrganization().getOrganizationId());
+
+         List<WeeklyHolidayBean> weeklyHolidayBeans = allWeeklyHolidays.stream().map(WeeklyHolidayBean::mapToBean)
+                 .collect(Collectors.toList());
+         responseMap.addAttribute(weeklyHolidayBeans);
+         */
+        List<? extends IAnnualHoliday> allAnnualHolidays = leaveManagementService.getAllAnnualHolidays(hierarchyService
                 .getDefaultOrganization().getOrganizationId());
 
-        List<WeeklyHolidayBean> weeklyHolidayBeans = allWeeklyHolidays.stream().map(WeeklyHolidayBean::mapToBean)
+        List<AnnualHolidayBean> annualHolidayBean = allAnnualHolidays.stream().map(AnnualHolidayBean::mapToBean)
                 .collect(Collectors.toList());
-        responseMap.addAttribute(weeklyHolidayBeans);
+
+        responseMap.addAttribute(annualHolidayBean);
 
         modelAndView.addAllObjects(responseMap);
         return modelAndView;

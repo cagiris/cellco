@@ -34,7 +34,15 @@
 									Holiday List
 							</a></li>
 						</sec:authorize>
+						<sec:authorize access="hasRole('ADMIN')">
+							<li><a href="<core:url value = '/holiday/create-annual' />"> <span 
+							        class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									Add Holiday
+							</a></li>
+						</sec:authorize>
 					</ul></li>
+
+
 			</sec:authorize>
 				<li role="presentation" class="dropdown"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
