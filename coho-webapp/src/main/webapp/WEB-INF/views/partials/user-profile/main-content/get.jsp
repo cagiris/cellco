@@ -75,14 +75,6 @@
 				<div class="col-sm-3">
 					<p class="form-control-static">${ userBean.userRole }</p>
 				</div>
-
-				<div class="col-sm-3">
-					<button type="button" class="btn btn-default" data-toggle="modal" 
-							data-target="#change-privileges-modal" data-userId="${ userBean.userRole }">
-						<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-							Change
-					</button>
-				</div>
 			</div>
 		</fieldset>
 		<fieldset>
@@ -204,48 +196,6 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary" id="update-password-button">Update Password</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="change-privileges-modal" tabindex="-1"
-	role="dialog" aria-labelledby="change-privileges-moda"
-	aria-hidden="true">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="change-privileges-modal-title">Change privileges</h4>
-			</div>
-			<div class="modal-body">
-				<form>
-					<div class="form-group">
-						<label for="userRoleList">Privileges</label>
-						<div>
-							
-							<select id="userRoleList">
-								<core:forEach var="role" items="${userRoleList}">
-									<core:choose>
-										<core:when test="${ userBean.userRole == role}">
-											<option selected="selected">${role}</option>
-										</core:when>
-										<core:otherwise>
-											<option>${role}</option>
-										</core:otherwise>
-									</core:choose>
-								</core:forEach>
-							</select>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" id="update-user-role-button">Save</button>
 			</div>
 		</div>
 	</div>

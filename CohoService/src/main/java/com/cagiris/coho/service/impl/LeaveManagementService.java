@@ -239,9 +239,11 @@ public class LeaveManagementService implements ILeaveManagementService {
         }
         try {
             QUserLeaveRequestEntity qUserLeaveRequestEntity = QUserLeaveRequestEntity.userLeaveRequestEntity;
-            HibernateQuery hibernateQuery = new HibernateQuery().from(qUserLeaveRequestEntity).where(
-                    qUserLeaveRequestEntity.leaveApplicationStatus.in(leaveStatus).and(
-                            qUserLeaveRequestEntity.userId.in(reportingUserIds)));
+            HibernateQuery hibernateQuery = new HibernateQuery()
+                    .from(qUserLeaveRequestEntity)
+                    .where(qUserLeaveRequestEntity.leaveApplicationStatus.in(leaveStatus).and(
+                            qUserLeaveRequestEntity.userId.in(reportingUserIds)))
+                    .orderBy(qUserLeaveRequestEntity.dateAdded.asc());
             List<UserLeaveRequestEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(
                     hibernateQuery, qUserLeaveRequestEntity);
             return executeQueryAndGetResults;

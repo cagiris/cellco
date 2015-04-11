@@ -7,7 +7,7 @@
 	<a href="update.html?entityId=${ userId }" class="btn btn-warning btn-xs" title="Update"> <span
 		class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
 	-->
-	<a href="update/${ userId }" class="btn btn-warning btn-xs" title="Update"> <span
+	<a href="update/${ userId }" class="btn btn-primary btn-xs" title="Update"> <span
 		class="glyphicon glyphicon glyphicon-cog" aria-hidden="true"></span>
 	</a> 
 	<!--
@@ -15,7 +15,7 @@
 		class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 	</a>
 	-->
-	<a href="#" class="btn btn-danger btn-xs btn-primary btn-lg" data-toggle="modal" 
+	<a href="#" class="btn btn-danger btn-xs" data-toggle="modal" 
 		data-target="#myModal" title="Remove Users" data-whatever="${ userId }"> <span
 		class="glyphicon glyphicon-remove" aria-hidden="true"  ></span>
 	</a>

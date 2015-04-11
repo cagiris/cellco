@@ -45,10 +45,20 @@
 		<property name="hierarchyService" ref="hierarchyService" />
 	</bean>
 
+	<bean id="BookingManagementService" class="com.cagiris.coho.service.impl.BookingManagementService">
+		<constructor-arg>
+			<ref bean="databaseManager" />
+		</constructor-arg>
+		<property name="hierarchyService" ref="hierarchyService" />
+	</bean>
+	
 	<bean id="cohoUserDetailService"
 		class="com.cagiris.coho.service.auth.impl.CohoUserDetailService">
 		<constructor-arg>
 			<ref bean="hierarchyService" />
+		</constructor-arg>
+			<constructor-arg>
+			<ref bean="attendenceReportingService" />
 		</constructor-arg>
 	</bean>
 

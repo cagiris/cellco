@@ -143,9 +143,10 @@ public class HierarchyService implements IHierarchyService {
         shiftEnd.set(Calendar.HOUR, 18);
         shiftEnd.set(Calendar.MINUTE, 0);
         long defaultShiftBuffer = 3 * 60;
+        long minimumGapBetweenShifts = 9 * 60;
         try {
             attendenceReportingService.createTeamShiftDetails(teamEntity.getTeamId(), shiftStart.getTime(),
-                    shiftEnd.getTime(), defaultShiftBuffer, true);
+                    shiftEnd.getTime(), defaultShiftBuffer, minimumGapBetweenShifts, true);
         } catch (AttendenceReportingServiceException e) {
             throw new HierarchyServiceException(e);
         }

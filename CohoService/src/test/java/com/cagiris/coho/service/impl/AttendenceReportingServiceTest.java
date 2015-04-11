@@ -117,7 +117,7 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
         shiftEndTime.setHours(hours + 1);
         long teamId = 21L;
         ITeamShiftDetails teamShiftDetails = attendenceReportingService.createTeamShiftDetails(teamId, shiftStartTime,
-                shiftEndTime, 60l, true);
+                shiftEndTime, 60l, 60l, true);
         // Assert.assertEqual(teamShiftDetails.getUserId(),id);
         // Assert.assertEqual(teamShiftDetails.getUserId(), id);
         // Assert.assertEqual(teamShiftDetails.getUserId(), id);
@@ -136,10 +136,10 @@ public class AttendenceReportingServiceTest extends AbstractTestCase {
         shiftEndTime.setHours(6);
 
         //ITeamShiftDetails teamShiftDetails1 =
-        attendenceReportingService.createTeamShiftDetails(2l, shiftStartTime, shiftEndTime, 60l, true);
+        attendenceReportingService.createTeamShiftDetails(2l, shiftStartTime, shiftEndTime, 60l, 60l, true);
 
         // ITeamShiftDetails teamShiftDetails2 =
-        attendenceReportingService.updateTeamShiftDetails(2l, shiftStartTime, shiftEndTime, 60l, true);
+        attendenceReportingService.updateTeamShiftDetails(2l, shiftStartTime, shiftEndTime, 60l, 60l, true);
     }
 
     @Ignore

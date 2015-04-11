@@ -55,37 +55,25 @@ public class QuickStatisticsController extends AbstractController {
     @PreAuthorize("hasRole('AGENT')")
     public @ResponseBody QuickStatsBean getAgentQuickStats() {
 
-        Integer casualLeaveCount = 0;
-        Integer paidLeaveCount = 0;
+        QuickStatsBean quickStatsBean = new QuickStatsBean();
 
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User)authentication.getPrincipal();
             IUserLeaveQuota userLeaveQuota;
-
             userLeaveQuota = leaveManagementService.getUserLeaveQuota(user.getUsername());
             Map<LeaveType, Integer> userLeaveQuotaMap = userLeaveQuota.getLeaveTypeVsLeaveQuota();
+            for (Map.Entry<LeaveType, Integer> entry : userLeaveQuotaMap.entrySet()) {
+                quickStatsBean.getData().put(entry.getKey().toString(), entry.getValue().toString());
+            }
 
-            casualLeaveCount = userLeaveQuotaMap.get(LeaveType.CASUAL_LEAVE);
-            paidLeaveCount = userLeaveQuotaMap.get(LeaveType.PAID_LEAVE);
+            return quickStatsBean;
         } catch (LeaveManagementServiceException e) {
             logger.error("Unable to fetch agent statistics");
             logger.error(e.getMessage());
         }
 
-        if (casualLeaveCount == null) {
-            casualLeaveCount = 0;
-        }
-
-        if (paidLeaveCount == null) {
-            paidLeaveCount = 0;
-        }
-
-        QuickStatsBean quickStatsBean = new QuickStatsBean();
-        quickStatsBean.getData().put("Casual Leaves", casualLeaveCount.toString());
-        quickStatsBean.getData().put("Paid Leaves", paidLeaveCount.toString());
-
-        return quickStatsBean;
+        return null;
     }
 
     @RequestMapping(GET_ADMIN_QUICK_STATISTICS)
