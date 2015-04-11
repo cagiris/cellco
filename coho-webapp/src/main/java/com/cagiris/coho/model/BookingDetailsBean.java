@@ -5,6 +5,7 @@
 package com.cagiris.coho.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.GroupSequence;
@@ -22,23 +23,71 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
     private Long bookingId;
 
     @Valid
-    private CustomerBean customer;
+    private CustomerBean customer = new CustomerBean();
 
     @Valid
-    private Set<PassengerBean> passengers;
+    private Set<PassengerBean> passengers = new HashSet<>();
 
-    @NotNull
+    @NotNull(message = "Can't be left Empty")
     private Double baseFare;
 
-    @NotNull
+    @NotNull(message = "Can't be left Empty")
     private Double taxesAndServiceFee;
 
-    @NotNull
-    private Double miscellaneousChanrges; //MCO
+    @NotNull(message = "Can't be left Empty")
+    private Double miscellaneousCharges; //MCO
 
     @Override
     public Serializable getEntityId() {
         return bookingId;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public CustomerBean getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(CustomerBean customer) {
+        this.customer = customer;
+    }
+
+    public Set<PassengerBean> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Set<PassengerBean> passengers) {
+        this.passengers = passengers;
+    }
+
+    public Double getBaseFare() {
+        return baseFare;
+    }
+
+    public void setBaseFare(Double baseFare) {
+        this.baseFare = baseFare;
+    }
+
+    public Double getTaxesAndServiceFee() {
+        return taxesAndServiceFee;
+    }
+
+    public void setTaxesAndServiceFee(Double taxesAndServiceFee) {
+        this.taxesAndServiceFee = taxesAndServiceFee;
+    }
+
+    public Double getMiscellaneousCharges() {
+        return miscellaneousCharges;
+    }
+
+    public void setMiscellaneousCharges(Double miscellaneousCharges) {
+        this.miscellaneousCharges = miscellaneousCharges;
     }
 
 }
