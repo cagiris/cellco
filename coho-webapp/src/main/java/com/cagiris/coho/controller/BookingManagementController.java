@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cagiris.coho.model.BookingDetailsBean;
 import com.cagiris.coho.model.UserBean;
+import com.cagiris.coho.service.api.PassengerType;
 import com.cagiris.coho.service.exception.CohoException;
 
 /**
@@ -37,6 +38,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
         modelMap.addAttribute(new UserBean());
         modelMap.addAttribute(new BookingDetailsBean());
+        modelMap.addAttribute(PassengerType.values());
 
         return modelMap;
     }

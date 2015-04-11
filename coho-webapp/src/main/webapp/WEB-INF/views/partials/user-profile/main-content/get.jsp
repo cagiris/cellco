@@ -62,12 +62,14 @@
 				</div>
 
 				<div class="col-sm-3">
-					<button type="button" class="btn btn-default" data-toggle="modal" 
-							data-target="#change-password-modal" data-userId="${ userProfileBean.userId }">
-							
-							<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-							Change
-					</button>
+					<sec:authorize access="hasRole('ADMIN')">
+						<button type="button" class="btn btn-default" data-toggle="modal" 
+								data-target="#change-password-modal" data-userId="${ userProfileBean.userId }">
+								
+								<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+								Change
+						</button>
+					</sec:authorize>
 				</div>
 			</div>
 			<div class="form-group">
