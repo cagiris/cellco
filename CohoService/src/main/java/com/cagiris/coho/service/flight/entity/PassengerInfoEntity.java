@@ -2,8 +2,9 @@
  * Copyright (c) 2015, Cagiris Pvt. Ltd.
  * All rights reserved.
  */
-package com.cagiris.coho.service.entity;
+package com.cagiris.coho.service.flight.entity;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -12,9 +13,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import com.cagiris.coho.service.api.IPassenger;
-import com.cagiris.coho.service.api.PassengerType;
+import com.cagiris.coho.service.entity.BaseEntity;
+import com.cagiris.coho.service.flight.api.IPassenger;
+import com.cagiris.coho.service.flight.api.PassengerType;
 
 /**
  *
@@ -24,9 +28,7 @@ import com.cagiris.coho.service.api.PassengerType;
 @Entity
 public class PassengerInfoEntity extends BaseEntity implements IPassenger {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long passengerId;
+    private BigInteger passengerId;
 
     private String firstName;
 
@@ -34,18 +36,18 @@ public class PassengerInfoEntity extends BaseEntity implements IPassenger {
 
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
     private PassengerType type;
 
     private Date dateOfBirth;
+
+    private BookingDetailsEntity bookingDetailsEntity;
 
     public PassengerInfoEntity() {
 
     }
 
-    public PassengerInfoEntity(Long passengerId, String firstName, String middleName, String lastName,
-            PassengerType type, Date dateOfBirth) {
-        this.passengerId = passengerId;
+    public PassengerInfoEntity(String firstName, String middleName, String lastName, PassengerType type,
+            Date dateOfBirth) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -53,12 +55,14 @@ public class PassengerInfoEntity extends BaseEntity implements IPassenger {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
-    public Long getPassengerId() {
+    public BigInteger getPassengerId() {
         return passengerId;
     }
 
-    public void setPassengerId(Long passengerId) {
+    public void setPassengerId(BigInteger passengerId) {
         this.passengerId = passengerId;
     }
 
@@ -89,6 +93,7 @@ public class PassengerInfoEntity extends BaseEntity implements IPassenger {
         this.lastName = lastName;
     }
 
+    @Enumerated(EnumType.STRING)
     @Override
     public PassengerType getType() {
         return type;
@@ -105,5 +110,15 @@ public class PassengerInfoEntity extends BaseEntity implements IPassenger {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
+    public BookingDetailsEntity getBookingDetailsEntity() {
+        return bookingDetailsEntity;
+    }
+
+    public void setBookingDetailsEntity(BookingDetailsEntity bookingDetailsEntity) {
+        this.bookingDetailsEntity = bookingDetailsEntity;
     }
 }

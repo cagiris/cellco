@@ -1,4 +1,4 @@
-package com.cagiris.coho.service.entity;
+package com.cagiris.coho.service.flight.entity;
 
 import static com.mysema.query.types.PathMetadataFactory.*;
 
@@ -15,11 +15,11 @@ import com.mysema.query.types.Path;
 @Generated("com.mysema.query.codegen.EntitySerializer")
 public class QCustomerEntity extends EntityPathBase<CustomerEntity> {
 
-    private static final long serialVersionUID = 966475927L;
+    private static final long serialVersionUID = 199577571L;
 
     public static final QCustomerEntity customerEntity = new QCustomerEntity("customerEntity");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.cagiris.coho.service.entity.QBaseEntity _super = new com.cagiris.coho.service.entity.QBaseEntity(this);
 
     public final StringPath addressLine1 = createString("addressLine1");
 
@@ -31,7 +31,7 @@ public class QCustomerEntity extends EntityPathBase<CustomerEntity> {
 
     public final StringPath country = createString("country");
 
-    public final NumberPath<Long> customerId = createNumber("customerId", Long.class);
+    public final NumberPath<java.math.BigInteger> customerId = createNumber("customerId", java.math.BigInteger.class);
 
     //inherited
     public final DateTimePath<java.util.Date> dateAdded = _super.dateAdded;

@@ -5,16 +5,26 @@
 package com.cagiris.coho.controller;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cagiris.coho.model.BookingDetailsBean;
+import com.cagiris.coho.model.CustomerBean;
 import com.cagiris.coho.model.UserBean;
-import com.cagiris.coho.service.api.PassengerType;
 import com.cagiris.coho.service.exception.CohoException;
+import com.cagiris.coho.service.flight.api.IBookingDetails;
+import com.cagiris.coho.service.flight.api.ICustomer;
+import com.cagiris.coho.service.flight.api.PassengerInfoBean;
+import com.cagiris.coho.service.flight.api.PassengerType;
+import com.cagiris.coho.service.flight.impl.BookingManagementService;
 
 /**
  *
@@ -26,6 +36,9 @@ import com.cagiris.coho.service.exception.CohoException;
 public class BookingManagementController extends AbstractCRUDController<BookingDetailsBean> {
 
     public static final String URL_MAPPING = "booking";
+
+    @Autowired
+    private BookingManagementService bookingManagementService;
 
     @Override
     protected String getURLMapping() {
@@ -45,7 +58,24 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
     @Override
     protected ModelMap create(BookingDetailsBean bean, ModelMap modelMap) throws CohoException {
+        CustomerBean customerBean = bean.getCustomer();
+        ICustomer addCustomer = bookingManagementService.addCustomer(customerBean.getFirstName(),
+                customerBean.getLastName(), "", customerBean.getAddressLine1(), customerBean.getAddressLine2(),
+                customerBean.getCity(), customerBean.getContactNumber(), customerBean.getCountry(),
+                customerBean.getEmailId(), customerBean.getPincode(), customerBean.getState());
+        List<PassengerInfoBean> passengerInfos = bean.getPassengers().stream().map((p) -> p.mapToPassengerInfoBean())
+                .collect(Collectors.toList());
+        User loggedInUser = ControllerUtils.getLoggedInUser();
+        IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(loggedInUser.getUsername(),
+                addCustomer.getCustomerId(), passengerInfos, BigDecimal.valueOf(bean.getBaseFare()),
+                BigDecimal.valueOf(bean.getTaxesAndServiceFee()), BigDecimal.valueOf(bean.getMiscellaneousCharges()));
+        bean.setBookingId(bookingDetails.getBookingId());
         return null;
+    }
+
+    @Override
+    protected String getCreateSuccessRedirectView(Serializable entityId) {
+        return ("redirect:/" + URL_MAPPING + CREATE_URL_MAPPING);
     }
 
     @Override

@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
         BookingDetailsBean.class})
 public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
 
-    private Long bookingId;
+    private String bookingId;
 
     @Valid
     private CustomerBean customer = new CustomerBean();
@@ -42,11 +42,11 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
         return bookingId;
     }
 
-    public Long getBookingId() {
+    public String getBookingId() {
         return bookingId;
     }
 
-    public void setBookingId(Long bookingId) {
+    public void setBookingId(String bookingId) {
         this.bookingId = bookingId;
     }
 

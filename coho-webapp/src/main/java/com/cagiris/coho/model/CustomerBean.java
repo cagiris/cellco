@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.cagiris.coho.service.api.ICustomer;
+import com.cagiris.coho.service.flight.api.ICustomer;
 
 /**
  *

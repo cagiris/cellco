@@ -2,7 +2,9 @@
  * Copyright (c) 2015, Cagiris Pvt. Ltd.
  * All rights reserved.
  */
-package com.cagiris.coho.service.api;
+package com.cagiris.coho.service.flight.api;
+
+import java.math.BigInteger;
 
 /**
  *
@@ -21,7 +23,7 @@ public interface ICustomer {
 
     public abstract String getCountry();
 
-    public abstract Long getCustomerId();
+    public abstract BigInteger getCustomerId();
 
     public abstract String getEmailId();
 
