@@ -29,6 +29,8 @@ public class QTeamShiftDetailsEntity extends EntityPathBase<TeamShiftDetailsEnti
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
+    public final NumberPath<Long> minimumGapBetweenShifts = createNumber("minimumGapBetweenShifts", Long.class);
+
     public final NumberPath<Long> shiftBuffer = createNumber("shiftBuffer", Long.class);
 
     public final DateTimePath<java.util.Date> shiftEndTime = createDateTime("shiftEndTime", java.util.Date.class);
