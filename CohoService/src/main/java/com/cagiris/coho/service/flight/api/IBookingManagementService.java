@@ -22,6 +22,8 @@ public interface IBookingManagementService {
             BigDecimal baseFare, BigDecimal taxesAndServiceFee, BigDecimal miscellaneousCharges)
             throws BookingManagementException;
 
+    IBookingDetails getBookingDetails(String bookingId) throws ResourceNotFoundException, BookingManagementException;
+
     ICustomer addCustomer(String firstName, String lastName, String middleName, String addressLine1,
             String addressLine2, String city, String contactNumber, String country, String emailId, String pincode,
             String state) throws BookingManagementException;

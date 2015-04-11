@@ -53,7 +53,7 @@ public class BookingManagementService implements IBookingManagementService {
 
     public BookingManagementService(IDatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
-        this.bookingIdGenerator = new UniqueIDGenerator("BookingId");
+        this.bookingIdGenerator = new UniqueIDGenerator("Booking");
     }
 
     public IHierarchyService getHierarchyService() {
@@ -88,6 +88,9 @@ public class BookingManagementService implements IBookingManagementService {
                 PassengerInfoEntity passengerInfoEntity = new PassengerInfoEntity(passenger.getFirstName(),
                         passenger.getMiddleName(), passenger.getLastName(), passenger.getType(),
                         passenger.getDateOfBirth());
+                passengerInfoEntity.setBookingDetailsEntity(bookingDetailsEntity);
+                passengerInfoEntity.setDateAdded(currentTime);
+                passengerInfoEntity.setDateModified(currentTime);
                 databaseManager.save(passengerInfoEntity);
             }
             bookingDetailsEntity = databaseManager.get(BookingDetailsEntity.class, id);
@@ -110,6 +113,8 @@ public class BookingManagementService implements IBookingManagementService {
         if (StringUtils.isNotBlank(userProfile.getEmailId())) {
             recipients.add(userProfile.getEmailId());
         }
+        logger.info("Wll send email for bookingId:{} to recipients:{}", bookingDetails.getBookingId(),
+                recipients.toArray(new String[0]));
         emailService.sendEmail(recipients, "Booking id:" + bookingDetails.getBookingId(),
                 JSONUtils.getJsonStringForObject(bookingDetails));
     }
@@ -148,6 +153,18 @@ public class BookingManagementService implements IBookingManagementService {
 
     public void setEmailService(IEmailService emailService) {
         this.emailService = emailService;
+    }
+
+    @Override
+    public IBookingDetails getBookingDetails(String bookingId) throws ResourceNotFoundException,
+            BookingManagementException {
+        try {
+            return databaseManager.get(BookingDetailsEntity.class, bookingId);
+        } catch (DatabaseManagerException e) {
+            throw new BookingManagementException(e);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
     }
 
 }

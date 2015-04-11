@@ -5,7 +5,6 @@
 package com.cagiris.coho.service.impl;
 
 import java.io.Serializable;
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -266,6 +265,7 @@ public class LeaveManagementService implements ILeaveManagementService {
         annualHolidayEntity.setHolidayDate(holidayDateTime.toDate());
         annualHolidayEntity.setDescription(description);
         annualHolidayEntity.setUserRole(userRole);
+
         try {
             Serializable id = databaseManager.save(annualHolidayEntity);
             return databaseManager.get(AnnualHolidayEntity.class, id);
@@ -376,16 +376,6 @@ public class LeaveManagementService implements ILeaveManagementService {
         this.hierarchyService = hierarchyService;
     }
 
-    public static void main(String[] args) {
-        LocalDate start = new LocalDate(new Date());
-        LocalDate localDate = start;
-        System.err.println(localDate);
-        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
-        String[] weekdays = dateFormatSymbols.getWeekdays();
-        System.out.println(Days.daysBetween(start, start.plusDays(1)).getDays());
-        System.out.println(weekdays[0]);
-    }
-
     @Override
     public IUserLeaveQuota addUserLeaveQuota(String userId) throws LeaveManagementServiceException {
         logger.info("Going to add user leave quota for userId:{}", userId);
@@ -406,7 +396,10 @@ public class LeaveManagementService implements ILeaveManagementService {
             Map<LeaveType, Integer> leaveTypeVsLeaveCount = new HashMap<LeaveType, Integer>(
                     userRoleQuota.getLeaveTypeVsLeaveCount());
             userLeaveQuotaEntity.setLeaveTypeVsLeaveQuota(leaveTypeVsLeaveCount);
-            userLeaveQuotaEntity.setLastLeaveAccumulationDate(new Date());
+            Date currentTime = new Date();
+            userLeaveQuotaEntity.setLastLeaveAccumulationDate(currentTime);
+            userLeaveQuotaEntity.setDateAdded(currentTime);
+            userLeaveQuotaEntity.setDateModified(currentTime);
             Serializable id = databaseManager.save(userLeaveQuotaEntity);
             return databaseManager.get(UserLeaveQuotaEntity.class, id);
         } catch (ResourceNotFoundException e) {
@@ -458,6 +451,7 @@ public class LeaveManagementService implements ILeaveManagementService {
             if (leaveAccumulationDate != null) {
                 userLeaveQuotaEntity.setLastLeaveAccumulationDate(leaveAccumulationDate);
             }
+            userLeaveQuotaEntity.setDateModified(new Date());
             databaseManager.update(userLeaveQuotaEntity);
             return userLeaveQuotaEntity;
         } catch (DatabaseManagerException | EntityNotFoundException e) {
