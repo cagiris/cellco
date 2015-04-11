@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.cagiris.coho.service.api.IBookingDetails;
+import com.cagiris.coho.service.api.IPassenger;
 
 /**
  *

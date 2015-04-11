@@ -6,8 +6,6 @@ package com.cagiris.coho.service.api;
 
 import java.util.Set;
 
-import com.cagiris.coho.service.entity.IPassenger;
-
 /**
  *
  * @author: Ashish Jindal
@@ -25,7 +23,7 @@ public interface IBookingDetails {
 
     public abstract double getTaxesAndServiceFee();
 
-    public abstract double getMiscellaneousChanrges();
+    public abstract double getMiscellaneousCharges();
 
     public abstract IUser getUser();
 }

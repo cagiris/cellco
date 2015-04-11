@@ -2,11 +2,9 @@
  * Copyright (c) 2015, Cagiris Pvt. Ltd.
  * All rights reserved.
  */
-package com.cagiris.coho.service.entity;
+package com.cagiris.coho.service.api;
 
 import java.util.Date;
-
-import com.cagiris.coho.service.api.PassengerType;
 
 /**
  *

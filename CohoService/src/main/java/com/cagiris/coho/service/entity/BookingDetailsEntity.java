@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 
 import com.cagiris.coho.service.api.IBookingDetails;
 import com.cagiris.coho.service.api.ICustomer;
+import com.cagiris.coho.service.api.IPassenger;
 import com.cagiris.coho.service.api.IUser;
 
 /**
@@ -68,7 +69,7 @@ public class BookingDetailsEntity extends BaseEntity implements IBookingDetails 
     }
 
     @Override
-    public double getMiscellaneousChanrges() {
+    public double getMiscellaneousCharges() {
         return miscellaneousChanrges;
     }
 
