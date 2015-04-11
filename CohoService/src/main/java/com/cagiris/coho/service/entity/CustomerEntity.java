@@ -32,66 +32,52 @@ public class CustomerEntity extends BaseEntity implements ICustomer {
 
     private String contactNumber;
 
-    private String billingAddress;
+    private String addressLine1;
+
+    private String addressLine2;
+
+    private String city;
+
+    private String pincode;
+
+    private String state;
+
+    private String country;
 
     public CustomerEntity() {
 
     }
 
     public CustomerEntity(Long customerId, String firstName, String middleName, String lastName, String emailId,
-            String contactNumber, String billingAddress) {
+            String contactNumber, String addressLine1, String addressLine2, String city, String pincode, String state,
+            String country) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.emailId = emailId;
         this.contactNumber = contactNumber;
-        this.billingAddress = billingAddress;
+        this.addressLine1 = addressLine1;
+        this.addressLine2 = addressLine2;
+        this.city = city;
+        this.pincode = pincode;
+        this.state = state;
+        this.country = country;
     }
 
     @Override
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public String getAddressLine1() {
+        return addressLine1;
     }
 
     @Override
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getAddressLine2() {
+        return addressLine2;
     }
 
     @Override
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    @Override
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Override
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public String getCity() {
+        return city;
     }
 
     @Override
@@ -99,16 +85,91 @@ public class CustomerEntity extends BaseEntity implements ICustomer {
         return contactNumber;
     }
 
+    @Override
+    public String getCountry() {
+        return country;
+    }
+
+    @Override
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    @Override
+    public String getEmailId() {
+        return emailId;
+    }
+
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    @Override
+    public String getPincode() {
+        return pincode;
+    }
+
+    @Override
+    public String getState() {
+        return state;
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 
-    @Override
-    public String getBillingAddress() {
-        return billingAddress;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public void setBillingAddress(String billingAddress) {
-        this.billingAddress = billingAddress;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
