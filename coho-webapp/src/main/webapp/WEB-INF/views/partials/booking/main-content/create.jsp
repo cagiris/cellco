@@ -29,41 +29,66 @@
 		<fieldset>
 			<legend>Passenger Details</legend>
 			<div
-				class="form-group <core:out value='${errorMap["customer.firstName"]}'/>">
+				class="form-group <core:out value='${errorMap["passengers[0].firstName"]}'/>">
 				<form:label cssClass="col-md-2 control-label"
-					path="customer.firstName">First Name</form:label>
+					path="passengers[0].firstName">First Name</form:label>
 				<div class="col-md-5 controls">
-					<form:input path="customer.firstName" placeholder="First Name"
+					<form:input path="passengers[0].firstName" placeholder="First Name"
 						cssClass="form-control" />
 					<p class="help-block form-field-error">
-						<form:errors path="customer.firstName" />
+						<form:errors path="passengers[0].firstName" />
 					</p>
 				</div>
 			</div>
 
 			<div
-				class="form-group <core:out value='${errorMap["customer.middleName"]}'/>">
+				class="form-group <core:out value='${errorMap["passengers[0].middleName"]}'/>">
 				<form:label cssClass="col-md-2 control-label"
-					path="customer.middleName">Middle Name</form:label>
+					path="passengers[0].middleName">Middle Name</form:label>
 				<div class="col-md-5">
 					<form:input placeholder="Middle Name" cssClass="form-control"
-						path="customer.middleName" />
+						path="passengers[0].middleName" />
 					<p class="help-block form-field-error">
-						<form:errors path="customer.middleName" />
+						<form:errors path="passengers[0].middleName" />
 					</p>
 				</div>
 			</div>
 
 			<div
-				class="form-group <core:out value='${errorMap["customer.lastName"]}'/>">
+				class="form-group <core:out value='${errorMap["passengers[0].lastName"]}'/>">
 				<form:label cssClass="col-md-2 control-label"
-					path="customer.lastName">Last Name</form:label>
+					path="passengers[0].lastName">Last Name</form:label>
 				<div class="col-md-5">
 					<form:input placeholder="Last Name" cssClass="form-control"
-						path="customer.lastName" />
+						path="passengers[0].lastName" />
 					<p class="help-block form-field-error">
-						<form:errors path="customer.lastName" />
+						<form:errors path="passengers[0].lastName" />
 					</p>
+				</div>
+			</div>
+			<div class="form-group <core:out value='${errorMap["passengers[0].type"]}'/>">
+				<form:label cssClass="col-md-2 control-label" path="passengers[0].type">Type</form:label>
+				<div class="col-md-5 controls">
+					<form:select path="passengers[0].type" cssClass="form-control">
+						<core:forEach var="type" items="${passengerTypeList}">
+							<option>${type}</option>
+						</core:forEach>
+					</form:select>
+					<p class="help-block form-field-error">
+						<form:errors path="passengers[0].type" />
+					</p>
+				</div>
+			</div>
+			<div class="form-group <core:out value='${errorMap["passengers[0].dateOfBirth"]}'/>">
+				<form:label cssClass="col-md-2 control-label" path="passengers[0].dateOfBirth">Date of Birth</form:label>
+				<div class="col-md-5">
+					<div class="input-group date form-datepicker"
+						data-date="<%=currentDate%>" data-date-format="dd-mm-yyyy">
+						<form:input path="passengers[0].dateOfBirth" cssClass="form-control" placeholder="dd-MM-YYYY" /> 
+						<span class="input-group-addon add-on"><i
+							class="glyphicon glyphicon-calendar"></i></span>
+					</div>
+					<p class="help-block form-field-error"><form:errors path="passengers[0].dateOfBirth" /></p>
 				</div>
 			</div>
 		</fieldset>

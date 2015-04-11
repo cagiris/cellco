@@ -5,8 +5,8 @@
 package com.cagiris.coho.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.GroupSequence;
 import javax.validation.Valid;
@@ -26,7 +26,7 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
     private CustomerBean customer = new CustomerBean();
 
     @Valid
-    private Set<PassengerBean> passengers = new HashSet<>();
+    private List<PassengerBean> passengers = new ArrayList();
 
     @NotNull(message = "Can't be left Empty")
     private Double baseFare;
@@ -58,11 +58,11 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
         this.customer = customer;
     }
 
-    public Set<PassengerBean> getPassengers() {
+    public List<PassengerBean> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(Set<PassengerBean> passengers) {
+    public void setPassengers(List<PassengerBean> passengers) {
         this.passengers = passengers;
     }
 

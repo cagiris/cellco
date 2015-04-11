@@ -21,6 +21,28 @@
 				<li><a href="<core:url value = '/dashboard' />"> <span class="glyphicon glyphicon-home"
 						aria-hidden="false"></span> Dashboard
 				</a></li>
+				<li role="presentation" class="dropdown"><a
+					class="dropdown-toggle" data-toggle="dropdown" href="#"
+					role="button" aria-expanded="false"> Bookings <span
+						class="caret"></span>
+				</a>
+					<ul class="dropdown-menu" role="menu">
+						<sec:authorize access="hasRole('AGENT')">
+							<li><a href="<core:url value = '/booking/create' />"> <span class="glyphicon glyphicon-pencil"
+									aria-hidden="false"></span> Create New
+							</a></li>
+							<li><a href="<core:url value = '/booking/history' />"> <span
+									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									History
+							</a></li>
+						</sec:authorize>
+						<sec:authorize access="hasRole('ADMIN')">
+							<li><a href="<core:url value = '/booking/list' />"> <span
+									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
+									Bookings
+							</a></li>
+						</sec:authorize>
+					</ul></li>
 			<sec:authorize access="hasRole('ADMIN')">
 				<li role="presentation" class="dropdown"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
