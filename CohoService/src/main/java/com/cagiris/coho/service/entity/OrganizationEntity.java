@@ -10,12 +10,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.cagiris.coho.service.api.IOrganization;
 
 /**
  *
  * @author: ssnk
  */
+// read only as no update api exit as of now
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
 public class OrganizationEntity extends BaseEntity implements IOrganization {
 

@@ -30,8 +30,8 @@ import com.cagiris.coho.service.flight.entity.BookingDetailsEntity;
 import com.cagiris.coho.service.flight.entity.CustomerEntity;
 import com.cagiris.coho.service.flight.entity.PassengerInfoEntity;
 import com.cagiris.coho.service.flight.exception.BookingManagementException;
+import com.cagiris.coho.service.utils.FreemarkerUtil;
 import com.cagiris.coho.service.utils.IEmailService;
-import com.cagiris.coho.service.utils.JSONUtils;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 
 /**
@@ -48,6 +48,8 @@ public class BookingManagementService implements IBookingManagementService {
     private IHierarchyService hierarchyService;
 
     private IEmailService emailService;
+
+    private FreemarkerUtil freemarkerUtil;
 
     private UniqueIDGenerator bookingIdGenerator;
 
@@ -115,8 +117,10 @@ public class BookingManagementService implements IBookingManagementService {
         }
         logger.info("Wll send email for bookingId:{} to recipients:{}", bookingDetails.getBookingId(),
                 recipients.toArray(new String[0]));
-        emailService.sendEmail(recipients, "Booking id:" + bookingDetails.getBookingId(),
-                JSONUtils.getJsonStringForObject(bookingDetails));
+        String emailBody = freemarkerUtil.evaluateTemplate("booking-email-template.ftl", bookingDetails);
+        String emailSubject = "Booking id:" + bookingDetails.getBookingId();
+        emailService.sendEmail(recipients, emailSubject, emailBody);
+        logger.info("Email successfully sent");
     }
 
     @Override
@@ -165,6 +169,14 @@ public class BookingManagementService implements IBookingManagementService {
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(e);
         }
+    }
+
+    public FreemarkerUtil getFreemarkerUtil() {
+        return freemarkerUtil;
+    }
+
+    public void setFreemarkerUtil(FreemarkerUtil freemarkerUtil) {
+        this.freemarkerUtil = freemarkerUtil;
     }
 
 }

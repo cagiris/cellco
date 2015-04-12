@@ -13,12 +13,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.cagiris.coho.service.api.ITeam;
 
 /**
  *
  * @author: ssnk
  */
+//read only as no update api exit as of now
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
 public class TeamEntity extends BaseEntity implements ITeam {
 

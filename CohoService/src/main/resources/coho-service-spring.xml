@@ -52,6 +52,7 @@
 		</constructor-arg>
 		<property name="hierarchyService" ref="hierarchyService" />
 		<property name="emailService" ref="emailService" />
+		<property name="freemarkerUtil" ref="freemarkerUtil" />
 	</bean>
 
 	<bean id="cohoUserDetailService"
@@ -67,6 +68,13 @@
 	<bean id="emailService" class="com.cagiris.coho.service.utils.EmailService"
 		init-method="init" />
 
+	<bean id="freemarkerUtil" class="com.cagiris.coho.service.utils.FreemarkerUtil">
+		<constructor-arg>
+			<list>
+				<value>booking-email-template.ftl</value>
+			</list>
+		</constructor-arg>
+	</bean>
 
 	<task:annotation-driven />
 
@@ -81,6 +89,12 @@
 	<bean id="userShiftCleanupJob" class="com.cagiris.coho.service.jobs.UserShiftCleanupJob">
 		<constructor-arg>
 			<ref bean="attendenceReportingService" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="hibernateStatisticsJob" class="com.cagiris.coho.service.db.impl.HibernateStatisticsJob">
+		<constructor-arg>
+			<ref bean="databaseManager" />
 		</constructor-arg>
 	</bean>
 
