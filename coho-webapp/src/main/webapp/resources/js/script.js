@@ -65,7 +65,7 @@ $("#myModal").on(
 			var entityId = $('#recipient-name').val();
 			console.log(entityId);
 			$.ajax({
-				url : "delete/" + entityId,
+				url : getRequestURL("user/delete/" + entityId),
 				cache : false,
 				type : "GET",
 				success : function(response) {
