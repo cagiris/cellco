@@ -78,7 +78,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
     @Override
     protected String getCreateSuccessRedirectView(Serializable entityId) {
-        return ("redirect:/" + URL_MAPPING + BOOKING_HISTORY_URL_MAPPING);
+        return ("redirect:/" + URL_MAPPING + CREATE_URL_MAPPING);
     }
 
     @Override

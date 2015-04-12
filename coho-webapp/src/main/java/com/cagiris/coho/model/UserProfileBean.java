@@ -79,7 +79,7 @@ public class UserProfileBean extends AbstractBean implements ICRUDBean {
     private String state;
 
     @NotBlank(message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
-    @Pattern(regexp = "^[a-zA-Z ] *$", message = "Can only contain alphabets", groups = ValidationCheckForPattern.class)
+    @Pattern(regexp = "^[a-zA-Z ]*$", message = "Can only contain alphabets", groups = ValidationCheckForPattern.class)
     @Size(min = 1, max = 30, message = "Too long (Max ({max}))", groups = ValidationCheckForLength.class)
     private String country;
 
