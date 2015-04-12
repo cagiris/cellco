@@ -166,39 +166,5 @@
 <div class="modal fade" id="change-password-modal" tabindex="-1"
 	role="dialog" aria-labelledby="change-password-modal"
 	aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="modal-title" id="change-password-modal-title">Change password</h4>
-			</div>
-			<div class="modal-body">
-				<form>
-					<p class="help-block error-msg" id="update-password-error"></p>
-					<p class="help-block success-msg" id="update-password-sucess"></p>
-					<div class="form-group">
-						<label for="new-password">New Password</label>
-						<div>
-							<input type="password" placeholder="New Password"
-								id="new-password" class="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="re-entered-password">Re-Enter Password</label>
-						<div>
-							<input type="password" placeholder="New Password"
-								id="re-entered-password" class="form-control" />
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" id="update-password-button">Update Password</button>
-			</div>
-		</div>
-	</div>
+	
 </div>

@@ -363,7 +363,7 @@ function getBaseURL() {
 
 }
 
-$('#update-password-button').click(function() {
+function updatePassword() {
 	$.ajax({
 		url : getRequestURL("user-profile/update-user-password"),
 		cache : false,
@@ -372,15 +372,29 @@ $('#update-password-button').click(function() {
 		mimeType : 'application/json',
 		data : JSON.stringify({
 			userId : $('#userId').val(),
-			newPassword : $('#new-password').val(),
-			reEnteredPassword : $('#re-entered-password').val()
+			newPassword : $('#newPassword').val(),
+			reEnteredPassword : $('#reEnteredPassword').val()
 		}),
 		type : "POST",
 		success : function(data) {
-			$('#update-password-success').html(data);
+			$('#change-password-modal').html(data);
 		},
 		error : function(data) {
-			$('#update-password-error').html("Operation failed");
+			$('#change-password-modal').html(data);
+		}
+	});
+};
+
+$('#change-password-modal').on('show.bs.modal', function (event) {
+	$.ajax({
+		url : getRequestURL("user-profile/update-user-password"),
+		cache : false,
+		type : "GET",
+		success : function(data) {
+			$('#change-password-modal').html(data);
+		},
+		error : function(data) {
+			$('#change-password-modal').html("Please try again later!");
 		}
 	});
 });

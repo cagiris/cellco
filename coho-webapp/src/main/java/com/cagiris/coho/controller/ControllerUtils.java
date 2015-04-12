@@ -26,6 +26,8 @@ import com.cagiris.coho.service.exception.HierarchyServiceException;
 
 public class ControllerUtils {
 
+    public static final String AJAX_CONTENT_MAPPING_PREFIX = "dynamic/";
+
     public static ITeam getDefaultTeam(IHierarchyService hierarchyService) throws HierarchyServiceException {
         IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
         return hierarchyService.getDefaultTeam(defaultOrganization.getOrganizationId());
