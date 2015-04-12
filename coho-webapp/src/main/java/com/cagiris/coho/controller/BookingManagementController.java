@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.BookingDetailsBean;
 import com.cagiris.coho.model.CustomerBean;
@@ -36,6 +38,7 @@ import com.cagiris.coho.service.flight.impl.BookingManagementService;
 public class BookingManagementController extends AbstractCRUDController<BookingDetailsBean> {
 
     public static final String URL_MAPPING = "booking";
+    public static final String BOOKING_HISTORY_URL_MAPPING = "/history";
 
     @Autowired
     private BookingManagementService bookingManagementService;
@@ -75,7 +78,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
     @Override
     protected String getCreateSuccessRedirectView(Serializable entityId) {
-        return ("redirect:/" + URL_MAPPING + CREATE_URL_MAPPING);
+        return ("redirect:/" + URL_MAPPING + BOOKING_HISTORY_URL_MAPPING);
     }
 
     @Override
@@ -102,4 +105,19 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         return null;
     }
 
+    @RequestMapping(value = BOOKING_HISTORY_URL_MAPPING)
+    public ModelAndView showBookingHistoryPage(@RequestParam(required = false) Map<String, String> params,
+            ModelMap modelMap) throws Exception {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(getURLMapping() + BOOKING_HISTORY_URL_MAPPING);
+
+        modelAndView.addAllObjects(getbookingHistoryData(params));
+
+        return modelAndView;
+    }
+
+    private Map<String, ?> getbookingHistoryData(Map<String, String> params) {
+        return null;
+    }
 }
