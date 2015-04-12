@@ -364,8 +364,8 @@ public class HierarchyService implements IHierarchyService {
         try {
             Long organizationId = (Long)databaseManager.save(organizationEntity);
             Set<UserRole> availableUserRoles = new HashSet<UserRole>();
-            availableUserRoles.add(UserRole.ADMIN);
             availableUserRoles.add(UserRole.AGENT);
+            availableUserRoles.add(UserRole.ADMIN);
             addOrganizationMetaConfiguration(organizationId, organizationName, UserIdGenerationPolicy.MANUAL,
                     AuthenicationPolicy.PASSWORD_BASED, 100, 10, 3, availableUserRoles);
             createOrgDependentEntities(organizationEntity);

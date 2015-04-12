@@ -22,6 +22,7 @@
 				<tr>
 					<td class="text-center">
 					<input id="shiftStartTime" type="hidden"/>
+					<input id="shiftDurationLong" type="hidden"/>
 					<label>Shift Duration - </label>
 					<label id="shiftDuration">00:00:00</label>
 					</td>

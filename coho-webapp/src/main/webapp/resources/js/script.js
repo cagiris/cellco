@@ -190,6 +190,7 @@ function startShift() {
 			$('#shiftId').val(userShiftInfo.shiftId);
 			$('#shiftButton').html('Stop Shift');
 			$("#shiftStartTime").val(userShiftInfo.shiftStartTime);
+			$('#shiftDurationLong').val(userShiftInfo.shiftDurationLong);
 			updateShiftDuration();
 		},
 		error : function() {
@@ -208,6 +209,7 @@ function stopShift(shiftId) {
 			$('#shiftButton').html('Start Shift');
 			$('#shiftDuration').html("00:00:00");
 			$("#shiftStartTime").val(null);
+			$('#shiftDurationLong').val(0);
 		},
 		data : {
 			'shiftId' : shiftId
@@ -232,6 +234,7 @@ function checkForActiveShift() {
 			$('#shiftId').val(userShiftInfo.shiftId);
 			$("#shiftStartTime").val(userShiftInfo.shiftStartTime);
 			$('#shiftButton').html('Stop Shift');
+			$('#shiftDurationLong').val(userShiftInfo.shiftDurationLong);
 			updateShiftDuration();
 		},
 		error : function() {
@@ -247,13 +250,13 @@ function updateShiftDuration() {
 		return;
 	}
 	var currentTime = new Date();
-	var shiftStartTime = $('#shiftStartTime').val();
-	var duration = currentTime - shiftStartTime;
+	var duration = parseInt($('#shiftDurationLong').val(),10);
+	$('#shiftDurationLong').val(duration+1000);
 	var timeStr = getHHMMSS(duration);
 	$("#shiftDuration").html(timeStr);
 	setTimeout(function() {
 		updateShiftDuration()
-	}, 500)
+	}, 1000)
 }
 
 (function() {

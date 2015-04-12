@@ -26,7 +26,7 @@ public class QBookingDetailsEntity extends EntityPathBase<BookingDetailsEntity> 
 
     public final NumberPath<java.math.BigDecimal> baseFare = createNumber("baseFare", java.math.BigDecimal.class);
 
-    public final NumberPath<java.math.BigInteger> bookingId = createNumber("bookingId", java.math.BigInteger.class);
+    public final StringPath bookingId = createString("bookingId");
 
     public final QCustomerEntity customer;
 
