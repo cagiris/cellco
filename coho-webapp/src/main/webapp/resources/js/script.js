@@ -65,7 +65,7 @@ $("#myModal").on(
 			var entityId = $('#recipient-name').val();
 			console.log(entityId);
 			$.ajax({
-				url : "delete/" + entityId,
+				url : getRequestURL("user/delete/" + entityId),
 				cache : false,
 				type : "GET",
 				success : function(response) {
@@ -190,6 +190,7 @@ function startShift() {
 			$('#shiftId').val(userShiftInfo.shiftId);
 			$('#shiftButton').html('Stop Shift');
 			$("#shiftStartTime").val(userShiftInfo.shiftStartTime);
+			$('#shiftDurationLong').val(userShiftInfo.shiftDurationLong);
 			updateShiftDuration();
 		},
 		error : function() {
@@ -208,6 +209,7 @@ function stopShift(shiftId) {
 			$('#shiftButton').html('Start Shift');
 			$('#shiftDuration').html("00:00:00");
 			$("#shiftStartTime").val(null);
+			$('#shiftDurationLong').val(0);
 		},
 		data : {
 			'shiftId' : shiftId
@@ -232,6 +234,7 @@ function checkForActiveShift() {
 			$('#shiftId').val(userShiftInfo.shiftId);
 			$("#shiftStartTime").val(userShiftInfo.shiftStartTime);
 			$('#shiftButton').html('Stop Shift');
+			$('#shiftDurationLong').val(userShiftInfo.shiftDurationLong);
 			updateShiftDuration();
 		},
 		error : function() {
@@ -247,13 +250,13 @@ function updateShiftDuration() {
 		return;
 	}
 	var currentTime = new Date();
-	var shiftStartTime = $('#shiftStartTime').val();
-	var duration = currentTime - shiftStartTime;
+	var duration = parseInt($('#shiftDurationLong').val(),10);
+	$('#shiftDurationLong').val(duration+1000);
 	var timeStr = getHHMMSS(duration);
 	$("#shiftDuration").html(timeStr);
 	setTimeout(function() {
 		updateShiftDuration()
-	}, 500)
+	}, 1000)
 }
 
 (function() {
@@ -363,24 +366,39 @@ function getBaseURL() {
 
 }
 
-$('#update-password-button').click(function() {
+function updatePassword() {
 	$.ajax({
 		url : getRequestURL("user-profile/update-user-password"),
 		cache : false,
-		dataType : 'json',
+		dataType : 'html',
 		contentType : 'application/json',
 		mimeType : 'application/json',
+		async: false,
 		data : JSON.stringify({
 			userId : $('#userId').val(),
-			newPassword : $('#new-password').val(),
-			reEnteredPassword : $('#re-entered-password').val()
+			newPassword : $('#newPassword').val(),
+			reEnteredPassword : $('#reEnteredPassword').val()
 		}),
 		type : "POST",
 		success : function(data) {
-			$('#update-password-success').html(data);
+			$('#change-password-modal').html(data);
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			$('#change-password-modal').html(jqXHR.responseText);
+		}
+	});
+};
+
+$('#change-password-modal').on('show.bs.modal', function (event) {
+	$.ajax({
+		url : getRequestURL("user-profile/update-user-password"),
+		cache : false,
+		type : "GET",
+		success : function(data) {
+			$('#change-password-modal').html(data);
 		},
 		error : function(data) {
-			$('#update-password-error').html("Operation failed");
+			$('#change-password-modal').html("Please try again later!");
 		}
 	});
 });

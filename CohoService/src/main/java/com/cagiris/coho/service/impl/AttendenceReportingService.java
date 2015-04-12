@@ -7,10 +7,12 @@ package com.cagiris.coho.service.impl;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.cagiris.coho.service.api.IAttendenceReportingService;
 import com.cagiris.coho.service.api.ITeamShiftDetails;
@@ -45,6 +47,23 @@ public class AttendenceReportingService implements IAttendenceReportingService {
     @Override
     public IUserShiftInfo startUserShift(Long teamId, String userId) throws AttendenceReportingServiceException {
         Date currentTime = new Date();
+        IUserShiftInfo lastShiftDetailsForUser = getLastShiftDetailsForUser(teamId, userId);
+        ITeamShiftDetails teamShiftDetails;
+        try {
+            teamShiftDetails = getTeamShiftDetails(teamId);
+        } catch (ResourceNotFoundException e) {
+            throw new AttendenceReportingServiceException(e);
+        }
+        DateTime currentDateTime = new DateTime();
+        if (lastShiftDetailsForUser != null) {
+            Integer minimumGapBetweenShifts = Optional.ofNullable(teamShiftDetails.getMinimumGapBetweenShifts())
+                    .map(Long::intValue).orElse(0);
+            DateTime nextEligibleLoginTime = new DateTime(lastShiftDetailsForUser.getShiftEndTime())
+                    .plusMinutes(minimumGapBetweenShifts.intValue());
+            if (currentDateTime.isBefore(nextEligibleLoginTime)) {
+                throw new UsernameNotFoundException("Cannot start shift before minimum gap");
+            }
+        }
         UserShiftEntity userShiftEntity = new UserShiftEntity();
         userShiftEntity.setUserId(userId);
         userShiftEntity.setShiftStartTime(currentTime);

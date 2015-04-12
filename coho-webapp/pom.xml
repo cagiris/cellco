@@ -20,7 +20,6 @@
 		<log4j.version>1.2.17</log4j.version>
 		<mvnCompiler.version>3.2</mvnCompiler.version>
 		<tiles.version>3.0.5</tiles.version>
-		<jackson.version>2.3.3</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -104,11 +103,6 @@
 		</dependency>
 
 		<!-- JSON Parser -->
-	    <dependency>
-	        <groupId>com.fasterxml.jackson.core</groupId>
-	        <artifactId>jackson-databind</artifactId>
-	        <version>${jackson.version}</version>
-	    </dependency>
 	    
 		<dependency>
 			<groupId>com.cagiris.coho</groupId>

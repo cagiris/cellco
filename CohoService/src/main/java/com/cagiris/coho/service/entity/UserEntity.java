@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.cagiris.coho.service.api.AuthenicationPolicy;
 import com.cagiris.coho.service.api.IUser;
 import com.cagiris.coho.service.api.UserRole;
@@ -21,6 +24,7 @@ import com.cagiris.coho.service.api.UserRole;
  *
  * @author: ssnk
  */
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 public class UserEntity extends BaseEntity implements IUser {
 

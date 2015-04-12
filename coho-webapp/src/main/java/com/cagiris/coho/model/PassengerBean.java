@@ -14,7 +14,9 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.cagiris.coho.service.api.IPassenger;
+import com.cagiris.coho.service.flight.api.IPassenger;
+import com.cagiris.coho.service.flight.api.PassengerInfoBean;
+import com.cagiris.coho.service.flight.api.PassengerType;
 
 /**
  *
@@ -54,6 +56,16 @@ public class PassengerBean extends AbstractBean {
         this.lastName = passenger.getLastName();
         this.type = passenger.getType().toString();
         this.dateOfBirth = passenger.getDateOfBirth();
+    }
+
+    public PassengerInfoBean mapToPassengerInfoBean() {
+        PassengerInfoBean passengerInfoBean = new PassengerInfoBean();
+        passengerInfoBean.setDateOfBirth(dateOfBirth);
+        passengerInfoBean.setFirstName(firstName);
+        passengerInfoBean.setLastName(lastName);
+        passengerInfoBean.setMiddleName(middleName);
+        passengerInfoBean.setType(PassengerType.valueOf(type));
+        return passengerInfoBean;
     }
 
     public String getFirstName() {

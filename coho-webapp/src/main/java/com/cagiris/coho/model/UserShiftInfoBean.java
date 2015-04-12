@@ -35,6 +35,8 @@ public class UserShiftInfoBean extends AbstractBean {
 
     private String shiftDuration;
 
+    private Long shiftDurationLong;
+
     public UserShiftInfoBean() {
     }
 
@@ -46,6 +48,7 @@ public class UserShiftInfoBean extends AbstractBean {
         this.userId = userShiftInfo.getUserId();
         this.shiftStartReason = userShiftInfo.getShiftStartReason();
         this.shiftEndReason = userShiftInfo.getShiftEndReason();
+        this.shiftDurationLong = userShiftInfo.getShiftDuration();
         this.shiftDuration = ControllerUtils.getFormattedTimeForMS(userShiftInfo.getShiftDuration());
     }
 
@@ -115,5 +118,13 @@ public class UserShiftInfoBean extends AbstractBean {
 
     public void setShiftDuration(String formattedShiftDuration) {
         this.shiftDuration = formattedShiftDuration;
+    }
+
+    public Long getShiftDurationLong() {
+        return shiftDurationLong;
+    }
+
+    public void setShiftDurationLong(Long shiftDurationLong) {
+        this.shiftDurationLong = shiftDurationLong;
     }
 }

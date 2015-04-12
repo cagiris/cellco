@@ -8,7 +8,15 @@
         <put-attribute name="main-content" value="/WEB-INF/views/partials/common/main-content/{1}.jsp" />
     </definition>
     
+    <definition name="error/*" extends="BasicTemplate">
+        <put-attribute name="main-content" value="/WEB-INF/views/partials/error/main-content/{1}.jsp" />
+    </definition>
+    
     <definition name="*/*" extends="DefaultTemplate">
+        <put-attribute name="main-content" value="/WEB-INF/views/partials/{1}/main-content/{2}.jsp" />
+    </definition>
+    
+     <definition name="dynamic/*/*" extends="AjaxTemplate">
         <put-attribute name="main-content" value="/WEB-INF/views/partials/{1}/main-content/{2}.jsp" />
     </definition>
     

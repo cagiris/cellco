@@ -9,14 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.UpdatePasswordBean;
@@ -121,30 +123,46 @@ public class UserProfileController extends AbstractCRUDController<UserProfileBea
         modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
 
         String entityId = ControllerUtils.getLoggedInUser().getUsername();
+
         modelAndView.addAllObjects(get(entityId));
 
         return modelAndView;
     }
 
+    @RequestMapping(value = {UPDATE_PASSWORD_MAPPING}, method = RequestMethod.GET)
+    public ModelAndView showUpdatePasswordPage() {
+        ModelAndView model = new ModelAndView();
+        model.addObject(new UpdatePasswordBean());
+        model.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping() + "/" + UPDATE_PASSWORD_MAPPING);
+        return model;
+    }
+
     @RequestMapping(value = {UPDATE_PASSWORD_MAPPING}, method = RequestMethod.POST,
                     consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public final String updatePassword(@RequestBody final UpdatePasswordBean bean) {
+    public ModelAndView updatePassword(@RequestBody @Valid UpdatePasswordBean bean, BindingResult bindingResult,
+            ModelMap modelMap) {
 
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping() + "/"
+                + UPDATE_PASSWORD_MAPPING);
         try {
-            ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
-                    .getTeamId(), bean.getUserId());
+            if (bindingResult.hasErrors()) {
+                modelAndView.addAllObjects(modelMap);
+            } else {
+                ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
+                        .getTeamId(), bean.getUserId());
 
-            if (bean.getNewPassword().equals(bean.getReEnteredPassword())) {
                 hierarchyService.updateUser(bean.getUserId(), bean.getNewPassword(),
                         UserRole.valueOf(user.getUserRole()));
 
-                return "Password updated successfuly";
-            } else {
-                return "Passwords don't match!";
+                modelAndView.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + "common/ajax-feedback-msg");
+                modelAndView.addObject(ATTR_SUCCESS_MSG, "Password updated successfuly");
             }
         } catch (CohoException e) {
-            return "Some server side error, Please try again later";
+            modelAndView.addAllObjects(modelMap);
+            modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
         }
+
+        return modelAndView;
     }
 }

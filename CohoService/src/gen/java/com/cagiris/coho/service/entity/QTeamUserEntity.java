@@ -22,6 +22,14 @@ public class QTeamUserEntity extends EntityPathBase<TeamUserEntity> {
 
     public static final QTeamUserEntity teamUserEntity = new QTeamUserEntity("teamUserEntity");
 
+    public final QBaseEntity _super = new QBaseEntity(this);
+
+    //inherited
+    public final DateTimePath<java.util.Date> dateAdded = _super.dateAdded;
+
+    //inherited
+    public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
+
     public final QTeamEntity teamEntity;
 
     public final NumberPath<Long> teamUserId = createNumber("teamUserId", Long.class);

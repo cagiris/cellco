@@ -2,7 +2,9 @@
  * Copyright (c) 2015, Cagiris Pvt. Ltd.
  * All rights reserved.
  */
-package com.cagiris.coho.service.exception;
+package com.cagiris.coho.service.flight.exception;
+
+import com.cagiris.coho.service.exception.CohoException;
 
 /**
  *

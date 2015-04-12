@@ -2,14 +2,17 @@
  * Copyright (c) 2015, Cagiris Pvt. Ltd.
  * All rights reserved.
  */
-package com.cagiris.coho.service.entity;
+package com.cagiris.coho.service.flight.entity;
+
+import java.math.BigInteger;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.cagiris.coho.service.api.ICustomer;
+import com.cagiris.coho.service.entity.BaseEntity;
+import com.cagiris.coho.service.flight.api.ICustomer;
 
 /**
  *
@@ -18,9 +21,7 @@ import com.cagiris.coho.service.api.ICustomer;
 @Entity
 public class CustomerEntity extends BaseEntity implements ICustomer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
+    private BigInteger customerId;
 
     private String firstName;
 
@@ -48,10 +49,9 @@ public class CustomerEntity extends BaseEntity implements ICustomer {
 
     }
 
-    public CustomerEntity(Long customerId, String firstName, String middleName, String lastName, String emailId,
-            String contactNumber, String addressLine1, String addressLine2, String city, String pincode, String state,
-            String country) {
-        this.customerId = customerId;
+    public CustomerEntity(String firstName, String lastName, String middleName, String addressLine1,
+            String addressLine2, String city, String contactNumber, String country, String emailId, String pincode,
+            String state) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -90,8 +90,10 @@ public class CustomerEntity extends BaseEntity implements ICustomer {
         return country;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
-    public Long getCustomerId() {
+    public BigInteger getCustomerId() {
         return customerId;
     }
 
@@ -145,7 +147,7 @@ public class CustomerEntity extends BaseEntity implements ICustomer {
         this.country = country;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(BigInteger customerId) {
         this.customerId = customerId;
     }
 

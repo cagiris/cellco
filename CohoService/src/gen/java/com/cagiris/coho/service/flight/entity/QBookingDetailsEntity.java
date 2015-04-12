@@ -1,4 +1,4 @@
-package com.cagiris.coho.service.entity;
+package com.cagiris.coho.service.flight.entity;
 
 import static com.mysema.query.types.PathMetadataFactory.*;
 
@@ -16,19 +16,17 @@ import com.mysema.query.types.path.PathInits;
 @Generated("com.mysema.query.codegen.EntitySerializer")
 public class QBookingDetailsEntity extends EntityPathBase<BookingDetailsEntity> {
 
-    private static final long serialVersionUID = -999696478L;
+    private static final long serialVersionUID = 1762016750L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QBookingDetailsEntity bookingDetailsEntity = new QBookingDetailsEntity("bookingDetailsEntity");
 
-    public final QBaseEntity _super = new QBaseEntity(this);
+    public final com.cagiris.coho.service.entity.QBaseEntity _super = new com.cagiris.coho.service.entity.QBaseEntity(this);
 
-    public final NumberPath<Double> baseFare = createNumber("baseFare", Double.class);
+    public final NumberPath<java.math.BigDecimal> baseFare = createNumber("baseFare", java.math.BigDecimal.class);
 
-    public final NumberPath<Long> bookingId = createNumber("bookingId", Long.class);
-
-    public final SetPath<BookingPassengerInfoEntity, QBookingPassengerInfoEntity> bookingVsPassengers = this.<BookingPassengerInfoEntity, QBookingPassengerInfoEntity>createSet("bookingVsPassengers", BookingPassengerInfoEntity.class, QBookingPassengerInfoEntity.class, PathInits.DIRECT2);
+    public final StringPath bookingId = createString("bookingId");
 
     public final QCustomerEntity customer;
 
@@ -38,11 +36,13 @@ public class QBookingDetailsEntity extends EntityPathBase<BookingDetailsEntity> 
     //inherited
     public final DateTimePath<java.util.Date> dateModified = _super.dateModified;
 
-    public final NumberPath<Double> miscellaneousChanrges = createNumber("miscellaneousChanrges", Double.class);
+    public final NumberPath<java.math.BigDecimal> miscellaneousCharges = createNumber("miscellaneousCharges", java.math.BigDecimal.class);
 
-    public final NumberPath<Double> taxesAndServiceFee = createNumber("taxesAndServiceFee", Double.class);
+    public final ListPath<PassengerInfoEntity, QPassengerInfoEntity> passengers = this.<PassengerInfoEntity, QPassengerInfoEntity>createList("passengers", PassengerInfoEntity.class, QPassengerInfoEntity.class, PathInits.DIRECT2);
 
-    public final QUserEntity user;
+    public final NumberPath<java.math.BigDecimal> taxesAndServiceFee = createNumber("taxesAndServiceFee", java.math.BigDecimal.class);
+
+    public final StringPath userId = createString("userId");
 
     public QBookingDetailsEntity(String variable) {
         this(BookingDetailsEntity.class, forVariable(variable), INITS);
@@ -63,7 +63,6 @@ public class QBookingDetailsEntity extends EntityPathBase<BookingDetailsEntity> 
     public QBookingDetailsEntity(Class<? extends BookingDetailsEntity> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
         this.customer = inits.isInitialized("customer") ? new QCustomerEntity(forProperty("customer")) : null;
-        this.user = inits.isInitialized("user") ? new QUserEntity(forProperty("user"), inits.get("user")) : null;
     }
 
 }

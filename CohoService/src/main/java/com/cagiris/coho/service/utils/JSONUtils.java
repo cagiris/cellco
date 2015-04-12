@@ -5,12 +5,12 @@
 package com.cagiris.coho.service.utils;
 
 import java.io.IOException;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import java.util.Map;
 
 import com.cagiris.coho.service.exception.CohoException;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -32,4 +32,9 @@ public class JSONUtils {
             throw new CohoException(e);
         }
     }
+
+    public static Map<String, Object> getMapForObject(Object object) {
+        return objectMapper.convertValue(object, Map.class);
+    }
+
 }

@@ -14,9 +14,19 @@
 		<property name="connection.username">postgres</property>
 		<property name="connection.password"></property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
-		<property name="hibernate.connection.pool_size ">100</property>
-		
-		
+
+		<!-- cache related config -->
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+
+		<!-- connection pool config -->
+		<property name="hibernate.c3p0.min_size">10</property>
+		<property name="hibernate.c3p0.max_size">50</property>
+		<property name="hibernate.c3p0.timeout">300</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+		<property name="hibernate.c3p0.idle_test_period">3000</property>
+
 	</session-factory>
 
 </hibernate-configuration>

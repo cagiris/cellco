@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.cagiris.coho.service.api.ICustomer;
+import com.cagiris.coho.service.flight.api.ICustomer;
 
 /**
  *
@@ -57,17 +57,16 @@ public class CustomerBean extends AbstractBean {
 
     @NotBlank(message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
     @Pattern(regexp = "^[0-9]*$", message = "Invalid pin code", groups = ValidationCheckForPattern.class)
-    @Size(min = 6, max = 6, message = "Please enter a correct {min} digit postal code",
-          groups = ValidationCheckForLength.class)
+    @Size(max = 6, message = "Too long (max {6} characters)", groups = ValidationCheckForLength.class)
     private String pincode;
 
     @NotBlank(message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
-    @Pattern(regexp = "^[a-zA-Z]*$", message = "Can only contain alphabets", groups = ValidationCheckForPattern.class)
+    @Pattern(regexp = "^[a-zA-Z ]*$", message = "Can only contain alphabets", groups = ValidationCheckForPattern.class)
     @Size(min = 1, max = 30, message = "Too long (Max ({max}))", groups = ValidationCheckForLength.class)
     private String state;
 
     @NotBlank(message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
-    @Pattern(regexp = "^[a-zA-Z]*$", message = "Can only contain alphabets", groups = ValidationCheckForPattern.class)
+    @Pattern(regexp = "^[a-zA-Z ]*$", message = "Can only contain alphabets", groups = ValidationCheckForPattern.class)
     @Size(min = 1, max = 30, message = "Too long (Max ({max}))", groups = ValidationCheckForLength.class)
     private String country;
 
