@@ -123,6 +123,7 @@ public class UserProfileController extends AbstractCRUDController<UserProfileBea
         modelAndView.setViewName(getURLMapping() + GET_URL_MAPPING);
 
         String entityId = ControllerUtils.getLoggedInUser().getUsername();
+
         modelAndView.addAllObjects(get(entityId));
 
         return modelAndView;

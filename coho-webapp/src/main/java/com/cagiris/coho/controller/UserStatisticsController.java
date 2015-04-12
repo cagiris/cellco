@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,7 +46,6 @@ public class UserStatisticsController {
     @Autowired
     private IHierarchyService hierarchyService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = GET_ALL_ACTIVE_SHIFT_MAPPING)
     public ModelAndView showRuntimeStatisticsPage(ModelMap modelMap) throws AttendenceReportingServiceException {
         List<? extends IUserShiftInfo> allActiveShiftInfos = attendenceReportingService.getAllActiveShiftInfos();
@@ -59,7 +57,6 @@ public class UserStatisticsController {
         return modelAndView;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = ALL_USER_SHIFT_MAPPING)
     public ModelAndView showUserShiftStatisticsPage(ModelMap modelMap) throws AttendenceReportingServiceException,
             HierarchyServiceException {

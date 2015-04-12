@@ -18,7 +18,6 @@ import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.service.api.AuthenicationPolicy;
 import com.cagiris.coho.service.api.IHierarchyService;
 import com.cagiris.coho.service.api.IOrganization;
-import com.cagiris.coho.service.api.ITeamUser;
 import com.cagiris.coho.service.api.UserRole;
 import com.cagiris.coho.service.exception.CohoException;
 
@@ -82,22 +81,12 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     @Override
     protected ModelMap get(Serializable entityId) throws CohoException {
-        ModelMap modelMap = new ModelMap();
-
-        ITeamUser user = hierarchyService.getTeamUserByUserId(ControllerUtils.getDefaultTeam(hierarchyService)
-                .getTeamId(), (String)entityId);
-
-        UserBean userBean = new UserBean(user);
-
-        modelMap.addAttribute(userBean);
-
-        return modelMap;
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
     protected ModelMap getListFormModel() throws CohoException {
-        // TODO Auto-generated method stub
-        return null;
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
@@ -107,26 +96,11 @@ public class UserManagementController extends AbstractCRUDController<UserBean> {
 
     @Override
     protected ModelMap getUpdateFormModel(Serializable entityId) throws CohoException {
-
-        ModelMap modelMap = new ModelMap();
-        modelMap.addAllAttributes(super.getUpdateFormModel(entityId));
-
-        // Add the additional data for list box.
-        IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
-        modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
-
-        return modelMap;
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
     }
 
     @Override
     protected ModelMap update(Serializable entityId, UserBean bean, ModelMap modelMap) throws CohoException {
-        ModelMap responseModelMap = new ModelMap();
-
-        hierarchyService.addUserToTeam(ControllerUtils.getDefaultTeam(hierarchyService).getTeamId(), bean.getUserId(),
-                bean.getPassword(), UserRole.valueOf(bean.getUserRole()), AuthenicationPolicy.PASSWORD_BASED);
-
-        responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "User details successfuly updated.");
-
-        return responseModelMap;
+        throw new CohoException(Constants.ERROR_FORBIDDEN);
     }
 }

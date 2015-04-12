@@ -13,7 +13,24 @@
 	<http auto-config="true" use-expressions="true">
         <intercept-url pattern="/login*" access="permitAll"/>
         <intercept-url pattern="/403*" access="permitAll"/>
-        <intercept-url pattern="/**" access="hasAnyRole('AGENT', 'ADMIN')" />
+        
+        <!-- Define individual access for other users  -->
+        <intercept-url pattern="/" access="hasRole('AGENT')" />
+        <intercept-url pattern="/dashboard" access="hasRole('AGENT')" />
+        <intercept-url pattern="/user-profile" access="hasRole('AGENT')" />
+        <intercept-url pattern="/get-agent-quick-statistics" access="hasRole('AGENT')" />
+        <intercept-url pattern="/leave/create" access="hasRole('AGENT')" />
+        <intercept-url pattern="/leave/get/*" access="hasRole('AGENT')" />
+        <intercept-url pattern="/leave/list" access="hasRole('AGENT')" />
+        <intercept-url pattern="/booking/create" access="hasRole('AGENT')" />
+        <intercept-url pattern="/booking/history" access="hasRole('AGENT')" />
+        <intercept-url pattern="/get-shift-status" access="hasRole('AGENT')" />
+        <intercept-url pattern="/start-shift" access="hasRole('AGENT')" />
+        <intercept-url pattern="/end-shift" access="hasRole('AGENT')" />
+        
+        <!-- Admin has access to everything -->
+        <intercept-url pattern="/**" access="hasRole('ADMIN')" />
+        
 		<form-login login-page="/login" login-processing-url="/authenticate"
 			default-target-url="/dashboard" authentication-failure-url="/login?error=true"
 			username-parameter="userName" password-parameter="password" />

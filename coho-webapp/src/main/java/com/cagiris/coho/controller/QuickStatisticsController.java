@@ -11,7 +11,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -52,7 +51,6 @@ public class QuickStatisticsController extends AbstractController {
     private IAttendenceReportingService attendenceReportingService;
 
     @RequestMapping(GET_AGENT_QUICK_STATISTICS)
-    @PreAuthorize("hasRole('AGENT')")
     public @ResponseBody QuickStatsBean getAgentQuickStats() {
 
         QuickStatsBean quickStatsBean = new QuickStatsBean();
@@ -77,7 +75,6 @@ public class QuickStatisticsController extends AbstractController {
     }
 
     @RequestMapping(GET_ADMIN_QUICK_STATISTICS)
-    @PreAuthorize("hasRole('ADMIN')")
     public @ResponseBody QuickStatsBean getAdminQuickStats() {
 
         Integer countPendingLeaveApprovals = 0;
