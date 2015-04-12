@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import com.cagiris.coho.service.entity.BaseEntity;
 import com.cagiris.coho.service.flight.api.IPassenger;
 import com.cagiris.coho.service.flight.api.PassengerType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -112,6 +113,7 @@ public class PassengerInfoEntity extends BaseEntity implements IPassenger {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "booking_id")
     public BookingDetailsEntity getBookingDetailsEntity() {

@@ -10,13 +10,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.cagiris.coho.service.api.ITeamShiftDetails;
 
 /**
  *
  * @author: abhishek
  */
-
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 public class TeamShiftDetailsEntity extends BaseEntity implements ITeamShiftDetails {
 

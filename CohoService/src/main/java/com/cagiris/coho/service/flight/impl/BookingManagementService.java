@@ -30,8 +30,8 @@ import com.cagiris.coho.service.flight.entity.BookingDetailsEntity;
 import com.cagiris.coho.service.flight.entity.CustomerEntity;
 import com.cagiris.coho.service.flight.entity.PassengerInfoEntity;
 import com.cagiris.coho.service.flight.exception.BookingManagementException;
+import com.cagiris.coho.service.utils.FreemarkerUtil;
 import com.cagiris.coho.service.utils.IEmailService;
-import com.cagiris.coho.service.utils.JSONUtils;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
 
 /**
@@ -49,11 +49,13 @@ public class BookingManagementService implements IBookingManagementService {
 
     private IEmailService emailService;
 
+    private FreemarkerUtil freemarkerUtil;
+
     private UniqueIDGenerator bookingIdGenerator;
 
     public BookingManagementService(IDatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
-        this.bookingIdGenerator = new UniqueIDGenerator("BookingId");
+        this.bookingIdGenerator = new UniqueIDGenerator("Booking");
     }
 
     public IHierarchyService getHierarchyService() {
@@ -88,6 +90,9 @@ public class BookingManagementService implements IBookingManagementService {
                 PassengerInfoEntity passengerInfoEntity = new PassengerInfoEntity(passenger.getFirstName(),
                         passenger.getMiddleName(), passenger.getLastName(), passenger.getType(),
                         passenger.getDateOfBirth());
+                passengerInfoEntity.setBookingDetailsEntity(bookingDetailsEntity);
+                passengerInfoEntity.setDateAdded(currentTime);
+                passengerInfoEntity.setDateModified(currentTime);
                 databaseManager.save(passengerInfoEntity);
             }
             bookingDetailsEntity = databaseManager.get(BookingDetailsEntity.class, id);
@@ -110,8 +115,12 @@ public class BookingManagementService implements IBookingManagementService {
         if (StringUtils.isNotBlank(userProfile.getEmailId())) {
             recipients.add(userProfile.getEmailId());
         }
-        emailService.sendEmail(recipients, "Booking id:" + bookingDetails.getBookingId(),
-                JSONUtils.getJsonStringForObject(bookingDetails));
+        logger.info("Wll send email for bookingId:{} to recipients:{}", bookingDetails.getBookingId(),
+                recipients.toArray(new String[0]));
+        String emailBody = freemarkerUtil.evaluateTemplate("booking-email-template.ftl", bookingDetails);
+        String emailSubject = "Booking id:" + bookingDetails.getBookingId();
+        emailService.sendEmail(recipients, emailSubject, emailBody);
+        logger.info("Email successfully sent");
     }
 
     @Override
@@ -148,6 +157,26 @@ public class BookingManagementService implements IBookingManagementService {
 
     public void setEmailService(IEmailService emailService) {
         this.emailService = emailService;
+    }
+
+    @Override
+    public IBookingDetails getBookingDetails(String bookingId) throws ResourceNotFoundException,
+            BookingManagementException {
+        try {
+            return databaseManager.get(BookingDetailsEntity.class, bookingId);
+        } catch (DatabaseManagerException e) {
+            throw new BookingManagementException(e);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(e);
+        }
+    }
+
+    public FreemarkerUtil getFreemarkerUtil() {
+        return freemarkerUtil;
+    }
+
+    public void setFreemarkerUtil(FreemarkerUtil freemarkerUtil) {
+        this.freemarkerUtil = freemarkerUtil;
     }
 
 }

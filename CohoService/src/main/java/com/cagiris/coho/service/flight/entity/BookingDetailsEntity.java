@@ -96,6 +96,7 @@ public class BookingDetailsEntity extends BaseEntity implements IBookingDetails 
     }
 
     @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "booking_id")
     @Override
     public List<PassengerInfoEntity> getPassengers() {
         return passengers;

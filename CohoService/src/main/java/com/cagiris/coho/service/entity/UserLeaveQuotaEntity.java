@@ -17,6 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.cagiris.coho.service.api.IUserLeaveQuota;
 import com.cagiris.coho.service.api.LeaveType;
 
@@ -24,6 +27,7 @@ import com.cagiris.coho.service.api.LeaveType;
  *
  * @author: ssnk
  */
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 public class UserLeaveQuotaEntity extends BaseEntity implements IUserLeaveQuota {
 

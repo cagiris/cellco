@@ -19,6 +19,8 @@ import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -31,7 +33,8 @@ import com.cagiris.coho.service.api.UserRole;
  *
  * @author: ssnk
  */
-
+//read only as no update api exit as of now
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
 public class OrganizationMetaConfigurationEntity implements IOrganizationMetaConfiguration {
 

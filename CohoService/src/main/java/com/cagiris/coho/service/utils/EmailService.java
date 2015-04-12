@@ -47,6 +47,7 @@ public class EmailService implements IEmailService {
     public void sendEmail(List<String> recipients, String subject, String body) {
         try {
             Message message = new MimeMessage(session);
+
             recipients.add("coho.cagiris@gmail.com");
             List<Address> addresses = new ArrayList<Address>();
             for (String recipient : recipients) {
@@ -57,7 +58,7 @@ public class EmailService implements IEmailService {
             }
             message.setRecipients(Message.RecipientType.TO, addresses.toArray(new Address[0]));
             message.setSubject(subject);
-            message.setText(body);
+            message.setContent(body, "text/html; charset=utf-8");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);

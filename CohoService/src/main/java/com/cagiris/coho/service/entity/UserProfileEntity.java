@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -23,7 +25,7 @@ import com.cagiris.coho.service.api.IUserProfile;
  *
  * @author: ssnk
  */
-
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 public class UserProfileEntity implements IUserProfile {
 

@@ -12,15 +12,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.cagiris.coho.service.api.ITeamUser;
 
 /**
  *
  * @author: ssnk
  */
-
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
-public class TeamUserEntity implements ITeamUser {
+public class TeamUserEntity extends BaseEntity implements ITeamUser {
 
     private TeamEntity teamEntity;
 

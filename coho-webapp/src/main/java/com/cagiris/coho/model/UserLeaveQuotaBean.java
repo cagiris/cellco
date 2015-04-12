@@ -1,6 +1,7 @@
 package com.cagiris.coho.model;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.cagiris.coho.service.api.IUserLeaveQuota;
@@ -15,7 +16,7 @@ public class UserLeaveQuotaBean extends AbstractBean {
 
     public UserLeaveQuotaBean(IUserLeaveQuota userLeaveQuota) {
         this.userId = userLeaveQuota.getUserId();
-        this.leaveTypeVsLeaveQuota = userLeaveQuota.getLeaveTypeVsLeaveQuota();
+        this.leaveTypeVsLeaveQuota = new HashMap(userLeaveQuota.getLeaveTypeVsLeaveQuota());
         this.totalLeaveCount = userLeaveQuota.getTotalLeaveCount();
         this.lastLeaveAccumulationDate = userLeaveQuota.getLastLeaveAccumulationDate();
     }

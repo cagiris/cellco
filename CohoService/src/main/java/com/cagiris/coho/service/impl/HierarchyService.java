@@ -113,7 +113,11 @@ public class HierarchyService implements IHierarchyService {
     @Override
     public ITeam addTeam(Long organizationId, Long parentTeamId, String teamName, String teamDescription)
             throws HierarchyServiceException {
+        Date date = new Date();
         TeamEntity teamEntity = new TeamEntity();
+        teamEntity.setDateAdded(date);
+        teamEntity.setDateModified(date);
+
         teamEntity.setTeamName(teamName);
         teamEntity.setTeamDescription(teamDescription);
         teamEntity.setParentTeamEntity(null);
@@ -222,11 +226,14 @@ public class HierarchyService implements IHierarchyService {
             }
         } catch (ResourceNotFoundException e1) {
         }
+        Date currentTime = new Date();
         UserEntity userEntity = new UserEntity();
         userEntity.setAuthPolicy(authenicationPolicy);
         userEntity.setUserId(userId);
         userEntity.setAuthToken(authToken);
         userEntity.setUserRole(userRole);
+        userEntity.setDateAdded(currentTime);
+        userEntity.setDateModified(currentTime);
         TeamUserEntity teamUserEntity = new TeamUserEntity();
         teamUserEntity.setUserEntity(userEntity);
         try {
@@ -236,6 +243,8 @@ public class HierarchyService implements IHierarchyService {
             userEntity = databaseManager.get(UserEntity.class, id);
             teamUserEntity.setTeamEntity(teamEntity);
             teamUserEntity.setUserEntity(userEntity);
+            teamUserEntity.setDateAdded(currentTime);
+            teamUserEntity.setDateModified(currentTime);
             databaseManager.save(teamUserEntity);
             UserProfileEntity userProfileEntity = new UserProfileEntity();
             userProfileEntity.setUserEntity(userEntity);
@@ -267,6 +276,9 @@ public class HierarchyService implements IHierarchyService {
         }
         TeamUserEntity teamUserEntity = new TeamUserEntity();
         teamUserEntity.setUserEntity(userEntity);
+        Date currentTime = new Date();
+        teamUserEntity.setDateAdded(currentTime);
+        teamUserEntity.setDateModified(currentTime);
         try {
             TeamEntity teamEntity = databaseManager.get(TeamEntity.class, teamId);
             teamUserEntity.setTeamEntity(teamEntity);
@@ -346,6 +358,9 @@ public class HierarchyService implements IHierarchyService {
         OrganizationEntity organizationEntity = new OrganizationEntity();
         organizationEntity.setOrganizationName(organizationName);
         organizationEntity.setOrganizationDescription(organizationDescription);
+        Date currentTime = new Date();
+        organizationEntity.setDateAdded(currentTime);
+        organizationEntity.setDateModified(currentTime);
         try {
             Long organizationId = (Long)databaseManager.save(organizationEntity);
             Set<UserRole> availableUserRoles = new HashSet<UserRole>();
@@ -600,6 +615,7 @@ public class HierarchyService implements IHierarchyService {
             UserEntity userEntity = databaseManager.get(UserEntity.class, userId);
             userEntity.setAuthToken(authToken);
             userEntity.setUserRole(userRole);
+            userEntity.setDateModified(new Date());
             databaseManager.saveOrUpdate(userEntity);
             return userEntity;
         } catch (ResourceNotFoundException | DatabaseManagerException | EntityNotFoundException e) {
