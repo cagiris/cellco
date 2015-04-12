@@ -367,9 +367,10 @@ function updatePassword() {
 	$.ajax({
 		url : getRequestURL("user-profile/update-user-password"),
 		cache : false,
-		dataType : 'json',
+		dataType : 'html',
 		contentType : 'application/json',
 		mimeType : 'application/json',
+		async: false,
 		data : JSON.stringify({
 			userId : $('#userId').val(),
 			newPassword : $('#newPassword').val(),
@@ -379,8 +380,8 @@ function updatePassword() {
 		success : function(data) {
 			$('#change-password-modal').html(data);
 		},
-		error : function(data) {
-			$('#change-password-modal').html(data);
+		error : function(jqXHR, textStatus, errorThrown) {
+			$('#change-password-modal').html(jqXHR.responseText);
 		}
 	});
 };
