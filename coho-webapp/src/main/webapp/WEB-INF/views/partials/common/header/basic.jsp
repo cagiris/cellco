@@ -9,7 +9,10 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<core:url value = '/' />"> - | COHO | -</a>
+			<a class="navbar-brand" href="<core:url value = '/' />"> 
+				<img src="/coho/resources/images/logo_grey.png" class="navbar-brand" style="margin-top:-15px">
+				- | COHO | -
+			</a>
 		</div>
 	</div>
 </nav>

@@ -9,6 +9,16 @@ body {
   padding-top: 50px;
 }
 
+/*
+ * Background
+ */
+#coho-background {
+	position: relative;
+	top: -75px;
+	left: -10px;
+	z-index: -1;
+}
+
 
 /*
  * Global add-ons
