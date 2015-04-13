@@ -130,7 +130,7 @@ public class BookingManagementService implements IBookingManagementService {
             String addressLine2, String city, String contactNumber, String country, String emailId, String pincode,
             String state) throws BookingManagementException {
         CustomerEntity customerEntity = new CustomerEntity(firstName, middleName, lastName, emailId, contactNumber,
-                addressLine1, addressLine2, city, pincode, state, country);
+                addressLine1, addressLine2, city, country, pincode, state);
         Date currentTime = new Date();
         customerEntity.setDateAdded(currentTime);
         customerEntity.setDateModified(currentTime);

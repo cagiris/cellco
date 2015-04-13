@@ -25,7 +25,7 @@
 <p><strong>Address Line2:</strong> ${contextObject.customer.addressLine2}</p>
 <p><strong>City:</strong> ${contextObject.customer.city}</p>
 <p><strong>Pincode:</strong> ${contextObject.customer.pincode}</p>
-<p><strong>State:</strong> ${contextObject.customer.state}</p>
+<p><strong>State:</strong> ${contextObject.customer.state}</p>  
 <p><strong>Country:</strong> ${contextObject.customer.country}</p>
 </p>
 

@@ -49,9 +49,8 @@ public class CustomerEntity extends BaseEntity implements ICustomer {
 
     }
 
-    public CustomerEntity(String firstName, String lastName, String middleName, String addressLine1,
-            String addressLine2, String city, String contactNumber, String country, String emailId, String pincode,
-            String state) {
+    public CustomerEntity(String firstName, String middleName, String lastName, String emailId, String contactNumber,
+            String addressLine1, String addressLine2, String city, String country, String pincode, String state) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
