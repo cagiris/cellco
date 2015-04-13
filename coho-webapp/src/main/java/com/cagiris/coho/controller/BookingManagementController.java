@@ -131,6 +131,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
     public ModelAndView addPassenger() {
         ModelAndView model = new ModelAndView();
         model.addObject("passengerIndex", (int)(500 + Math.random() * 1000));
+        model.addObject(PassengerType.values());
         model.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping() + PASSENGER_DETAILS_URL_MAPPING);
         return model;
     }

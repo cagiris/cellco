@@ -56,6 +56,7 @@
 					<div class="col-md-5 controls">
 						<select id="type${passengerIndex}" class="form-control">
 							<core:forEach var="type" items="${passengerTypeList}">
+								<option>${type}</option>
 							</core:forEach>
 						</select>
 					</div>
