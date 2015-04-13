@@ -590,12 +590,10 @@ public class HierarchyService implements IHierarchyService {
 
     @Override
     public List<? extends IUserProfile> getAllUserProfiles(Long organizationId) throws HierarchyServiceException {
-        QUserEntity qUserEntity = QUserEntity.userEntity;
-        HibernateQuery userEntityQuery = new HibernateQuery().from(qUserEntity).where(
-                qUserEntity.organizationEntity.organizationId.eq(organizationId));
+        ITeam defaultTeam = getDefaultTeam(organizationId);
         try {
-            List<UserEntity> userList = databaseManager.executeQueryAndGetResults(userEntityQuery, qUserEntity);
-            Set<String> userIds = userList.stream().map(UserEntity::getUserId).collect(Collectors.toSet());
+            List<? extends ITeamUser> allUsersForTeam = getAllUsersForTeam(defaultTeam.getTeamId());
+            Set<String> userIds = allUsersForTeam.stream().map(ITeamUser::getUserId).collect(Collectors.toSet());
             QUserProfileEntity qUserProfileEntity = QUserProfileEntity.userProfileEntity;
             HibernateQuery hibernateQuery = new HibernateQuery().from(qUserProfileEntity).where(
                     qUserProfileEntity.userId.in(userIds));

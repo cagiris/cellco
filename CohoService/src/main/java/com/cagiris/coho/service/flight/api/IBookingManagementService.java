@@ -6,6 +6,7 @@ package com.cagiris.coho.service.flight.api;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
@@ -27,6 +28,9 @@ public interface IBookingManagementService {
     ICustomer addCustomer(String firstName, String lastName, String middleName, String addressLine1,
             String addressLine2, String city, String contactNumber, String country, String emailId, String pincode,
             String state) throws BookingManagementException;
+
+    List<? extends IBookingDetails> queryBookingDetails(List<String> userIds, Date fromDate, Date toDate)
+            throws BookingManagementException;
 
     ICustomer getCustomer(BigInteger customerId) throws ResourceNotFoundException, BookingManagementException;
 }
