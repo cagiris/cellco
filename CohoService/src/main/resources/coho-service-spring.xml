@@ -53,6 +53,11 @@
 		<property name="hierarchyService" ref="hierarchyService" />
 		<property name="emailService" ref="emailService" />
 		<property name="freemarkerUtil" ref="freemarkerUtil" />
+		<property name="emailRecipients">
+			<list>
+				<value>coho.cagiris@gmail.com</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="cohoUserDetailService"
@@ -66,7 +71,10 @@
 	</bean>
 
 	<bean id="emailService" class="com.cagiris.coho.service.utils.EmailService"
-		init-method="init" />
+		init-method="init">
+		<property name="userName"><value>coho.cagiris@gmail.com</value></property>
+		<property name="password"><value>jklabc123</value></property>
+	</bean>
 
 	<bean id="freemarkerUtil" class="com.cagiris.coho.service.utils.FreemarkerUtil">
 		<constructor-arg>

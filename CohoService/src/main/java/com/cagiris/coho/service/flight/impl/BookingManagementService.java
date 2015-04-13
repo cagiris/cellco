@@ -57,6 +57,8 @@ public class BookingManagementService implements IBookingManagementService {
 
     private UniqueIDGenerator bookingIdGenerator;
 
+    private List<String> emailRecipients;
+
     public BookingManagementService(IDatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
         this.bookingIdGenerator = new UniqueIDGenerator("Booking");
@@ -77,7 +79,7 @@ public class BookingManagementService implements IBookingManagementService {
         try {
             BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
             CustomerEntity customer = (CustomerEntity)getCustomer(customerId);
-            bookingDetailsEntity.setBookingId(bookingIdGenerator.getNextUID(userId));
+            bookingDetailsEntity.setBookingId(bookingIdGenerator.getNextUID());
             bookingDetailsEntity.setCustomer(customer);
             bookingDetailsEntity.setBaseFare(baseFare);
             bookingDetailsEntity.setMiscellaneousCharges(miscellaneousCharges);
@@ -120,12 +122,16 @@ public class BookingManagementService implements IBookingManagementService {
         if (StringUtils.isNotBlank(userProfile.getEmailId())) {
             recipients.add(userProfile.getEmailId());
         }
+        if (emailRecipients != null) {
+            recipients.addAll(emailRecipients);
+        }
+
         logger.info("Wll send email for bookingId:{} to recipients:{}", bookingDetails.getBookingId(),
                 recipients.toArray(new String[0]));
         String emailBody = freemarkerUtil.evaluateTemplate("booking-email-template.ftl", bookingDetails);
         String emailSubject = "Booking id:" + bookingDetails.getBookingId();
         emailService.sendEmail(recipients, emailSubject, emailBody);
-        logger.info("Email successfully sent");
+        logger.info("Email successfully sent for booking id:{}", bookingDetails.getBookingId());
     }
 
     @Override
@@ -202,6 +208,14 @@ public class BookingManagementService implements IBookingManagementService {
         } catch (DatabaseManagerException e) {
             throw new BookingManagementException(e);
         }
+    }
+
+    public List<String> getEmailRecipients() {
+        return emailRecipients;
+    }
+
+    public void setEmailRecipients(List<String> emailRecipients) {
+        this.emailRecipients = emailRecipients;
     }
 
 }

@@ -24,11 +24,13 @@ import javax.mail.internet.MimeMessage;
 
 public class EmailService implements IEmailService {
 
+    private String userName;
+
+    private String password;
+
     private Session session;
 
     public void init() {
-        String username = "coho.cagiris@gmail.com";
-        String password = "jklabc123";
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -38,7 +40,7 @@ public class EmailService implements IEmailService {
         session = Session.getInstance(props, new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(getUserName(), getPassword());
             }
         });
     }
@@ -48,7 +50,6 @@ public class EmailService implements IEmailService {
         try {
             Message message = new MimeMessage(session);
 
-            recipients.add("coho.cagiris@gmail.com");
             List<Address> addresses = new ArrayList<Address>();
             for (String recipient : recipients) {
                 InternetAddress[] parsedAddress = InternetAddress.parse(recipient);
@@ -63,5 +64,21 @@ public class EmailService implements IEmailService {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
