@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.cagiris.coho.service.exception.CohoException;
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,6 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class JSONUtils {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
+    {
+        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+    }
 
     public static String getJsonStringForObject(Object object) throws CohoException {
         try {
@@ -31,6 +35,15 @@ public class JSONUtils {
         } catch (IOException e) {
             throw new CohoException(e);
         }
+    }
+
+    public static <T> T parseJSON(String jsonString, Class<T> clazz) throws CohoException {
+        try {
+            return objectMapper.readValue(jsonString, clazz);
+        } catch (IOException e) {
+            throw new CohoException(e);
+        }
+
     }
 
     public static Map<String, Object> getMapForObject(Object object) {

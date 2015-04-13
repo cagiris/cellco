@@ -70,6 +70,8 @@ public class HolidayManagementController extends AbstractController {
         ModelMap responseModelMap = new ModelMap();
         responseModelMap.addAttribute(ATTR_SUCCESS_MSG, "Success");
         modelAndView.addObject(responseModelMap);
+        IOrganization defaultOrganization = hierarchyService.getDefaultOrganization();
+        modelMap.addAttribute(hierarchyService.getAvailableUserRoles(defaultOrganization.getOrganizationId()));
         modelAndView.setViewName(URL_MAPPING + CREATE_ANNUAL_HOLIDAY_URL_MAPPING);
         return modelAndView;
     }

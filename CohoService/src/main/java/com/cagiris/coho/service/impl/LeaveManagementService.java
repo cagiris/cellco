@@ -187,7 +187,7 @@ public class LeaveManagementService implements ILeaveManagementService {
 
     // creates or updates ... 
     @Override
-    public IUserRoleLeaveQuota updateLeaveQuotaForRole(Long organizationId, UserRole userRole,
+    public IUserRoleLeaveQuota createLeaveQuotaForRole(Long organizationId, UserRole userRole,
             Map<LeaveType, Integer> leaveTypeVsLeaveCount, LeaveAccumulationPolicy leaveAccumulationPolicy)
             throws LeaveManagementServiceException {
         try {
@@ -197,10 +197,11 @@ public class LeaveManagementService implements ILeaveManagementService {
             userRoleLeaveQuotaEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
             userRoleLeaveQuotaEntity.setLeaveAccumulationPolicy(leaveAccumulationPolicy);
             userRoleLeaveQuotaEntity.setUserRole(userRole);
+            userRoleLeaveQuotaEntity.setDateAdded(currentTime);
             userRoleLeaveQuotaEntity.setDateModified(currentTime);
-            databaseManager.saveOrUpdate(userRoleLeaveQuotaEntity);
-            return userRoleLeaveQuotaEntity;
-        } catch (DatabaseManagerException e) {
+            Serializable id = databaseManager.save(userRoleLeaveQuotaEntity);
+            return databaseManager.get(UserRoleLeaveQuotaEntity.class, id);
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
             logger.error("error while adding user leave request", e);
             throw new LeaveManagementServiceException(e.getMessage(), e);
         }
@@ -458,5 +459,45 @@ public class LeaveManagementService implements ILeaveManagementService {
             throw new LeaveManagementServiceException(e);
         }
 
+    }
+
+    @Override
+    public List<? extends IUserRoleLeaveQuota> getAllUserRoleLeaveQuotas(Long organizationId)
+            throws LeaveManagementServiceException {
+        Set<UserRole> availableUserRoles;
+        try {
+            availableUserRoles = hierarchyService.getAvailableUserRoles(organizationId);
+        } catch (HierarchyServiceException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+        QUserRoleLeaveQuotaEntity qUserRoleLeaveQuotaEntity = QUserRoleLeaveQuotaEntity.userRoleLeaveQuotaEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qUserRoleLeaveQuotaEntity)
+                .where(qUserRoleLeaveQuotaEntity.userRole.in(availableUserRoles))
+                .orderBy(qUserRoleLeaveQuotaEntity.userRole.asc());
+        try {
+            List<UserRoleLeaveQuotaEntity> roleLeaveQuotas = databaseManager.executeQueryAndGetResults(hibernateQuery,
+                    qUserRoleLeaveQuotaEntity);
+            return roleLeaveQuotas;
+        } catch (DatabaseManagerException e) {
+            throw new LeaveManagementServiceException(e);
+        }
+    }
+
+    @Override
+    public IUserRoleLeaveQuota updateLeaveQuotaForRole(Long userRoleLeaveQuotaId,
+            Map<LeaveType, Integer> leaveTypeVsLeaveCount, LeaveAccumulationPolicy leaveAccumulationPolicy)
+            throws LeaveManagementServiceException {
+        try {
+            UserRoleLeaveQuotaEntity userRoleLeaveQuotaEntity = databaseManager.get(UserRoleLeaveQuotaEntity.class,
+                    userRoleLeaveQuotaId);
+            Date currentTime = new Date();
+            userRoleLeaveQuotaEntity.setDateModified(currentTime);
+            userRoleLeaveQuotaEntity.setLeaveAccumulationPolicy(leaveAccumulationPolicy);
+            userRoleLeaveQuotaEntity.setLeaveTypeVsLeaveCount(leaveTypeVsLeaveCount);
+            databaseManager.update(userRoleLeaveQuotaEntity);
+            return userRoleLeaveQuotaEntity;
+        } catch (DatabaseManagerException | EntityNotFoundException e) {
+            throw new LeaveManagementServiceException(e);
+        }
     }
 }

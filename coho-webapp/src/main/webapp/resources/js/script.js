@@ -284,6 +284,33 @@ function getHHMMSS(timeElapsed) {
 	return timeStr;
 }
 
+$('.userRoleLeaveQuota').on('click', function() {
+	var userLeaveQuotaId = $(this).siblings('input').val();
+	var leavAccPolicy = $(this).parent().siblings().children('div').children('select').val();
+	var inputElements=$(this).parent().siblings().children('div').children('input');
+	var inputValues = {};
+	inputElements.each(function(obj){
+		inputValues[($(this).attr('name'))]=($(this).val());
+		});
+	var inputObject = {'userLeaveQuotaId' : userLeaveQuotaId,
+			'leaveAccumulationPolicy':leavAccPolicy,
+			'leaveTypeVsLeaveCount':inputValues};
+	$.ajax({
+		url : getRequestURL("userRoleLeaveQuota/modify"),
+		cache : false,
+		type : "POST",
+		success : function(response) {
+			location.reload(); 
+		},
+		data : {
+			'input':JSON.stringify(inputObject)
+		},
+		error : function() {
+		}
+
+	});
+})
+
 function initLeaveStatistics() {
 	if ($("#leave-statistics-table").length == 0) {
 		return;

@@ -48,12 +48,18 @@ public interface ILeaveManagementService {
     /**
      * The number of leaves can be configured per user role.
      */
-    IUserRoleLeaveQuota updateLeaveQuotaForRole(Long organizationId, UserRole userRole,
+    IUserRoleLeaveQuota createLeaveQuotaForRole(Long organizationId, UserRole userRole,
             Map<LeaveType, Integer> leaveTypeVsLeaveCount, LeaveAccumulationPolicy leaveAccumulationPolicy)
             throws LeaveManagementServiceException;
 
+    IUserRoleLeaveQuota updateLeaveQuotaForRole(Long userLeaveQuotaId, Map<LeaveType, Integer> leaveTypeVsLeaveCount,
+            LeaveAccumulationPolicy leaveAccumulationPolicy) throws LeaveManagementServiceException;
+
     IUserRoleLeaveQuota getUserRoleQuota(Long organizationId, UserRole userRole)
             throws LeaveManagementServiceException, ResourceNotFoundException;
+
+    List<? extends IUserRoleLeaveQuota> getAllUserRoleLeaveQuotas(Long organizationId)
+            throws LeaveManagementServiceException;
 
     /**
      * This will return the the list of leave requests by leaveRequestStatus

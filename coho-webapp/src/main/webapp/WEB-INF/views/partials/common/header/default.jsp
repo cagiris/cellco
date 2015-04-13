@@ -85,6 +85,10 @@
 							</a></li>
 						</sec:authorize>
 						<sec:authorize access="hasRole('ADMIN')">
+							<li><a href="<core:url value = '/userRoleLeaveQuota/list' />"> <span 
+							        class="glyphicon glyphicon-cog"></span>
+									Leave Configuration
+							</a></li>
 							<li><a href="<core:url value = '/leave/list' />"> <span
 									class="glyphicon glyphicon-th-list" aria-hidden="false"></span>
 									Leaves List

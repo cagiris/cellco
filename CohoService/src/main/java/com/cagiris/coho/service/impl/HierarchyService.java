@@ -386,7 +386,7 @@ public class HierarchyService implements IHierarchyService {
                     leaveTypeVsLeaveCount.put(leaveType, 0);
                 }
                 leaveTypeVsLeaveCount.put(LeaveType.SICK_LEAVE, 1);
-                leaveManagementService.updateLeaveQuotaForRole(organizationEntity.getOrganizationId(), userRole,
+                leaveManagementService.createLeaveQuotaForRole(organizationEntity.getOrganizationId(), userRole,
                         leaveTypeVsLeaveCount, LeaveAccumulationPolicy.MONTHLY);
             }
 
