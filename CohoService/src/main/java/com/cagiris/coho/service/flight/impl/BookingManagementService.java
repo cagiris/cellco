@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +31,12 @@ import com.cagiris.coho.service.flight.api.IPassenger;
 import com.cagiris.coho.service.flight.entity.BookingDetailsEntity;
 import com.cagiris.coho.service.flight.entity.CustomerEntity;
 import com.cagiris.coho.service.flight.entity.PassengerInfoEntity;
+import com.cagiris.coho.service.flight.entity.QBookingDetailsEntity;
 import com.cagiris.coho.service.flight.exception.BookingManagementException;
 import com.cagiris.coho.service.utils.FreemarkerUtil;
 import com.cagiris.coho.service.utils.IEmailService;
 import com.cagiris.coho.service.utils.UniqueIDGenerator;
+import com.mysema.query.jpa.hibernate.HibernateQuery;
 
 /**
  *
@@ -53,6 +56,8 @@ public class BookingManagementService implements IBookingManagementService {
     private FreemarkerUtil freemarkerUtil;
 
     private UniqueIDGenerator bookingIdGenerator;
+
+    private List<String> emailRecipients;
 
     public BookingManagementService(IDatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
@@ -74,7 +79,7 @@ public class BookingManagementService implements IBookingManagementService {
         try {
             BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
             CustomerEntity customer = (CustomerEntity)getCustomer(customerId);
-            bookingDetailsEntity.setBookingId(bookingIdGenerator.getNextUID(userId));
+            bookingDetailsEntity.setBookingId(bookingIdGenerator.getNextUID());
             bookingDetailsEntity.setCustomer(customer);
             bookingDetailsEntity.setBaseFare(baseFare);
             bookingDetailsEntity.setMiscellaneousCharges(miscellaneousCharges);
@@ -117,12 +122,16 @@ public class BookingManagementService implements IBookingManagementService {
         if (StringUtils.isNotBlank(userProfile.getEmailId())) {
             recipients.add(userProfile.getEmailId());
         }
+        if (emailRecipients != null) {
+            recipients.addAll(emailRecipients);
+        }
+
         logger.info("Wll send email for bookingId:{} to recipients:{}", bookingDetails.getBookingId(),
                 recipients.toArray(new String[0]));
         String emailBody = freemarkerUtil.evaluateTemplate("booking-email-template.ftl", bookingDetails);
         String emailSubject = "Booking id:" + bookingDetails.getBookingId();
         emailService.sendEmail(recipients, emailSubject, emailBody);
-        logger.info("Email successfully sent");
+        logger.info("Email successfully sent for booking id:{}", bookingDetails.getBookingId());
     }
 
     @Override
@@ -179,6 +188,34 @@ public class BookingManagementService implements IBookingManagementService {
 
     public void setFreemarkerUtil(FreemarkerUtil freemarkerUtil) {
         this.freemarkerUtil = freemarkerUtil;
+    }
+
+    @Override
+    public List<? extends IBookingDetails> queryBookingDetails(List<String> userIds, Date fromDate, Date toDate)
+            throws BookingManagementException {
+        DateTime fromDateTime = new DateTime(fromDate);
+        DateTime toDateTime = new DateTime();
+        if (toDate != null) {
+            toDateTime = new DateTime(toDate);
+        }
+        QBookingDetailsEntity qBookingDetailsEntity = QBookingDetailsEntity.bookingDetailsEntity;
+        HibernateQuery hibernateQuery = new HibernateQuery().from(qBookingDetailsEntity).where(
+                qBookingDetailsEntity.userId.in(userIds).and(
+                        qBookingDetailsEntity.dateAdded.after(fromDateTime.toDate()).and(
+                                qBookingDetailsEntity.dateAdded.before(toDateTime.toDate()))));
+        try {
+            return databaseManager.executeQueryAndGetResults(hibernateQuery, qBookingDetailsEntity);
+        } catch (DatabaseManagerException e) {
+            throw new BookingManagementException(e);
+        }
+    }
+
+    public List<String> getEmailRecipients() {
+        return emailRecipients;
+    }
+
+    public void setEmailRecipients(List<String> emailRecipients) {
+        this.emailRecipients = emailRecipients;
     }
 
 }
