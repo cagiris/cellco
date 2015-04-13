@@ -429,6 +429,21 @@ $('#modifyUserShiftButton').on(
 			});
 		})
 
-		
-		
+function addPasssenger() {
+	$.ajax({
+		url : getRequestURL("booking/passenger-details"),
+		cache : false,
+		type : "POST",
+		success : function(data) {
+			$('#passenger-accordion').append(data);
+		},
+		error : function(data) {
+			$('#passenger-accordion').append("Please try again later!");
+		}
+	});
+};
+
+$('.remove-passenger').click(function removePassenger() {
+	$(this).closest('.panel').remove();
+});
 

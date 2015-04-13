@@ -26,6 +26,7 @@
         <intercept-url pattern="/get-agent-quick-statistics" access="hasRole('AGENT')" />
         
         <intercept-url pattern="/booking/create" access="hasRole('AGENT')" />
+        <intercept-url pattern="/booking/passenger-details" access="hasRole('AGENT')" />
         <intercept-url pattern="/booking/history" access="hasRole('AGENT')" />
         
         <intercept-url pattern="/get-shift-status" access="hasRole('AGENT')" />

@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,6 +41,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
     public static final String URL_MAPPING = "booking";
     public static final String BOOKING_HISTORY_URL_MAPPING = "/history";
+    public static final String PASSENGER_DETAILS_URL_MAPPING = "/passenger-details";
 
     @Autowired
     private BookingManagementService bookingManagementService;
@@ -123,5 +125,13 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
     private Map<String, ?> getbookingHistoryData(Map<String, String> params) {
         return null;
+    }
+
+    @RequestMapping(value = {PASSENGER_DETAILS_URL_MAPPING}, method = RequestMethod.POST)
+    public ModelAndView addPassenger() {
+        ModelAndView model = new ModelAndView();
+        model.addObject("passengerIndex", (int)(500 + Math.random() * 1000));
+        model.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping() + PASSENGER_DETAILS_URL_MAPPING);
+        return model;
     }
 }

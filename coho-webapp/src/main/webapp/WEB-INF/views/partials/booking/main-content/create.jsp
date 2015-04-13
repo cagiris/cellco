@@ -14,7 +14,7 @@
 
 <jsp:useBean id="errorMap" class="java.util.HashMap" />
 <spring:hasBindErrors name="bookingDetailsBean">
-	<core:forEach var="error" items="${errors.fieldErrors}">
+	<core:forEach var="error" items="${errors.fieldErrors}" varStatus="count">
 		<core:set target="${errorMap}" property="${ error.field }" value="has-error"/>
 	</core:forEach>
 </spring:hasBindErrors>
@@ -27,69 +27,121 @@
 
 	<div class="col-md-8">
 		<fieldset>
-			<legend>Passenger Details</legend>
-			<div
-				class="form-group <core:out value='${errorMap["passengers[0].firstName"]}'/>">
-				<form:label cssClass="col-md-2 control-label"
-					path="passengers[0].firstName">First Name</form:label>
-				<div class="col-md-5 controls">
-					<form:input path="passengers[0].firstName" placeholder="First Name"
-						cssClass="form-control" />
-					<p class="help-block form-field-error">
-						<form:errors path="passengers[0].firstName" />
-					</p>
-				</div>
-			</div>
+			<legend>
+				Passenger Details 
+				<a href="#" class="btn btn-default btn-xs pull-right" title="Add Passenger" onclick="addPasssenger();"> 
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+				</a>
+			</legend>
 
-			<div
-				class="form-group <core:out value='${errorMap["passengers[0].middleName"]}'/>">
-				<form:label cssClass="col-md-2 control-label"
-					path="passengers[0].middleName">Middle Name</form:label>
-				<div class="col-md-5">
-					<form:input placeholder="Middle Name" cssClass="form-control"
-						path="passengers[0].middleName" />
-					<p class="help-block form-field-error">
-						<form:errors path="passengers[0].middleName" />
-					</p>
-				</div>
-			</div>
+			<div class="panel-group" id="passenger-accordion" role="tablist"
+				aria-multiselectable="true">
 
-			<div
-				class="form-group <core:out value='${errorMap["passengers[0].lastName"]}'/>">
-				<form:label cssClass="col-md-2 control-label"
-					path="passengers[0].lastName">Last Name</form:label>
-				<div class="col-md-5">
-					<form:input placeholder="Last Name" cssClass="form-control"
-						path="passengers[0].lastName" />
-					<p class="help-block form-field-error">
-						<form:errors path="passengers[0].lastName" />
-					</p>
-				</div>
-			</div>
-			<div class="form-group <core:out value='${errorMap["passengers[0].type"]}'/>">
-				<form:label cssClass="col-md-2 control-label" path="passengers[0].type">Type</form:label>
-				<div class="col-md-5 controls">
-					<form:select path="passengers[0].type" cssClass="form-control">
-						<core:forEach var="type" items="${passengerTypeList}">
-							<option>${type}</option>
-						</core:forEach>
-					</form:select>
-					<p class="help-block form-field-error">
-						<form:errors path="passengers[0].type" />
-					</p>
-				</div>
-			</div>
-			<div class="form-group <core:out value='${errorMap["passengers[0].dateOfBirth"]}'/>">
-				<form:label cssClass="col-md-2 control-label" path="passengers[0].dateOfBirth">Date of Birth</form:label>
-				<div class="col-md-5">
-					<div class="input-group date form-datepicker"
-						data-date="<%=currentDate%>" data-date-format="dd-mm-yyyy">
-						<form:input path="passengers[0].dateOfBirth" cssClass="form-control" placeholder="dd-MM-YYYY" /> 
-						<span class="input-group-addon add-on"><i
-							class="glyphicon glyphicon-calendar"></i></span>
+				<core:forEach var="passenger" items="passengers" varStatus="count">
+
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" id="heading${count.index}">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#passenger${count.index}" aria-expanded="true"
+									aria-controls="passenger${count.index}"> Passenger #${count.index+1} 
+								</a> 
+								<a href="#" class="btn btn-default btn-xs pull-right remove-passenger"
+									title="Remove Passenger" > <span
+									class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+								</a>
+							</h4>
+						</div>
+						<div id="passenger${count.index}" class="panel-collapse collapse in"
+							role="tabpanel" aria-labelledby="headingOne">
+							<div class="panel-body">
+								<core:set var="passengerFirstName"
+									value="passengers[${count.index}].firstName" scope="page" />
+								<div
+									class="form-group <core:out value='${errorMap[passengerFirstName]}'/>">
+									<form:label cssClass="col-md-2 control-label"
+										path="${passengerFirstName}">First Name</form:label>
+									<div class="col-md-5 controls">
+										<form:input path="${passengerFirstName}"
+											placeholder="First Name" cssClass="form-control" />
+										<p class="help-block form-field-error">
+											<form:errors path="${passengerFirstName}" />
+										</p>
+									</div>
+								</div>
+
+								<core:set var="passengerMiddleName"
+									value="passengers[${count.index}].middleName" scope="page" />
+								<div
+									class="form-group <core:out value='${errorMap[passengerMiddleName]}'/>">
+									<form:label cssClass="col-md-2 control-label"
+										path="${passengerMiddleName}">Middle Name</form:label>
+									<div class="col-md-5">
+										<form:input placeholder="Middle Name" cssClass="form-control"
+											path="${passengerMiddleName}" />
+										<p class="help-block form-field-error">
+											<form:errors path="${passengerMiddleName}" />
+										</p>
+									</div>
+								</div>
+
+								<core:set var="passengerLastName"
+									value="passengers[${count.index}].lastName" scope="page" />
+								<div
+									class="form-group <core:out value='${errorMap[passengerLastName]}'/>">
+									<form:label cssClass="col-md-2 control-label"
+										path="${passengerLastName}">Last Name</form:label>
+									<div class="col-md-5">
+										<form:input placeholder="Last Name" cssClass="form-control"
+											path="${passengerLastName}" />
+										<p class="help-block form-field-error">
+											<form:errors path="${passengerLastName}" />
+										</p>
+									</div>
+								</div>
+
+								<core:set var="passengerType"
+									value="passengers[${count.index}].type" scope="page" />
+								<div
+									class="form-group <core:out value='${errorMap[passengerType]}'/>">
+									<form:label cssClass="col-md-2 control-label"
+										path="${passengerType}">Type</form:label>
+									<div class="col-md-5 controls">
+										<form:select path="${passengerType}" cssClass="form-control">
+											<core:forEach var="type" items="${passengerTypeList}">
+												<option>${type}</option>
+											</core:forEach>
+										</form:select>
+										<p class="help-block form-field-error">
+											<form:errors path="${passengerType}" />
+										</p>
+									</div>
+								</div>
+
+								<core:set var="passengerdateOfBirth"
+									value="passengers[${count.index}].dateOfBirth" scope="page" />
+								<div
+									class="form-group <core:out value='${errorMap[passengerdateOfBirth]}'/>">
+									<form:label cssClass="col-md-2 control-label"
+										path="${passengerdateOfBirth}">Date of Birth</form:label>
+									<div class="col-md-5">
+										<div class="input-group date form-datepicker"
+											data-date="<%=currentDate%>" data-date-format="dd-mm-yyyy">
+											<form:input path="${passengerdateOfBirth}"
+												cssClass="form-control" placeholder="dd-MM-YYYY" />
+											<span class="input-group-addon add-on"><i
+												class="glyphicon glyphicon-calendar"></i></span>
+										</div>
+										<p class="help-block form-field-error">
+											<form:errors path="${passengerdateOfBirth}" />
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<p class="help-block form-field-error"><form:errors path="passengers[0].dateOfBirth" /></p>
-				</div>
+				</core:forEach>
+
 			</div>
 		</fieldset>
 		<fieldset>
@@ -290,7 +342,8 @@
 		</fieldset>
 		<div class="form-group">
 			<div class="col-md-4 col-md-offset-2">
-				<button type="submit" class="btn btn-primary">Save Booking</button>
+				<button type="submit" class="btn btn-primary" 
+				id="save-booking-button" onclick="saveBooking();">Save Booking</button>
 			</div>
 		</div>
 	</div>
