@@ -20,6 +20,8 @@ public interface IBookingDetails {
 
     public abstract List<? extends IPassenger> getPassengers();
 
+    public abstract BookingGDSType getBookingGDSType();
+
     public abstract BigDecimal getBaseFare();
 
     public abstract BigDecimal getTaxesAndServiceFee();

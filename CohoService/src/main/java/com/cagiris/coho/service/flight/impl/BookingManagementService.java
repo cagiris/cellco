@@ -22,6 +22,7 @@ import com.cagiris.coho.service.db.api.EntityNotFoundException;
 import com.cagiris.coho.service.db.api.IDatabaseManager;
 import com.cagiris.coho.service.exception.CohoException;
 import com.cagiris.coho.service.exception.ResourceNotFoundException;
+import com.cagiris.coho.service.flight.api.BookingGDSType;
 import com.cagiris.coho.service.flight.api.IBookingDetails;
 import com.cagiris.coho.service.flight.api.IBookingManagementService;
 import com.cagiris.coho.service.flight.api.ICustomer;
@@ -68,8 +69,8 @@ public class BookingManagementService implements IBookingManagementService {
 
     @Override
     public IBookingDetails submitBookingDetails(String userId, BigInteger customerId,
-            List<? extends IPassenger> passengers, BigDecimal baseFare, BigDecimal taxesAndServiceFee,
-            BigDecimal miscellaneousCharges) throws BookingManagementException {
+            List<? extends IPassenger> passengers, BookingGDSType bookingGDSType, BigDecimal baseFare,
+            BigDecimal taxesAndServiceFee, BigDecimal miscellaneousCharges) throws BookingManagementException {
         try {
             BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
             CustomerEntity customer = (CustomerEntity)getCustomer(customerId);
@@ -79,6 +80,7 @@ public class BookingManagementService implements IBookingManagementService {
             bookingDetailsEntity.setMiscellaneousCharges(miscellaneousCharges);
             bookingDetailsEntity.setTaxesAndServiceFee(taxesAndServiceFee);
             bookingDetailsEntity.setUserId(userId);
+            bookingDetailsEntity.setBookingGDSType(bookingGDSType);
 
             Date currentTime = new Date();
             bookingDetailsEntity.setDateAdded(currentTime);

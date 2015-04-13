@@ -4,6 +4,7 @@
 <p>
 <p><strong>Booking Id:</strong> ${contextObject.bookingId}</p>
 <p><strong>User Id:</strong> ${contextObject.userId}</p>
+<p><strong>Booking GDS:</strong> ${contextObject.bookingGDSType}</p>
 <p><strong>Base Fare:</strong> ${contextObject.baseFare}</p>
 <p><strong>Taxes and Service Fee:</strong> ${contextObject.taxesAndServiceFee}</p>
 <p><strong>Misc Charges:</strong> ${contextObject.miscellaneousCharges}</p>

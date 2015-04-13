@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.cagiris.coho.service.entity.BaseEntity;
+import com.cagiris.coho.service.flight.api.BookingGDSType;
 import com.cagiris.coho.service.flight.api.IBookingDetails;
 
 /**
@@ -31,6 +34,8 @@ public class BookingDetailsEntity extends BaseEntity implements IBookingDetails 
     private CustomerEntity customer;
 
     private List<PassengerInfoEntity> passengers;
+
+    private BookingGDSType bookingGDSType;
 
     private BigDecimal baseFare;
 
@@ -104,5 +109,15 @@ public class BookingDetailsEntity extends BaseEntity implements IBookingDetails 
 
     public void setPassengers(List<PassengerInfoEntity> passengers) {
         this.passengers = passengers;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Override
+    public BookingGDSType getBookingGDSType() {
+        return bookingGDSType;
+    }
+
+    public void setBookingGDSType(BookingGDSType bookingGDSType) {
+        this.bookingGDSType = bookingGDSType;
     }
 }

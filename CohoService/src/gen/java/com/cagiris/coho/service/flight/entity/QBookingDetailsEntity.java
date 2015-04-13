@@ -26,6 +26,8 @@ public class QBookingDetailsEntity extends EntityPathBase<BookingDetailsEntity> 
 
     public final NumberPath<java.math.BigDecimal> baseFare = createNumber("baseFare", java.math.BigDecimal.class);
 
+    public final EnumPath<com.cagiris.coho.service.flight.api.BookingGDSType> bookingGDSType = createEnum("bookingGDSType", com.cagiris.coho.service.flight.api.BookingGDSType.class);
+
     public final StringPath bookingId = createString("bookingId");
 
     public final QCustomerEntity customer;

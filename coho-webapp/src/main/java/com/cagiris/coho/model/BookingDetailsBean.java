@@ -29,6 +29,9 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
     private List<PassengerBean> passengers = new ArrayList();
 
     @NotNull(message = "Can't be left Empty")
+    private String bookingGDSType;
+
+    @NotNull(message = "Can't be left Empty")
     private Double baseFare;
 
     @NotNull(message = "Can't be left Empty")
@@ -88,6 +91,14 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
 
     public void setMiscellaneousCharges(Double miscellaneousCharges) {
         this.miscellaneousCharges = miscellaneousCharges;
+    }
+
+    public String getBookingGDSType() {
+        return bookingGDSType;
+    }
+
+    public void setBookingGDSType(String bookingGDSType) {
+        this.bookingGDSType = bookingGDSType;
     }
 
 }

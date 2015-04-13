@@ -22,6 +22,7 @@ import com.cagiris.coho.model.BookingDetailsBean;
 import com.cagiris.coho.model.CustomerBean;
 import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.service.exception.CohoException;
+import com.cagiris.coho.service.flight.api.BookingGDSType;
 import com.cagiris.coho.service.flight.api.IBookingDetails;
 import com.cagiris.coho.service.flight.api.ICustomer;
 import com.cagiris.coho.service.flight.api.PassengerInfoBean;
@@ -55,6 +56,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         modelMap.addAttribute(new UserBean());
         modelMap.addAttribute(new BookingDetailsBean());
         modelMap.addAttribute(PassengerType.values());
+        modelMap.addAttribute(BookingGDSType.values());
 
         return modelMap;
     }
@@ -70,8 +72,9 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
                 .collect(Collectors.toList());
         User loggedInUser = ControllerUtils.getLoggedInUser();
         IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(loggedInUser.getUsername(),
-                addCustomer.getCustomerId(), passengerInfos, BigDecimal.valueOf(bean.getBaseFare()),
-                BigDecimal.valueOf(bean.getTaxesAndServiceFee()), BigDecimal.valueOf(bean.getMiscellaneousCharges()));
+                addCustomer.getCustomerId(), passengerInfos, BookingGDSType.valueOf(bean.getBookingGDSType()),
+                BigDecimal.valueOf(bean.getBaseFare()), BigDecimal.valueOf(bean.getTaxesAndServiceFee()),
+                BigDecimal.valueOf(bean.getMiscellaneousCharges()));
         bean.setBookingId(bookingDetails.getBookingId());
         return null;
     }

@@ -94,6 +94,19 @@
 		</fieldset>
 		<fieldset>
 			<legend>Booking Details</legend>
+			<div class="form-group <core:out value='${errorMap["bookingGDSType"]}'/>">
+				<form:label cssClass="col-md-2 control-label" path="bookingGDSType">Type</form:label>
+				<div class="col-md-5 controls">
+					<form:select path="bookingGDSType" cssClass="form-control">
+						<core:forEach var="type" items="${bookingGDSTypeList}">
+							<option>${type}</option>
+						</core:forEach>
+					</form:select>
+					<p class="help-block form-field-error">
+						<form:errors path="bookingGDSType" />
+					</p>
+				</div>
+			</div>
 			<div
 				class="form-group <core:out value='${errorMap["baseFare"]}'/>">
 				<form:label cssClass="col-md-2 control-label"
