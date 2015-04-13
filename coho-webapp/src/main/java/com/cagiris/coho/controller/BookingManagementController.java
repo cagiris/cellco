@@ -65,9 +65,10 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
     protected ModelMap create(BookingDetailsBean bean, ModelMap modelMap) throws CohoException {
         CustomerBean customerBean = bean.getCustomer();
         ICustomer addCustomer = bookingManagementService.addCustomer(customerBean.getFirstName(),
-                customerBean.getLastName(), "", customerBean.getAddressLine1(), customerBean.getAddressLine2(),
-                customerBean.getCity(), customerBean.getContactNumber(), customerBean.getCountry(),
-                customerBean.getEmailId(), customerBean.getPincode(), customerBean.getState());
+                customerBean.getLastName(), customerBean.getMiddleName(), customerBean.getAddressLine1(),
+                customerBean.getAddressLine2(), customerBean.getCity(), customerBean.getContactNumber(),
+                customerBean.getCountry(), customerBean.getEmailId(), customerBean.getPincode(),
+                customerBean.getState());
         List<PassengerInfoBean> passengerInfos = bean.getPassengers().stream().map((p) -> p.mapToPassengerInfoBean())
                 .collect(Collectors.toList());
         User loggedInUser = ControllerUtils.getLoggedInUser();
