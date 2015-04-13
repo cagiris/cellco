@@ -10,10 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +47,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
     public static final String URL_MAPPING = "booking";
     public static final String BOOKING_HISTORY_URL_MAPPING = "/history";
     public static final String PASSENGER_DETAILS_URL_MAPPING = "/passenger-details";
+    public static final String BOOKING_SAVE_URL_MAPPING = "/save";
 
     @Autowired
     private BookingManagementService bookingManagementService;
@@ -134,5 +140,47 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         model.addObject(PassengerType.values());
         model.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping() + PASSENGER_DETAILS_URL_MAPPING);
         return model;
+    }
+
+    @RequestMapping(value = {BOOKING_SAVE_URL_MAPPING}, method = RequestMethod.POST,
+                    consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView saveBooking(@RequestBody @Valid BookingDetailsBean bean, BindingResult bindingResult,
+            ModelMap modelMap) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject(PassengerType.values());
+        modelAndView.addObject(BookingGDSType.values());
+
+        modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
+        try {
+            if (bindingResult.hasErrors()) {
+                modelAndView.addObject(bean);
+                modelAndView.addAllObjects(modelMap);
+            } else {
+                CustomerBean customerBean = bean.getCustomer();
+                ICustomer addCustomer = bookingManagementService.addCustomer(customerBean.getFirstName(),
+                        customerBean.getLastName(), customerBean.getMiddleName(), customerBean.getAddressLine1(),
+                        customerBean.getAddressLine2(), customerBean.getCity(), customerBean.getContactNumber(),
+                        customerBean.getCountry(), customerBean.getEmailId(), customerBean.getPincode(),
+                        customerBean.getState());
+                List<PassengerInfoBean> passengerInfos = bean.getPassengers().stream()
+                        .map((p) -> p.mapToPassengerInfoBean()).collect(Collectors.toList());
+                User loggedInUser = ControllerUtils.getLoggedInUser();
+                IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(
+                        loggedInUser.getUsername(), addCustomer.getCustomerId(), passengerInfos,
+                        BookingGDSType.valueOf(bean.getBookingGDSType()), BigDecimal.valueOf(bean.getBaseFare()),
+                        BigDecimal.valueOf(bean.getTaxesAndServiceFee()),
+                        BigDecimal.valueOf(bean.getMiscellaneousCharges()));
+                bean.setBookingId(bookingDetails.getBookingId());
+
+                modelAndView.addObject(ATTR_SUCCESS_MSG, "Booking saved Successfuly");
+            }
+        } catch (CohoException e) {
+            modelAndView.addAllObjects(modelMap);
+            modelAndView.addObject(bean);
+            modelAndView.addObject(ATTR_ERROR_MSG, e.getMessage());
+        }
+
+        return modelAndView;
     }
 }

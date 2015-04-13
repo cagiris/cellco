@@ -477,3 +477,68 @@ $('.remove-passenger').click(function () {
 	$(this).closest('.panel').remove();
 });
 
+function getPassengerList() {
+	var passengers = [];
+	
+	$('#passenger-accordion .panel').each(function() {
+		passengers.push(getPassengerObj($(this)));
+	});
+	
+	return passengers;
+}
+
+function getPassengerObj(panel) {
+	var passenger = {
+			firstName : $(panel).find('.passenger-firstName').val(),
+			middleName : $(panel).find('.passenger-middleName').val(),
+			lastName : $(panel).find('.passenger-lastName').val(),
+			type : $(panel).find('.passenger-type').val(),
+			dateOfBirth: $(panel).find('.passenger-dateOfBirth').val(),
+	}
+	
+	return passenger;
+}
+
+function saveBooking() {
+	var bookingData = {
+			customer : {
+				firstName : $('#customer\\.firstName').val(),
+				middleName : $('#customer\\.middleName').val(),
+				lastName : $('#customer\\.lastName').val(),
+				contactNumber : $('#customer\\.contactNumber').val(),
+				emailId : $('#customer\\.emailId').val(),
+				addressLine1 : $('#customer\\.addressLine1').val(),
+				addressLine2 : $('#customer\\.addressLine2').val(),
+				city : $('#customer\\.city').val(),
+				pincode : $('#customer\\.pincode').val(),
+				state : $('#customer\\.state').val(),
+				country : $('#customer\\.country').val()
+			},
+			
+			passengers : getPassengerList(),
+			
+			bookingGDSType : $('#bookingGDSType').val(),
+			
+			baseFare : $('#baseFare').val(),
+			
+			taxesAndServiceFee : $('#taxesAndServiceFee').val(),
+			
+			miscellaneousCharges : $('#miscellaneousCharges').val(),
+	};
+	
+	$.ajax({
+		url : getRequestURL("booking/save"),
+		cache : false,
+		dataType : 'html',
+		contentType : 'application/json',
+		mimeType : 'application/json',
+		data : JSON.stringify(bookingData),
+		type : "POST",
+		success : function(data) {
+			$('body').html(data);
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			$('#change-password-modal').html(jqXHR.responseText);
+		}
+	});
+};

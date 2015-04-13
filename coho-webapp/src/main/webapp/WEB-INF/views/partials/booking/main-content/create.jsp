@@ -6,7 +6,7 @@
 <%@page import="java.util.Date"%>
 
 <%
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	String currentDate = simpleDateFormat.format(new Date());
 %>
 
@@ -63,7 +63,7 @@
 										path="${passengerFirstName}">First Name</form:label>
 									<div class="col-md-5 controls">
 										<form:input path="${passengerFirstName}"
-											placeholder="First Name" cssClass="form-control" />
+											placeholder="First Name" cssClass="form-control passenger-firstName" />
 										<p class="help-block form-field-error">
 											<form:errors path="${passengerFirstName}" />
 										</p>
@@ -77,7 +77,7 @@
 									<form:label cssClass="col-md-2 control-label"
 										path="${passengerMiddleName}">Middle Name</form:label>
 									<div class="col-md-5">
-										<form:input placeholder="Middle Name" cssClass="form-control"
+										<form:input placeholder="Middle Name" cssClass="form-control passenger-middleName"
 											path="${passengerMiddleName}" />
 										<p class="help-block form-field-error">
 											<form:errors path="${passengerMiddleName}" />
@@ -92,7 +92,7 @@
 									<form:label cssClass="col-md-2 control-label"
 										path="${passengerLastName}">Last Name</form:label>
 									<div class="col-md-5">
-										<form:input placeholder="Last Name" cssClass="form-control"
+										<form:input placeholder="Last Name" cssClass="form-control passenger-lastName"
 											path="${passengerLastName}" />
 										<p class="help-block form-field-error">
 											<form:errors path="${passengerLastName}" />
@@ -107,7 +107,7 @@
 									<form:label cssClass="col-md-2 control-label"
 										path="${passengerType}">Type</form:label>
 									<div class="col-md-5 controls">
-										<form:select path="${passengerType}" cssClass="form-control">
+										<form:select path="${passengerType}" cssClass="form-control passenger-type">
 											<core:forEach var="type" items="${passengerTypeList}">
 												<option>${type}</option>
 											</core:forEach>
@@ -126,9 +126,9 @@
 										path="${passengerdateOfBirth}">Date of Birth</form:label>
 									<div class="col-md-5">
 										<div class="input-group date form-datepicker"
-											data-date="<%=currentDate%>" data-date-format="dd-mm-yyyy">
+											data-date="<%=currentDate%>" data-date-format="yyyy-mm-dd">
 											<form:input path="${passengerdateOfBirth}"
-												cssClass="form-control" placeholder="dd-MM-YYYY" />
+												cssClass="form-control passenger-dateOfBirth" placeholder="yyyy-mm-dd" />
 											<span class="input-group-addon add-on"><i
 												class="glyphicon glyphicon-calendar"></i></span>
 										</div>
@@ -340,11 +340,13 @@
 				</div>
 			</fieldset>
 		</fieldset>
-		<div class="form-group">
-			<div class="col-md-4 col-md-offset-2">
-				<button type="submit" class="btn btn-primary" 
-				id="save-booking-button" onclick="saveBooking();">Save Booking</button>
-			</div>
-		</div>
 	</div>
 </form:form>
+
+<div class="col-md-4 col-md-offset-2">
+	<a href="#" class="btn btn-primary" title="Save Booking"
+		onclick="saveBooking();"> <span class="glyphicon glyphicon-ok"
+		aria-hidden="true"></span>
+		Save Booking
+	</a>
+</div>

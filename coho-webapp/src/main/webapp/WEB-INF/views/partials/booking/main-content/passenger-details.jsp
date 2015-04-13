@@ -32,14 +32,14 @@
 					<label class="col-md-2 control-label" >First Name</label>
 					<div class="col-md-5 controls">
 						<input type="text" id="firstName${passengerIndex}"
-							placeholder="First Name" class="form-control" />
+							placeholder="First Name" class="form-control passenger-firstName" />
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label class="col-md-2 control-label" >Middle Name</label>
 					<div class="col-md-5">
-						<input type="text" placeholder="Middle Name" class="form-control"
+						<input type="text" placeholder="Middle Name" class="form-control passenger-middleName"
 							id="middleName${passengerIndex}" />
 					</div>
 				</div>
@@ -47,14 +47,14 @@
 				<div class="form-group">
 					<label class="col-md-2 control-label" >Last Name</label>
 					<div class="col-md-5">
-						<input type="text" placeholder="Last Name" class="form-control"
+						<input type="text" placeholder="Last Name" class="form-control passenger-lastName"
 							id="lastName${passengerIndex}" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 control-label" >Type</label>
 					<div class="col-md-5 controls">
-						<select id="type${passengerIndex}" class="form-control">
+						<select id="type${passengerIndex}" class="form-control passenger-type">
 							<core:forEach var="type" items="${passengerTypeList}">
 								<option>${type}</option>
 							</core:forEach>
@@ -67,7 +67,7 @@
 						<div class="input-group date form-datepicker"
 							data-date="<%=currentDate%>" data-date-format="dd-mm-yyyy">
 							<input type="text" id="dateOfBirth${passengerIndex}"
-								class="form-control" placeholder="dd-MM-YYYY" />
+								class="form-control passenger-dateOfBirth" placeholder="dd-MM-YYYY" />
 							<span class="input-group-addon add-on"><i
 								class="glyphicon glyphicon-calendar"></i></span>
 						</div>

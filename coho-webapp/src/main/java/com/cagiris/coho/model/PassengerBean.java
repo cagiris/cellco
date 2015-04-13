@@ -43,7 +43,7 @@ public class PassengerBean extends AbstractBean {
     private String type;
 
     @Nonnull
-    @DateTimeFormat(pattern = Constants.DATE_FORMAT)
+    @DateTimeFormat(pattern = Constants.DATE_FORMAT_BOOKING)
     private Date dateOfBirth;
 
     public PassengerBean() {
