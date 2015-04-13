@@ -436,6 +436,9 @@ function addPasssenger() {
 		type : "POST",
 		success : function(data) {
 			$('#passenger-accordion').append(data);
+			$('.remove-passenger').click(function () {
+				$(this).closest('.panel').remove();
+			});
 		},
 		error : function(data) {
 			$('#passenger-accordion').append("Please try again later!");
@@ -443,7 +446,7 @@ function addPasssenger() {
 	});
 };
 
-$('.remove-passenger').click(function removePassenger() {
+$('.remove-passenger').click(function () {
 	$(this).closest('.panel').remove();
 });
 
