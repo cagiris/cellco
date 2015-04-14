@@ -220,3 +220,11 @@ body {
 #employee-photo-container {
 	height: 250px;
 }
+
+.loading {
+	color: white;
+	width:31px;
+	height:31px;
+	background-image: url("../images/ajax-loader.gif");
+	display: none;
+}

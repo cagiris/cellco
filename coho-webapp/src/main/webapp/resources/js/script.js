@@ -466,6 +466,7 @@ function addPasssenger() {
 			$('.remove-passenger').click(function () {
 				$(this).closest('.panel').remove();
 			});
+			$('.form-datepicker').datepicker();
 		},
 		error : function(data) {
 			$('#passenger-accordion').append("Please try again later!");
@@ -526,6 +527,8 @@ function saveBooking() {
 			miscellaneousCharges : $('#miscellaneousCharges').val(),
 	};
 	
+	$('.loading').show();
+	
 	$.ajax({
 		url : getRequestURL("booking/save"),
 		cache : false,
@@ -535,9 +538,11 @@ function saveBooking() {
 		data : JSON.stringify(bookingData),
 		type : "POST",
 		success : function(data) {
+			$('.loading').hide();
 			$('body').html(data);
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
+			$('.loading').hide();
 			$('#change-password-modal').html(jqXHR.responseText);
 		}
 	});

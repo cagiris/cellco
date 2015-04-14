@@ -13,7 +13,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading" role="tab" id="heading${passengerIndex}">
 		<h4 class="panel-title">
-			<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+			<a class="collapsed" data-toggle="collapse" data-parent="#passenger-accordion"
 				href="#passenger${passengerIndex}" aria-expanded="false"
 				aria-controls="passenger${passengerIndex}"> 
 				Passenger 
@@ -25,7 +25,7 @@
 		</h4>
 	</div>
 	<div id="passenger${passengerIndex}" class="panel-collapse collapse" role="tabpanel"
-		aria-labelledby="headingTwo">
+		aria-labelledby="heading${passengerIndex}">
 		<div class="panel-body">
 			<div class="panel-body">
 				<div class="form-group">
@@ -65,9 +65,9 @@
 					<label class="col-md-2 control-label" >Date of Birth</label>
 					<div class="col-md-5">
 						<div class="input-group date form-datepicker"
-							data-date="<%=currentDate%>" data-date-format="dd-mm-yyyy">
+							data-date="<%=currentDate%>" data-date-format="yyyy-mm-dd">
 							<input type="text" id="dateOfBirth${passengerIndex}"
-								class="form-control passenger-dateOfBirth" placeholder="dd-MM-YYYY" />
+								class="form-control passenger-dateOfBirth" placeholder="yyyy-mm-dd" />
 							<span class="input-group-addon add-on"><i
 								class="glyphicon glyphicon-calendar"></i></span>
 						</div>

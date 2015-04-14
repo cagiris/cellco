@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cagiris.coho.model.BookingDetailsBean;
 import com.cagiris.coho.model.CustomerBean;
+import com.cagiris.coho.model.PassengerBean;
 import com.cagiris.coho.model.UserBean;
 import com.cagiris.coho.service.exception.CohoException;
 import com.cagiris.coho.service.flight.api.BookingGDSType;
@@ -62,7 +63,10 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         ModelMap modelMap = new ModelMap();
 
         modelMap.addAttribute(new UserBean());
-        modelMap.addAttribute(new BookingDetailsBean());
+        BookingDetailsBean bookingDetailsBean = new BookingDetailsBean();
+        bookingDetailsBean.getPassengers().add(new PassengerBean());
+
+        modelMap.addAttribute(bookingDetailsBean);
         modelMap.addAttribute(PassengerType.values());
         modelMap.addAttribute(BookingGDSType.values());
 
@@ -173,6 +177,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
                         BigDecimal.valueOf(bean.getMiscellaneousCharges()));
                 bean.setBookingId(bookingDetails.getBookingId());
 
+                modelAndView.setViewName(getRedirectUrl(CREATE_URL_MAPPING));
                 modelAndView.addObject(ATTR_SUCCESS_MSG, "Booking saved Successfuly");
             }
         } catch (CohoException e) {

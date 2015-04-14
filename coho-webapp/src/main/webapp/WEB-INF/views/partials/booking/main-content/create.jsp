@@ -10,11 +10,11 @@
 	String currentDate = simpleDateFormat.format(new Date());
 %>
 
-<h1 class="page-header">New booking</h1>
+<h1 class="page-header">New booking <div class="loading pull-right"></div></h1>
 
 <jsp:useBean id="errorMap" class="java.util.HashMap" />
 <spring:hasBindErrors name="bookingDetailsBean">
-	<core:forEach var="error" items="${errors.fieldErrors}" varStatus="count">
+	<core:forEach var="error" items="${errors.fieldErrors}" >
 		<core:set target="${errorMap}" property="${ error.field }" value="has-error"/>
 	</core:forEach>
 </spring:hasBindErrors>
@@ -37,15 +37,16 @@
 			<div class="panel-group" id="passenger-accordion" role="tablist"
 				aria-multiselectable="true">
 
-				<core:forEach var="passenger" items="passengers" varStatus="count">
+				<core:forEach var="passenger" items="${bookingDetailsBean.passengers}" varStatus="count">
 
 					<div class="panel panel-default">
 						<div class="panel-heading" role="tab" id="heading${count.index}">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion"
+								<a class="collapsed" data-toggle="collapse"
+									data-parent="#passenger-accordion"
 									href="#passenger${count.index}" aria-expanded="true"
-									aria-controls="passenger${count.index}"> Passenger #${count.index+1} 
-								</a> 
+									aria-controls="passenger${count.index}"> Passenger </a> 
+									
 								<a href="#" class="btn btn-default btn-xs pull-right remove-passenger"
 									title="Remove Passenger" > <span
 									class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -53,7 +54,7 @@
 							</h4>
 						</div>
 						<div id="passenger${count.index}" class="panel-collapse collapse in"
-							role="tabpanel" aria-labelledby="headingOne">
+							role="tabpanel" aria-labelledby="heading${count.index}">
 							<div class="panel-body">
 								<core:set var="passengerFirstName"
 									value="passengers[${count.index}].firstName" scope="page" />
@@ -349,4 +350,5 @@
 		aria-hidden="true"></span>
 		Save Booking
 	</a>
+	<div class="loading col-md-4"></div>
 </div>
