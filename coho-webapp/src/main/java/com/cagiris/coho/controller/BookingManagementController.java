@@ -157,9 +157,13 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
 
         modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
         try {
-            if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors() || (bean.getPassengers().size() == 0)) {
                 modelAndView.addObject(bean);
                 modelAndView.addAllObjects(modelMap);
+
+                if ((bean.getPassengers().size() == 0)) {
+                    modelAndView.addObject(ATTR_ERROR_MSG, "Please atleast one passenger in the booking");
+                }
             } else {
                 CustomerBean customerBean = bean.getCustomer();
                 ICustomer addCustomer = bookingManagementService.addCustomer(customerBean.getFirstName(),
