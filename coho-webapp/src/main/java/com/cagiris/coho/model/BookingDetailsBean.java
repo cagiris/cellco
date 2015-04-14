@@ -11,6 +11,9 @@ import java.util.List;
 import javax.validation.GroupSequence;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -31,14 +34,20 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
     @NotNull(message = "Can't be left Empty")
     private String bookingGDSType;
 
-    @NotNull(message = "Can't be left Empty")
-    private Double baseFare;
+    @Pattern(regexp = "^[0-9]*.?[0-9]*$", message = "Can only contain decimals",
+             groups = ValidationCheckForPattern.class)
+    @NotBlank(message = "Can't be left Empty")
+    private String baseFare;
 
-    @NotNull(message = "Can't be left Empty")
-    private Double taxesAndServiceFee;
+    @Pattern(regexp = "^[0-9]*.?[0-9]*$", message = "Can only contain decimals",
+             groups = ValidationCheckForPattern.class)
+    @NotBlank(message = "Can't be left Empty")
+    private String taxesAndServiceFee;
 
-    @NotNull(message = "Can't be left Empty")
-    private Double miscellaneousCharges; //MCO
+    @Pattern(regexp = "^[0-9]*.?[0-9]*$", message = "Can only contain decimals",
+             groups = ValidationCheckForPattern.class)
+    @NotBlank(message = "Can't be left Empty")
+    private String miscellaneousCharges; //MCO
 
     @Override
     public Serializable getEntityId() {
@@ -69,36 +78,36 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
         this.passengers = passengers;
     }
 
-    public Double getBaseFare() {
-        return baseFare;
-    }
-
-    public void setBaseFare(Double baseFare) {
-        this.baseFare = baseFare;
-    }
-
-    public Double getTaxesAndServiceFee() {
-        return taxesAndServiceFee;
-    }
-
-    public void setTaxesAndServiceFee(Double taxesAndServiceFee) {
-        this.taxesAndServiceFee = taxesAndServiceFee;
-    }
-
-    public Double getMiscellaneousCharges() {
-        return miscellaneousCharges;
-    }
-
-    public void setMiscellaneousCharges(Double miscellaneousCharges) {
-        this.miscellaneousCharges = miscellaneousCharges;
-    }
-
     public String getBookingGDSType() {
         return bookingGDSType;
     }
 
     public void setBookingGDSType(String bookingGDSType) {
         this.bookingGDSType = bookingGDSType;
+    }
+
+    public String getBaseFare() {
+        return baseFare;
+    }
+
+    public void setBaseFare(String baseFare) {
+        this.baseFare = baseFare;
+    }
+
+    public String getTaxesAndServiceFee() {
+        return taxesAndServiceFee;
+    }
+
+    public void setTaxesAndServiceFee(String taxesAndServiceFee) {
+        this.taxesAndServiceFee = taxesAndServiceFee;
+    }
+
+    public String getMiscellaneousCharges() {
+        return miscellaneousCharges;
+    }
+
+    public void setMiscellaneousCharges(String miscellaneousCharges) {
+        this.miscellaneousCharges = miscellaneousCharges;
     }
 
 }

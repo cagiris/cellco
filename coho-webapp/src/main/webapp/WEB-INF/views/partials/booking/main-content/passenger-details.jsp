@@ -6,7 +6,7 @@
 <%@page import="java.util.Date"%>
 
 <%
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	String currentDate = simpleDateFormat.format(new Date());
 %>
 

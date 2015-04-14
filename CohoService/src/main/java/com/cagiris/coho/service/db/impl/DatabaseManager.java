@@ -157,6 +157,7 @@ public class DatabaseManager implements IDatabaseManager {
             tx.commit();
             return save;
         } catch (HibernateException e) {
+            logger.error("Error while executing save", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -194,6 +195,7 @@ public class DatabaseManager implements IDatabaseManager {
             tx.commit();
             return save;
         } catch (HibernateException e) {
+            logger.error("Error while executing save", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -210,6 +212,7 @@ public class DatabaseManager implements IDatabaseManager {
             session.update(entity);
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while executing update", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -242,6 +245,7 @@ public class DatabaseManager implements IDatabaseManager {
             session.saveOrUpdate(entity);
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while executing save/update", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -258,6 +262,7 @@ public class DatabaseManager implements IDatabaseManager {
             session.saveOrUpdate(entityName, entity);
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while executing save/update", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -273,6 +278,7 @@ public class DatabaseManager implements IDatabaseManager {
             checkIfNotNull(entityClass.getClass().getName(), id, entity);
             return entity;
         } catch (HibernateException e) {
+            logger.error("Error while getting for id:{}", id, e);
             throw new DatabaseManagerException(e);
         } finally {
             closeSession(session);
@@ -281,7 +287,9 @@ public class DatabaseManager implements IDatabaseManager {
 
     private <T> void checkIfNotNull(String className, Serializable id, T entity) throws EntityNotFoundException {
         if (entity == null) {
-            throw new EntityNotFoundException("Entity " + className + " with id " + id + " not found");
+            String message = "Entity " + className + " with id " + id + " not found";
+            logger.error(message);
+            throw new EntityNotFoundException(message);
         }
     }
 
@@ -293,6 +301,7 @@ public class DatabaseManager implements IDatabaseManager {
             checkIfNotNull(entityName, id, entity);
             return entity;
         } catch (HibernateException e) {
+            logger.error("Error while getting for id:{}", id, e);
             throw new DatabaseManagerException(e);
         } finally {
             closeSession(session);
@@ -313,6 +322,7 @@ public class DatabaseManager implements IDatabaseManager {
             session.delete(entity);
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while deleting entity", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -329,6 +339,7 @@ public class DatabaseManager implements IDatabaseManager {
             session.delete(entityName, entity);
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while deleting entity", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -347,6 +358,7 @@ public class DatabaseManager implements IDatabaseManager {
             }
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while deleting entities", e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -370,6 +382,7 @@ public class DatabaseManager implements IDatabaseManager {
             HibernateQuery hibernateQueryWithSession = new HibernateQuery(session, hibernateQuery.getMetadata());
             return hibernateQueryWithSession.list(entityPath);
         } catch (HibernateException e) {
+            logger.error("Error while executing query:{}", entityPath.toString(), e);
             throw new DatabaseManagerException(e);
         } finally {
             closeSession(session);
@@ -386,6 +399,7 @@ public class DatabaseManager implements IDatabaseManager {
             cohoUpdateClause.execute();
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while executing update query:{}", updateClause.toString(), e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {
@@ -404,6 +418,7 @@ public class DatabaseManager implements IDatabaseManager {
             cohoDeleteClause.execute();
             tx.commit();
         } catch (HibernateException e) {
+            logger.error("Error while executing delete query:{}", deleteClause.toString(), e);
             rollbackTransaction(tx);
             throw new DatabaseManagerException(e);
         } finally {

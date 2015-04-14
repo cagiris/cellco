@@ -540,6 +540,10 @@ function saveBooking() {
 		success : function(data) {
 			$('.loading').hide();
 			$('.main').html(data);
+			$('.remove-passenger').click(function () {
+				$(this).closest('.panel').remove();
+			});
+			$('.form-datepicker').datepicker();
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 			$('.loading').hide();

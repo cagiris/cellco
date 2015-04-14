@@ -76,10 +76,11 @@ public class BookingManagementService implements IBookingManagementService {
     public IBookingDetails submitBookingDetails(String userId, BigInteger customerId,
             List<? extends IPassenger> passengers, BookingGDSType bookingGDSType, BigDecimal baseFare,
             BigDecimal taxesAndServiceFee, BigDecimal miscellaneousCharges) throws BookingManagementException {
+        String bookingId = bookingIdGenerator.getNextUID();
         try {
             BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
             CustomerEntity customer = (CustomerEntity)getCustomer(customerId);
-            bookingDetailsEntity.setBookingId(bookingIdGenerator.getNextUID());
+            bookingDetailsEntity.setBookingId(bookingId);
             bookingDetailsEntity.setCustomer(customer);
             bookingDetailsEntity.setBaseFare(baseFare);
             bookingDetailsEntity.setMiscellaneousCharges(miscellaneousCharges);
@@ -112,6 +113,7 @@ public class BookingManagementService implements IBookingManagementService {
         } catch (EntityNotFoundException e) {
             throw new BookingManagementException(e);
         } catch (CohoException e) {
+            logger.error("Failed to send email for bookingId:{}", bookingId, e);
             throw new BookingManagementException(e);
         }
     }

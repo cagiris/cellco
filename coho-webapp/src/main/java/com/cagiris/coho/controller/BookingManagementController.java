@@ -86,8 +86,8 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         User loggedInUser = ControllerUtils.getLoggedInUser();
         IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(loggedInUser.getUsername(),
                 addCustomer.getCustomerId(), passengerInfos, BookingGDSType.valueOf(bean.getBookingGDSType()),
-                BigDecimal.valueOf(bean.getBaseFare()), BigDecimal.valueOf(bean.getTaxesAndServiceFee()),
-                BigDecimal.valueOf(bean.getMiscellaneousCharges()));
+                new BigDecimal(bean.getBaseFare()), new BigDecimal(bean.getTaxesAndServiceFee()),
+                new BigDecimal(bean.getMiscellaneousCharges()));
         bean.setBookingId(bookingDetails.getBookingId());
         return null;
     }
@@ -155,7 +155,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         modelAndView.addObject(PassengerType.values());
         modelAndView.addObject(BookingGDSType.values());
 
-        modelAndView.setViewName(getURLMapping() + CREATE_URL_MAPPING);
+        modelAndView.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping() + CREATE_URL_MAPPING);
         try {
             if (bindingResult.hasErrors() || (bean.getPassengers().size() == 0)) {
                 modelAndView.addObject(bean);
@@ -176,13 +176,10 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
                 User loggedInUser = ControllerUtils.getLoggedInUser();
                 IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(
                         loggedInUser.getUsername(), addCustomer.getCustomerId(), passengerInfos,
-                        BookingGDSType.valueOf(bean.getBookingGDSType()), BigDecimal.valueOf(bean.getBaseFare()),
-                        BigDecimal.valueOf(bean.getTaxesAndServiceFee()),
-                        BigDecimal.valueOf(bean.getMiscellaneousCharges()));
+                        BookingGDSType.valueOf(bean.getBookingGDSType()), new BigDecimal(bean.getBaseFare()),
+                        new BigDecimal(bean.getTaxesAndServiceFee()), new BigDecimal(bean.getMiscellaneousCharges()));
                 bean.setBookingId(bookingDetails.getBookingId());
 
-                modelAndView.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping()
-                        + CREATE_URL_MAPPING);
                 modelMap.addAllAttributes(getCreateFormModel());
                 modelAndView.addObject(ATTR_SUCCESS_MSG, "Booking saved Successfuly");
             }

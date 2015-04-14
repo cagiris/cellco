@@ -4,7 +4,7 @@
 	<groupId>com.cagiris</groupId>
 	<artifactId>coho</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>coho-webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -107,7 +107,7 @@
 		<dependency>
 			<groupId>com.cagiris.coho</groupId>
 			<artifactId>CohoService</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 
 	</dependencies>

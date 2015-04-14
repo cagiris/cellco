@@ -17,6 +17,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.cagiris.coho.service.exception.CohoException;
+
 /**
  *
  * @author: ssnk
@@ -46,7 +48,7 @@ public class EmailService implements IEmailService {
     }
 
     @Override
-    public void sendEmail(List<String> recipients, String subject, String body) {
+    public void sendEmail(List<String> recipients, String subject, String body) throws CohoException {
         try {
             Message message = new MimeMessage(session);
 
@@ -62,7 +64,7 @@ public class EmailService implements IEmailService {
             message.setContent(body, "text/html; charset=utf-8");
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new CohoException(e);
         }
     }
 
