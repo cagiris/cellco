@@ -539,7 +539,7 @@ function saveBooking() {
 		type : "POST",
 		success : function(data) {
 			$('.loading').hide();
-			$('body').html(data);
+			$('.main').html(data);
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 			$('.loading').hide();

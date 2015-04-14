@@ -181,7 +181,9 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
                         BigDecimal.valueOf(bean.getMiscellaneousCharges()));
                 bean.setBookingId(bookingDetails.getBookingId());
 
-                modelAndView.setViewName(getRedirectUrl(CREATE_URL_MAPPING));
+                modelAndView.setViewName(ControllerUtils.AJAX_CONTENT_MAPPING_PREFIX + getURLMapping()
+                        + CREATE_URL_MAPPING);
+                modelMap.addAllAttributes(getCreateFormModel());
                 modelAndView.addObject(ATTR_SUCCESS_MSG, "Booking saved Successfuly");
             }
         } catch (CohoException e) {

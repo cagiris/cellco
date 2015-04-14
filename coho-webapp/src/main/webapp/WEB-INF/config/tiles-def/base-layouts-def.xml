@@ -20,6 +20,7 @@
     
     <definition name="AjaxTemplate" template="/WEB-INF/views/templates/ajax-template.jsp">
         <put-attribute name="main-content" value="" />
+        <put-attribute name="feedback-msg" value="/WEB-INF/views/partials/common/main-content/feedback-msg.jsp" cascade="true" />
     </definition>
     
 </tiles-definitions>
