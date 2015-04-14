@@ -48,3 +48,8 @@
 		</table>
 	</div>
 </sec:authorize>
+
+		
+<footer class="footer-coho text-center">
+	<a href="http://www.cagiris.com">Copyright &copy; Cagiris</a>
+</footer>
