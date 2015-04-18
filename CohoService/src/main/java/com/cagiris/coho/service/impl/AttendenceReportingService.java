@@ -12,7 +12,6 @@ import java.util.Optional;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.cagiris.coho.service.api.IAttendenceReportingService;
 import com.cagiris.coho.service.api.ITeamShiftDetails;
@@ -61,7 +60,8 @@ public class AttendenceReportingService implements IAttendenceReportingService {
             DateTime nextEligibleLoginTime = new DateTime(lastShiftDetailsForUser.getShiftEndTime())
                     .plusMinutes(minimumGapBetweenShifts.intValue());
             if (currentDateTime.isBefore(nextEligibleLoginTime)) {
-                throw new UsernameNotFoundException("Cannot start shift before minimum gap");
+                logger.warn("User:{} cannot start shift before:{}", userId, nextEligibleLoginTime);
+                throw new AttendenceReportingServiceException("Cannot start shift before minimum gap");
             }
         }
         UserShiftEntity userShiftEntity = new UserShiftEntity();
@@ -257,9 +257,11 @@ public class AttendenceReportingService implements IAttendenceReportingService {
     public IUserShiftInfo getLastShiftDetailsForUser(Long teamId, String userId)
             throws AttendenceReportingServiceException {
         QUserShiftEntity qUserShiftEntity = QUserShiftEntity.userShiftEntity;
-        HibernateQuery hibernateQuery = new HibernateQuery().from(qUserShiftEntity)
-                .where(qUserShiftEntity.userId.eq(userId).and(qUserShiftEntity.teamId.eq(teamId)))
-                .orderBy(qUserShiftEntity.dateAdded.desc()).limit(1);
+        HibernateQuery hibernateQuery = new HibernateQuery()
+                .from(qUserShiftEntity)
+                .where(qUserShiftEntity.userId.eq(userId).and(qUserShiftEntity.teamId.eq(teamId))
+                        .and(qUserShiftEntity.shiftEndTime.isNotNull())).orderBy(qUserShiftEntity.dateAdded.desc())
+                .limit(1);
         try {
             List<UserShiftEntity> executeQueryAndGetResults = databaseManager.executeQueryAndGetResults(hibernateQuery,
                     qUserShiftEntity);

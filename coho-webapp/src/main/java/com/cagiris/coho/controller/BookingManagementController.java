@@ -84,10 +84,10 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
         List<PassengerInfoBean> passengerInfos = bean.getPassengers().stream().map((p) -> p.mapToPassengerInfoBean())
                 .collect(Collectors.toList());
         User loggedInUser = ControllerUtils.getLoggedInUser();
-        IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(loggedInUser.getUsername(),
-                addCustomer.getCustomerId(), passengerInfos, BookingGDSType.valueOf(bean.getBookingGDSType()),
-                new BigDecimal(bean.getBaseFare()), new BigDecimal(bean.getTaxesAndServiceFee()),
-                new BigDecimal(bean.getMiscellaneousCharges()));
+        IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(loggedInUser.getUsername(), bean
+                .getPnr(), addCustomer.getCustomerId(), passengerInfos,
+                BookingGDSType.valueOf(bean.getBookingGDSType()), new BigDecimal(bean.getBaseFare()), new BigDecimal(
+                        bean.getTaxesAndServiceFee()), new BigDecimal(bean.getMiscellaneousCharges()));
         bean.setBookingId(bookingDetails.getBookingId());
         return null;
     }
@@ -175,7 +175,7 @@ public class BookingManagementController extends AbstractCRUDController<BookingD
                         .map((p) -> p.mapToPassengerInfoBean()).collect(Collectors.toList());
                 User loggedInUser = ControllerUtils.getLoggedInUser();
                 IBookingDetails bookingDetails = bookingManagementService.submitBookingDetails(
-                        loggedInUser.getUsername(), addCustomer.getCustomerId(), passengerInfos,
+                        loggedInUser.getUsername(), bean.getPnr(), addCustomer.getCustomerId(), passengerInfos,
                         BookingGDSType.valueOf(bean.getBookingGDSType()), new BigDecimal(bean.getBaseFare()),
                         new BigDecimal(bean.getTaxesAndServiceFee()), new BigDecimal(bean.getMiscellaneousCharges()));
                 bean.setBookingId(bookingDetails.getBookingId());

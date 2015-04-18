@@ -46,7 +46,7 @@
 	</http>
 
 	<authentication-manager>
-		<authentication-provider user-service-ref="cohoUserDetailService">
+		<authentication-provider ref="cohoAuthenticationProvider">
 		</authentication-provider>
 	</authentication-manager>
 </beans:beans>

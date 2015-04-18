@@ -29,6 +29,8 @@ public class BookingDetailsEntity extends BaseEntity implements IBookingDetails 
 
     private String bookingId;
 
+    private String pnr;
+
     private String userId;
 
     private CustomerEntity customer;
@@ -119,5 +121,14 @@ public class BookingDetailsEntity extends BaseEntity implements IBookingDetails 
 
     public void setBookingGDSType(BookingGDSType bookingGDSType) {
         this.bookingGDSType = bookingGDSType;
+    }
+
+    @Override
+    public String getPnr() {
+        return pnr;
+    }
+
+    public void setPnr(String pnr) {
+        this.pnr = pnr;
     }
 }

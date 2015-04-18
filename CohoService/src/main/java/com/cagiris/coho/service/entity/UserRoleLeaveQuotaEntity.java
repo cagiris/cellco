@@ -16,7 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 
 import org.hibernate.annotations.Cache;
@@ -62,7 +61,7 @@ public class UserRoleLeaveQuotaEntity extends BaseEntity implements IUserRoleLea
     @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name = "leave_type")
     @Column(name = "leave_quota")
-    @CollectionTable(name = "user_leave_type_vs_quota", joinColumns = {@JoinColumn(name = "user_leave_quota_id")})
+    @CollectionTable
     @Override
     public Map<LeaveType, Integer> getLeaveTypeVsLeaveCount() {
         return leaveTypeVsLeaveCount;

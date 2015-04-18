@@ -16,6 +16,8 @@ public interface IBookingDetails {
 
     String getBookingId();
 
+    String getPnr();
+
     public abstract ICustomer getCustomer();
 
     public abstract List<? extends IPassenger> getPassengers();

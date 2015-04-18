@@ -3,6 +3,7 @@
 </h1>
 <p>
 <p><strong>Booking Id:</strong> ${contextObject.bookingId}</p>
+<p><strong>PNR:</strong> ${contextObject.pnr}</p>
 <p><strong>User Id:</strong> ${contextObject.userId}</p>
 <p><strong>Booking GDS:</strong> ${contextObject.bookingGDSType}</p>
 <p><strong>Base Fare:</strong> ${contextObject.baseFare}</p>

@@ -19,9 +19,9 @@ import com.cagiris.coho.service.flight.exception.BookingManagementException;
 
 public interface IBookingManagementService {
 
-    IBookingDetails submitBookingDetails(String userId, BigInteger customerId, List<? extends IPassenger> passengers,
-            BookingGDSType bookingGDSType, BigDecimal baseFare, BigDecimal taxesAndServiceFee,
-            BigDecimal miscellaneousCharges) throws BookingManagementException;
+    IBookingDetails submitBookingDetails(String userId, String pnr, BigInteger customerId,
+            List<? extends IPassenger> passengers, BookingGDSType bookingGDSType, BigDecimal baseFare,
+            BigDecimal taxesAndServiceFee, BigDecimal miscellaneousCharges) throws BookingManagementException;
 
     IBookingDetails getBookingDetails(String bookingId) throws ResourceNotFoundException, BookingManagementException;
 

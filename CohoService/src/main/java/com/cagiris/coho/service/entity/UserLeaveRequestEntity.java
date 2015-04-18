@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
 
@@ -65,7 +64,7 @@ public class UserLeaveRequestEntity extends BaseEntity implements IUserLeaveRequ
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "leave_type")
     @Column(name = "leave_quota")
-    @CollectionTable(joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable
     @Override
     public Map<LeaveType, Integer> getLeaveTypeVsLeaveCount() {
         return leaveTypeVsLeaveCount;

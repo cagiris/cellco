@@ -42,6 +42,8 @@ public class QBookingDetailsEntity extends EntityPathBase<BookingDetailsEntity> 
 
     public final ListPath<PassengerInfoEntity, QPassengerInfoEntity> passengers = this.<PassengerInfoEntity, QPassengerInfoEntity>createList("passengers", PassengerInfoEntity.class, QPassengerInfoEntity.class, PathInits.DIRECT2);
 
+    public final StringPath pnr = createString("pnr");
+
     public final NumberPath<java.math.BigDecimal> taxesAndServiceFee = createNumber("taxesAndServiceFee", java.math.BigDecimal.class);
 
     public final StringPath userId = createString("userId");

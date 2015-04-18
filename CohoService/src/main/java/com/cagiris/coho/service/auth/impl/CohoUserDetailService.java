@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -34,6 +36,8 @@ import com.cagiris.coho.service.exception.ResourceNotFoundException;
 
 public class CohoUserDetailService implements UserDetailsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CohoUserDetailService.class);
+
     private IHierarchyService hierarchyService;
 
     private IAttendenceReportingService attendenceReportingService;
@@ -50,6 +54,7 @@ public class CohoUserDetailService implements UserDetailsService {
             IUser user = hierarchyService.getUser(userId);
             List<? extends ITeam> teamsForUser = hierarchyService.getTeamsForUser(userId);
             if (teamsForUser.size() == 0) {
+                logger.warn("User:{} does not belong to any team", userId);
                 throw new UsernameNotFoundException("User does not belong to any team");
             }
             Long teamId = teamsForUser.get(0).getTeamId();
@@ -62,6 +67,7 @@ public class CohoUserDetailService implements UserDetailsService {
                 DateTime nextEligibleLoginTime = new DateTime(lastUserShiftInfo.getShiftEndTime())
                         .plusMinutes(minimumGapBetweenShifts.intValue());
                 if (currentDateTime.isBefore(nextEligibleLoginTime)) {
+                    logger.warn("User:{} cannot start shift before:{}", userId, nextEligibleLoginTime);
                     throw new UsernameNotFoundException("Cannot login before minimum gap");
                 }
             }

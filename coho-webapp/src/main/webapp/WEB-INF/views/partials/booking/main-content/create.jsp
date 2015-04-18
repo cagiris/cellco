@@ -147,6 +147,18 @@
 		</fieldset>
 		<fieldset>
 			<legend>Booking Details</legend>
+			<div
+				class="form-group <core:out value='${errorMap["pnr"]}'/>">
+				<form:label cssClass="col-md-2 control-label"
+					path="pnr">PNR</form:label>
+				<div class="col-md-5 controls">
+					<form:input path="pnr" placeholder="PNR"
+						cssClass="form-control" />
+					<p class="help-block form-field-error">
+						<form:errors path="pnr" />
+					</p>
+				</div>
+			</div>
 			<div class="form-group <core:out value='${errorMap["bookingGDSType"]}'/>">
 				<form:label cssClass="col-md-2 control-label" path="bookingGDSType">Type</form:label>
 				<div class="col-md-5 controls">

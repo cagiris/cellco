@@ -56,6 +56,8 @@
 		<property name="emailRecipients">
 			<list>
 				<value>coho.cagiris@gmail.com</value>
+				<value>ticketing@cheapofly.co</value>
+				<value>sales@cheapofly.co</value>
 			</list>
 		</property>
 	</bean>
@@ -70,10 +72,24 @@
 		</constructor-arg>
 	</bean>
 
+	<bean id="cohoAuthenticationProvider"
+		class="com.cagiris.coho.service.auth.impl.CohoAuthenticationProvider">
+		<constructor-arg>
+			<ref bean="hierarchyService" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="attendenceReportingService" />
+		</constructor-arg>
+	</bean>
+
 	<bean id="emailService" class="com.cagiris.coho.service.utils.EmailService"
 		init-method="init">
-		<property name="userName"><value>coho.cagiris@gmail.com</value></property>
-		<property name="password"><value>jklabc123</value></property>
+		<property name="userName">
+			<value>coho.cagiris@gmail.com</value>
+		</property>
+		<property name="password">
+			<value>jklabc123</value>
+		</property>
 	</bean>
 
 	<bean id="freemarkerUtil" class="com.cagiris.coho.service.utils.FreemarkerUtil">

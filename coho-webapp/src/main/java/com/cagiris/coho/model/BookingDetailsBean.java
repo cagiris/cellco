@@ -25,6 +25,9 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
 
     private String bookingId;
 
+    @NotBlank(message = "Can't be left empty", groups = ValidationCheckForEmpty.class)
+    private String pnr;
+
     @Valid
     private CustomerBean customer = new CustomerBean();
 
@@ -108,6 +111,14 @@ public class BookingDetailsBean extends AbstractBean implements ICRUDBean {
 
     public void setMiscellaneousCharges(String miscellaneousCharges) {
         this.miscellaneousCharges = miscellaneousCharges;
+    }
+
+    public String getPnr() {
+        return pnr;
+    }
+
+    public void setPnr(String pnr) {
+        this.pnr = pnr;
     }
 
 }

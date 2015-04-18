@@ -73,7 +73,7 @@ public class BookingManagementService implements IBookingManagementService {
     }
 
     @Override
-    public IBookingDetails submitBookingDetails(String userId, BigInteger customerId,
+    public IBookingDetails submitBookingDetails(String userId, String pnr, BigInteger customerId,
             List<? extends IPassenger> passengers, BookingGDSType bookingGDSType, BigDecimal baseFare,
             BigDecimal taxesAndServiceFee, BigDecimal miscellaneousCharges) throws BookingManagementException {
         String bookingId = bookingIdGenerator.getNextUID();
@@ -87,6 +87,7 @@ public class BookingManagementService implements IBookingManagementService {
             bookingDetailsEntity.setTaxesAndServiceFee(taxesAndServiceFee);
             bookingDetailsEntity.setUserId(userId);
             bookingDetailsEntity.setBookingGDSType(bookingGDSType);
+            bookingDetailsEntity.setPnr(pnr);
 
             Date currentTime = new Date();
             bookingDetailsEntity.setDateAdded(currentTime);

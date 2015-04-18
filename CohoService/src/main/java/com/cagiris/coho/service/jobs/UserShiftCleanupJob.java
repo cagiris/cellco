@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import com.cagiris.coho.service.api.IAttendenceReportingService;
@@ -20,6 +22,8 @@ import com.cagiris.coho.service.exception.JobExecutionException;
  * @author: ssnk
  */
 public class UserShiftCleanupJob implements IJob {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserShiftCleanupJob.class);
 
     private IAttendenceReportingService attendenceReportingService;
 
@@ -38,9 +42,13 @@ public class UserShiftCleanupJob implements IJob {
             for (IUserShiftInfo userShiftInfo : activeUserShiftInfos) {
                 Long teamId = userShiftInfo.getTeamId();
                 ITeamShiftDetails teamShiftDetails = attendenceReportingService.getTeamShiftDetails(teamId);
-                DateTime expectedShiftEndTime = new DateTime(userShiftInfo.getShiftStartTime())
-                        .plusMinutes(teamShiftDetails.getShiftBuffer().intValue());
+                Long shiftDurationInMillis = teamShiftDetails.getShiftDuration();
+                Long shiftBuffer = shiftDurationInMillis / (60 * 1000) + teamShiftDetails.getShiftBuffer();
+                DateTime expectedShiftEndTime = new DateTime(userShiftInfo.getShiftStartTime()).plusMinutes(shiftBuffer
+                        .intValue());
                 if (expectedShiftEndTime.isBefore(currentTime)) {
+                    logger.info("Ending shift for user:{} as used logged in more than :{} minutes",
+                            userShiftInfo.getUserId(), shiftBuffer);
                     attendenceReportingService.updateUserShiftInfo(userShiftInfo.getShiftId(),
                             userShiftInfo.getShiftStartTime(), currentTime.toDate(), "Shift timed out");
                 }
@@ -49,5 +57,4 @@ public class UserShiftCleanupJob implements IJob {
             throw new JobExecutionException(e);
         }
     }
-
 }

@@ -522,6 +522,8 @@ function saveBooking() {
 			
 			baseFare : $('#baseFare').val(),
 			
+			pnr : $('#pnr').val(),
+			
 			taxesAndServiceFee : $('#taxesAndServiceFee').val(),
 			
 			miscellaneousCharges : $('#miscellaneousCharges').val(),
